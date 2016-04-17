@@ -18,7 +18,4 @@
 		Next
 	End Sub
 
-	Private Sub button_Click(sender As Object, e As RoutedEventArgs) Handles button.Click
-		MsgBox("Test")
-	End Sub
 End Class
