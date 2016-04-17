@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Database.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DatabaseStoreContainer">
+    <EntitySet Name="Companies" EntityType="Database.Store.Companies" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Contacts" EntityType="Database.Store.Contacts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Quotes" EntityType="Database.Store.Quotes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Notes" EntityType="Database.Store.Notes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="QuoteLines" EntityType="Database.Store.QuoteLines" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ContactNote" Association="Database.Store.ContactNote">
+      <End Role="Contact" EntitySet="Contacts" />
+      <End Role="Note" EntitySet="Notes" />
+    </AssociationSet>
+    <AssociationSet Name="CustomerContact" Association="Database.Store.CustomerContact">
+      <End Role="Customer" EntitySet="Companies" />
+      <End Role="Contact" EntitySet="Contacts" />
+    </AssociationSet>
+    <AssociationSet Name="CustomerQuote" Association="Database.Store.CustomerQuote">
+      <End Role="Customer" EntitySet="Companies" />
+      <End Role="Quote" EntitySet="Quotes" />
+    </AssociationSet>
+    <AssociationSet Name="QuoteQuoteLine" Association="Database.Store.QuoteQuoteLine">
+      <End Role="Quote" EntitySet="Quotes" />
+      <End Role="QuoteLine" EntitySet="QuoteLines" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Companies">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Address" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="City" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Phone" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Misc" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Contacts">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Position" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Customer_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Quotes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Customer_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Notes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Contact_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="QuoteLines">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Display" Type="int" Nullable="false" />
+    <Property Name="UNIT" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="COST" Type="decimal" Nullable="false" />
+    <Property Name="DESC" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Quote_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ContactNote">
+    <End Role="Contact" Type="Database.Store.Contacts" Multiplicity="1" />
+    <End Role="Note" Type="Database.Store.Notes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contact">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Note">
+        <PropertyRef Name="Contact_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CustomerContact">
+    <End Role="Customer" Type="Database.Store.Companies" Multiplicity="1" />
+    <End Role="Contact" Type="Database.Store.Contacts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Contact">
+        <PropertyRef Name="Customer_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CustomerQuote">
+    <End Role="Customer" Type="Database.Store.Companies" Multiplicity="1" />
+    <End Role="Quote" Type="Database.Store.Quotes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Quote">
+        <PropertyRef Name="Customer_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="QuoteQuoteLine">
+    <End Role="Quote" Type="Database.Store.Quotes" Multiplicity="1" />
+    <End Role="QuoteLine" Type="Database.Store.QuoteLines" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Quote">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="QuoteLine">
+        <PropertyRef Name="Quote_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Database" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="DatabaseContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="Database.Company" />
+          <EntitySet Name="Contacts" EntityType="Database.Contact" />
+          <EntitySet Name="Quotes" EntityType="Database.Quote" />
+          <EntitySet Name="Notes" EntityType="Database.Note" />
+          <AssociationSet Name="ContactNote" Association="Database.ContactNote">
+            <End Role="Contact" EntitySet="Contacts" />
+            <End Role="Note" EntitySet="Notes" />
+          </AssociationSet>
+          <AssociationSet Name="CustomerContact" Association="Database.CustomerContact">
+            <End Role="Customer" EntitySet="Companies" />
+            <End Role="Contact" EntitySet="Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="CustomerQuote" Association="Database.CustomerQuote">
+            <End Role="Customer" EntitySet="Companies" />
+            <End Role="Quote" EntitySet="Quotes" />
+          </AssociationSet>
+          <EntitySet Name="QuoteLines" EntityType="Database.QuoteLine" />
+          <AssociationSet Name="QuoteQuoteLine" Association="Database.QuoteQuoteLine">
+            <End Role="Quote" EntitySet="Quotes" />
+            <End Role="QuoteLine" EntitySet="QuoteLines" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Contacts" Relationship="Database.CustomerContact" FromRole="Customer" ToRole="Contact" />
+          <NavigationProperty Name="Quotes" Relationship="Database.CustomerQuote" FromRole="Customer" ToRole="Quote" />
+          <Property Name="Address" Type="String" Nullable="true" />
+          <Property Name="City" Type="String" Nullable="true" />
+          <Property Name="Phone" Type="String" Nullable="true" />
+          <Property Name="Misc" Type="String" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Notes" Relationship="Database.ContactNote" FromRole="Contact" ToRole="Note" />
+          <NavigationProperty Name="Customer" Relationship="Database.CustomerContact" FromRole="Contact" ToRole="Customer" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Phone" Type="String" Nullable="true" />
+          <Property Name="Email" Type="String" Nullable="true" />
+          <Property Name="Position" Type="String" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Quote">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Customer" Relationship="Database.CustomerQuote" FromRole="Quote" ToRole="Customer" />
+          <NavigationProperty Name="Lines" Relationship="Database.QuoteQuoteLine" FromRole="Quote" ToRole="QuoteLine" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Contact" Relationship="Database.ContactNote" FromRole="Note" ToRole="Contact" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Text" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="ContactNote">
+          <End Type="Database.Contact" Role="Contact" Multiplicity="1" />
+          <End Type="Database.Note" Role="Note" Multiplicity="*" />
+        </Association>
+        <Association Name="CustomerContact">
+          <End Type="Database.Company" Role="Customer" Multiplicity="1" />
+          <End Type="Database.Contact" Role="Contact" Multiplicity="*" />
+        </Association>
+        <Association Name="CustomerQuote">
+          <End Type="Database.Company" Role="Customer" Multiplicity="1" />
+          <End Type="Database.Quote" Role="Quote" Multiplicity="*" />
+        </Association>
+        <EntityType Name="QuoteLine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Quote" Relationship="Database.QuoteQuoteLine" FromRole="QuoteLine" ToRole="Quote" />
+          <Property Name="Display" Type="Int32" Nullable="false" />
+          <Property Name="UNIT" Type="String" Nullable="false" />
+          <Property Name="COST" Type="Decimal" Nullable="false" />
+          <Property Name="DESC" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="QuoteQuoteLine">
+          <End Type="Database.Quote" Role="Quote" Multiplicity="1" />
+          <End Type="Database.QuoteLine" Role="QuoteLine" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DatabaseStoreContainer" CdmEntityContainer="DatabaseContainer">
+    <EntitySetMapping Name="Companies">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.Company)">
+        <MappingFragment StoreEntitySet="Companies">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Misc" ColumnName="Misc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contacts">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.Contact)">
+        <MappingFragment StoreEntitySet="Contacts">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Quotes">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.Quote)">
+        <MappingFragment StoreEntitySet="Quotes">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notes">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.Note)">
+        <MappingFragment StoreEntitySet="Notes">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Text" ColumnName="Text" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuoteLines">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.QuoteLine)">
+        <MappingFragment StoreEntitySet="QuoteLines">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Display" ColumnName="Display" />
+          <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+          <ScalarProperty Name="COST" ColumnName="COST" />
+          <ScalarProperty Name="DESC" ColumnName="DESC" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ContactNote" TypeName="Database.ContactNote" StoreEntitySet="Notes">
+      <EndProperty Name="Contact">
+        <ScalarProperty Name="ID" ColumnName="Contact_ID" />
+      </EndProperty>
+      <EndProperty Name="Note">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="CustomerContact" TypeName="Database.CustomerContact" StoreEntitySet="Contacts">
+      <EndProperty Name="Customer">
+        <ScalarProperty Name="ID" ColumnName="Customer_ID" />
+      </EndProperty>
+      <EndProperty Name="Contact">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="CustomerQuote" TypeName="Database.CustomerQuote" StoreEntitySet="Quotes">
+      <EndProperty Name="Customer">
+        <ScalarProperty Name="ID" ColumnName="Customer_ID" />
+      </EndProperty>
+      <EndProperty Name="Quote">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="QuoteQuoteLine" TypeName="Database.QuoteQuoteLine" StoreEntitySet="QuoteLines">
+      <EndProperty Name="Quote">
+        <ScalarProperty Name="ID" ColumnName="Quote_ID" />
+      </EndProperty>
+      <EndProperty Name="QuoteLine">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
