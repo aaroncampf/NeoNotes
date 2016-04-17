@@ -23,9 +23,7 @@
 		<Label x:Name="label_Copy4" Content="Company" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top"/>
 		<TabControl x:Name="tabControl" Margin="272,51,1,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 			<TabItem Header="TabItem">
-				<Grid Background="#FFE5E5E5" Margin="0,2,0,-2">
-					<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="132,60,0,0" VerticalAlignment="Top" Width="75"/>
-				</Grid>
+				<Grid Background="#FFE5E5E5" Margin="0,2,0,-2"/>
 			</TabItem>
 			<TabItem Header="TabItem">
 				<Grid Background="#FFE5E5E5"/>
