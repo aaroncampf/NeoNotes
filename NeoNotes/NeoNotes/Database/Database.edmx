@@ -37,6 +37,7 @@
     <Property Name="Address" Type="nvarchar(max)" Nullable="true" />
     <Property Name="City" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Phone" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Zip" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Misc" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
   <EntityType Name="Contacts">
@@ -165,6 +166,7 @@
           <Property Name="Address" Type="String" Nullable="true" />
           <Property Name="City" Type="String" Nullable="true" />
           <Property Name="Phone" Type="String" Nullable="true" />
+          <Property Name="Zip" Type="String" Nullable="true" />
           <Property Name="Misc" Type="String" Nullable="true" />
         </EntityType>
         <EntityType Name="Contact">
@@ -239,6 +241,7 @@
           <ScalarProperty Name="Address" ColumnName="Address" />
           <ScalarProperty Name="City" ColumnName="City" />
           <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
           <ScalarProperty Name="Misc" ColumnName="Misc" />
         </MappingFragment>
       </EntityTypeMapping>

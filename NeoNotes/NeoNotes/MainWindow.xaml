@@ -6,28 +6,58 @@
         xmlns:local="clr-namespace:NeoNotes"
         xmlns:NeoNotes="clr-namespace:NeoNotes" x:Name="window" x:Class="MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="444.985" Width="764.581">
+        Title="MainWindow" Height="726.985" Width="1069.581">
 	<Grid x:Name="grid">
 		<ComboBox x:Name="cbxCompanies" HorizontalAlignment="Left" Margin="86,15,0,0" VerticalAlignment="Top" Width="166" DisplayMemberPath="Name"/>
-		<TextBox x:Name="txtCompanyName" HorizontalAlignment="Left" Height="23" Margin="86,55,0,0" TextWrapping="Wrap" Text="{Binding DataContext.Name, ElementName=window}" VerticalAlignment="Top" Width="166" >
-		</TextBox>
-		<Label x:Name="label" Content="Name" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top"/>
-		<TextBox x:Name="txtCompanyAddress" HorizontalAlignment="Left" Height="23" Margin="86,83,0,0" TextWrapping="Wrap" Text="{Binding DataContext.Address, ElementName=window}" VerticalAlignment="Top" Width="166"/>
-		<Label x:Name="label_Copy" Content="Address" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top"/>
-		<TextBox x:Name="txtCompanyCity" HorizontalAlignment="Left" Height="23" Margin="86,114,0,0" TextWrapping="Wrap" Text="{Binding DataContext.City, ElementName=window}" VerticalAlignment="Top" Width="166"/>
-		<Label x:Name="label_Copy1" Content="City" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top"/>
-		<TextBox x:Name="txtCompanyPhone" HorizontalAlignment="Left" Height="23" Margin="86,145,0,0" TextWrapping="Wrap" Text="{Binding DataContext.Phone, ElementName=window}" VerticalAlignment="Top" Width="166"/>
-		<Label x:Name="label_Copy2" Content="Phone" HorizontalAlignment="Left" Margin="10,141,0,0" VerticalAlignment="Top"/>
-		<TextBox x:Name="txtCompanyMisc" HorizontalAlignment="Left" Height="117" Margin="86,176,0,0" TextWrapping="Wrap" Text="{Binding DataContext.Misc, ElementName=txtCompanyMisc}" VerticalAlignment="Top" Width="166" AcceptsReturn="True"/>
-		<Label x:Name="label_Copy3" Content="Misc" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top"/>
 		<Label x:Name="label_Copy4" Content="Company" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top"/>
-		<TabControl x:Name="tabControl" Margin="272,51,1,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-			<TabItem Header="TabItem">
-				<Grid Background="#FFE5E5E5" Margin="0,2,0,-2"/>
+		<TabControl x:Name="tabControl" Margin="373,51,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+			<TabItem Header="Contact">
+				<Grid Background="#FFE5E5E5" Margin="0,2,0,-2">
+					<TextBox x:Name="txtContactName" HorizontalAlignment="Left" Height="23" Margin="76,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding SelectedItem.Name, ElementName=lbxContacts}"/>
+					<Label x:Name="label_Copy6" Content="Name" HorizontalAlignment="Left" Margin="6,7,0,0" VerticalAlignment="Top" Width="65" />
+					<Label x:Name="label2" Content="Phone" HorizontalAlignment="Left" Margin="6,33,0,0" VerticalAlignment="Top"/>
+					<TextBox x:Name="txtContactPhone" HorizontalAlignment="Left" Height="23" Margin="76,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding SelectedItem.Phone, ElementName=lbxContacts}"/>
+					<Label x:Name="label2_Copy" Content="Email" HorizontalAlignment="Left" Margin="6,64,0,0" VerticalAlignment="Top"/>
+					<TextBox x:Name="txtContactEmail" HorizontalAlignment="Left" Height="23" Margin="76,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding SelectedItem.Email, ElementName=lbxContacts}"/>
+					<Label x:Name="label2_Copy1" Content="Position" HorizontalAlignment="Left" Margin="6,92,0,0" VerticalAlignment="Top"/>
+					<TextBox x:Name="txtContactPosition" HorizontalAlignment="Left" Height="23" Margin="76,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.533,2.696" Text="{Binding SelectedItem.Position, ElementName=lbxContacts}"/>
+					<GroupBox x:Name="groupBox" Header="Notes" HorizontalAlignment="Left" Margin="23,470,0,0" VerticalAlignment="Top" Height="137" Width="650">
+						<Grid />
+					</GroupBox>
+					<ListBox x:Name="lbxNotes" HorizontalAlignment="Left" Height="215" Margin="240,37,0,0" VerticalAlignment="Top" Width="433"/>
+					<Label x:Name="label3" Content="Notes" HorizontalAlignment="Left" Margin="240,7,0,0" VerticalAlignment="Top"/>
+					<DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="240,257,0,0" VerticalAlignment="Top" Height="208" Width="433" ItemsSource="{Binding SelectedItem.Notes, ElementName=lbxContacts}">
+						<DataGrid.Columns>
+							<DataGridTextColumn Binding="{Binding Path=Date}" ClipboardContentBinding="{Binding Path=Date}" Header="Date" Width="100"/>
+							<DataGridTextColumn Binding="{Binding Path=Name}" ClipboardContentBinding="{Binding Path=Name}" Header="Name" Width="*"/>
+						</DataGrid.Columns>
+					</DataGrid>
+
+				</Grid>
 			</TabItem>
-			<TabItem Header="TabItem">
+			<TabItem Header="Quotes">
 				<Grid Background="#FFE5E5E5"/>
 			</TabItem>
 		</TabControl>
+		<Button x:Name="btnPrintCompanies" Content="Print Companies" HorizontalAlignment="Left" Margin="649,10,0,0" VerticalAlignment="Top" Width="98"/>
+		<ComboBox x:Name="cbxSearchContacts" HorizontalAlignment="Left" Margin="372,15,0,0" VerticalAlignment="Top" Width="214"/>
+		<Label x:Name="label_Copy5" Content="Search Contacts" HorizontalAlignment="Left" Margin="272,14,0,0" VerticalAlignment="Top"/>
+		<GroupBox x:Name="gbxCompany" Header="Company" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Height="633" Width="311">
+			<Grid>
+				<TextBox x:Name="txtCompanyName" HorizontalAlignment="Left" Height="23" Margin="83,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Text="{Binding SelectedItem.Name, ElementName=cbxCompanies}"  />
+				<Label x:Name="label" Content="Name" HorizontalAlignment="Left" Margin="7,6,0,0" VerticalAlignment="Top" Width="65"/>
+				<TextBox x:Name="txtCompanyAddress" HorizontalAlignment="Left" Height="23" Margin="83,38,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Address, ElementName=cbxCompanies}" VerticalAlignment="Top" Width="166"/>
+				<Label x:Name="label_Copy" Content="Address" HorizontalAlignment="Left" Margin="7,34,0,0" VerticalAlignment="Top" Width="71"/>
+				<TextBox x:Name="txtCompanyCity" HorizontalAlignment="Left" Height="23" Margin="83,69,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.City, ElementName=cbxCompanies}" VerticalAlignment="Top" Width="166"/>
+				<Label x:Name="label_Copy1" Content="City" HorizontalAlignment="Left" Margin="7,65,0,0" VerticalAlignment="Top" Width="46"/>
+				<TextBox x:Name="txtCompanyPhone" HorizontalAlignment="Left" Height="23" Margin="83,100,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Phone, ElementName=cbxCompanies}" VerticalAlignment="Top" Width="166"/>
+				<Label x:Name="label_Copy2" Content="Phone" HorizontalAlignment="Left" Margin="7,96,0,0" VerticalAlignment="Top" Width="68"/>
+				<TextBox x:Name="txtCompanyMisc" HorizontalAlignment="Left" Height="117" Margin="83,131,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Misc, ElementName=cbxCompanies}" VerticalAlignment="Top" Width="166" AcceptsReturn="True"/>
+				<Label x:Name="label_Copy3" Content="Misc" HorizontalAlignment="Left" Margin="7,127,0,0" VerticalAlignment="Top" Width="53"/>
+				<ListBox x:Name="lbxContacts" HorizontalAlignment="Left" Height="222" Margin="83,295,0,0" VerticalAlignment="Top" Width="166" ItemsSource="{Binding SelectedItem.Contacts, ElementName=cbxCompanies}" DisplayMemberPath="Name" />
+				<Label x:Name="label1" Content="Contacts" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="68"/>
+				<Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="83,522,0,0" VerticalAlignment="Top" Width="166"/>
+			</Grid>
+		</GroupBox>
 	</Grid>
 </Window>

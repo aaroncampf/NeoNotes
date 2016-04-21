@@ -16,6 +16,7 @@ Partial Public Class Company
     Public Property Address As String
     Public Property City As String
     Public Property Phone As String
+    Public Property Zip As String
     Public Property Misc As String
 
     Public Overridable Property Contacts As ICollection(Of Contact) = New HashSet(Of Contact)
