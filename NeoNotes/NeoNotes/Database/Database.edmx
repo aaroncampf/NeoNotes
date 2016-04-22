@@ -66,7 +66,8 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Contact_ID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="QuoteLines">
@@ -175,7 +176,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Notes" Relationship="Database.ContactNote" FromRole="Contact" ToRole="Note" />
-          <NavigationProperty Name="Customer" Relationship="Database.CustomerContact" FromRole="Contact" ToRole="Customer" />
+          <NavigationProperty Name="Company" Relationship="Database.CustomerContact" FromRole="Contact" ToRole="Customer" />
           <Property Name="Name" Type="String" Nullable="false" />
           <Property Name="Phone" Type="String" Nullable="true" />
           <Property Name="Email" Type="String" Nullable="true" />
@@ -186,7 +187,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Customer" Relationship="Database.CustomerQuote" FromRole="Quote" ToRole="Customer" />
+          <NavigationProperty Name="Company" Relationship="Database.CustomerQuote" FromRole="Quote" ToRole="Customer" />
           <NavigationProperty Name="Lines" Relationship="Database.QuoteQuoteLine" FromRole="Quote" ToRole="QuoteLine" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" />
@@ -198,7 +199,8 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Contact" Relationship="Database.ContactNote" FromRole="Note" ToRole="Contact" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Text" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Text" Type="String" Nullable="true" />
         </EntityType>
         <Association Name="ContactNote">
           <End Type="Database.Contact" Role="Contact" Multiplicity="1" />
@@ -271,6 +273,7 @@
         <MappingFragment StoreEntitySet="Notes">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Text" ColumnName="Text" />
         </MappingFragment>
       </EntityTypeMapping>

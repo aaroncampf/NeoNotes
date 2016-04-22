@@ -44,10 +44,26 @@ Class MainWindow
 		Dim Contact As New Contact With {.Name = "New Contact"}
 		CType(cbxCompanies.SelectedItem, Company).Contacts.Add(Contact)
 
-
 		lbxContacts.SelectedItem = Contact
 		lbxContacts.Items.Refresh()
 	End Sub
+
+
+	Private Sub lbxContacts_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lbxContacts.SelectionChanged
+		If lbxContacts.SelectedItem Is Nothing Then Exit Sub
+		'dgNotes.Items.Clear()
+
+		'For Each Item In CType(lbxContacts.SelectedItem, Contact).Notes
+		'	dgNotes.Items.Add(Item)
+		'Next
+	End Sub
+
+	Private Sub cbxSearchContacts_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxSearchContacts.SelectionChanged
+		Dim Contact As Contact = cbxSearchContacts.SelectedItem
+		cbxCompanies.SelectedItem = Contact.Company
+		lbxContacts.SelectedItem = Contact
+	End Sub
+
 
 	'Private Sub cbxCompanies_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxCompanies.SelectionChanged
 	'	gbxCompany.DataContext = cbxCompanies.SelectedItem

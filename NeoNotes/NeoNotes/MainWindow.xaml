@@ -21,17 +21,24 @@
 					<TextBox x:Name="txtContactEmail" HorizontalAlignment="Left" Height="23" Margin="76,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding SelectedItem.Email, ElementName=lbxContacts}"/>
 					<Label x:Name="label2_Copy1" Content="Position" HorizontalAlignment="Left" Margin="6,92,0,0" VerticalAlignment="Top"/>
 					<TextBox x:Name="txtContactPosition" HorizontalAlignment="Left" Height="23" Margin="76,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.533,2.696" Text="{Binding SelectedItem.Position, ElementName=lbxContacts}"/>
-					<GroupBox x:Name="groupBox" Header="Notes" HorizontalAlignment="Left" Margin="23,470,0,0" VerticalAlignment="Top" Height="137" Width="650">
-						<Grid />
+					<GroupBox x:Name="groupBox" Header="Notes" HorizontalAlignment="Left" Margin="240,246,0,0" VerticalAlignment="Top" Height="371" Width="433">
+						<Grid >
+							<Label x:Name="label6" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,8,0,0"/>
+							<Label x:Name="label7" Content="Text" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
+							<TextBox x:Name="textBox" Height="23" Margin="78,12,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Text="{Binding SelectedItem.Name, ElementName=dgNotes}"/>
+							<TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="309" Margin="78,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Text="{Binding SelectedItem.Text, ElementName=dgNotes}"/>
+						</Grid>
 					</GroupBox>
-					<ListBox x:Name="lbxNotes" HorizontalAlignment="Left" Height="215" Margin="240,37,0,0" VerticalAlignment="Top" Width="433"/>
 					<Label x:Name="label3" Content="Notes" HorizontalAlignment="Left" Margin="240,7,0,0" VerticalAlignment="Top"/>
-					<DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="240,257,0,0" VerticalAlignment="Top" Height="208" Width="433" ItemsSource="{Binding SelectedItem.Notes, ElementName=lbxContacts}">
+					<DataGrid x:Name="dgNotes" HorizontalAlignment="Left" Margin="240,33,0,0" VerticalAlignment="Top" Height="208" Width="433" ItemsSource="{Binding SelectedItem.Notes, ElementName=lbxContacts}" AutoGenerateColumns="False" IsReadOnly="True">
+						<!-- ItemsSource="{Binding SelectedItem.Notes, ElementName=lbxContacts}" AutoGenerateColumns="False" -->
 						<DataGrid.Columns>
-							<DataGridTextColumn Binding="{Binding Path=Date}" ClipboardContentBinding="{Binding Path=Date}" Header="Date" Width="100"/>
-							<DataGridTextColumn Binding="{Binding Path=Name}" ClipboardContentBinding="{Binding Path=Name}" Header="Name" Width="*"/>
+							<DataGridTextColumn Binding="{Binding Path=Date, StringFormat=\{0:dd/MM/yyyy\}}" Header="Date" Width="100" SortDirection="Descending" />
+							<DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" Width="*"/>
 						</DataGrid.Columns>
 					</DataGrid>
+					<Label x:Name="label4" HorizontalAlignment="Left" Margin="195,277,0,0" VerticalAlignment="Top"/>
+					<Label x:Name="label5" Content="Make the Grid editable&#xD;&#xA;" Margin="530,10,10,577" RenderTransformOrigin="1.262,1.217"/>
 
 				</Grid>
 			</TabItem>
@@ -40,7 +47,7 @@
 			</TabItem>
 		</TabControl>
 		<Button x:Name="btnPrintCompanies" Content="Print Companies" HorizontalAlignment="Left" Margin="649,10,0,0" VerticalAlignment="Top" Width="98"/>
-		<ComboBox x:Name="cbxSearchContacts" HorizontalAlignment="Left" Margin="372,15,0,0" VerticalAlignment="Top" Width="214"/>
+		<ComboBox x:Name="cbxSearchContacts" HorizontalAlignment="Left" Margin="372,15,0,0" VerticalAlignment="Top" Width="214" DisplayMemberPath="Name"/>
 		<Label x:Name="label_Copy5" Content="Search Contacts" HorizontalAlignment="Left" Margin="272,14,0,0" VerticalAlignment="Top"/>
 		<GroupBox x:Name="gbxCompany" Header="Company" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Height="633" Width="311">
 			<Grid>

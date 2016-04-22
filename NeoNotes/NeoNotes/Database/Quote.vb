@@ -15,7 +15,7 @@ Partial Public Class Quote
     Public Property [Date] As Date
     Public Property Name As String
 
-    Public Overridable Property Customer As Company
+    Public Overridable Property Company As Company
     Public Overridable Property Lines As ICollection(Of QuoteLine) = New HashSet(Of QuoteLine)
 
 End Class
