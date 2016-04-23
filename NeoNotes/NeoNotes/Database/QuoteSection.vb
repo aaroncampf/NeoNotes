@@ -10,14 +10,10 @@
 Imports System
 Imports System.Collections.Generic
 
-Partial Public Class QuoteLine
+Partial Public Class QuoteSection
     Public Property ID As Integer
-    Public Property Display As Integer
-    Public Property UNIT As String
-    Public Property COST As Decimal
-    Public Property DESC As String
-    Public Property IsCentered As Boolean
+    Public Property Name As String
 
-    Public Overridable Property Quote As Quote
+    Public Overridable Property QuoteSectionDetails As ICollection(Of QuoteSectionDetail) = New HashSet(Of QuoteSectionDetail)
 
 End Class

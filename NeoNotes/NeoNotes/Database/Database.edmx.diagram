@@ -14,6 +14,9 @@
         <AssociationConnector Association="Database.CustomerQuote" />
         <EntityTypeShape EntityType="Database.QuoteLine" Width="1.5" PointX="6.375" PointY="3.25" />
         <AssociationConnector Association="Database.QuoteQuoteLine" />
+        <EntityTypeShape EntityType="Database.QuoteSection" Width="1.5" PointX="4.125" PointY="6.375" />
+        <EntityTypeShape EntityType="Database.QuoteSectionDetail" Width="1.5" PointX="6.75" PointY="6.875" />
+        <AssociationConnector Association="Database.QuoteSectionQuoteSectionDetail" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

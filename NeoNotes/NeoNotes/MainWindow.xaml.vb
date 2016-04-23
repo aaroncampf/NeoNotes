@@ -64,6 +64,13 @@ Class MainWindow
 		lbxContacts.SelectedItem = Contact
 	End Sub
 
+	Private Sub btnContactRemove_Click(sender As Object, e As RoutedEventArgs) Handles btnContactRemove.Click
+		If MsgBox($"Are you sure you want to remove the contact {txtContactName.Text}?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+			CType(cbxCompanies.SelectedItem, Company).Contacts.Remove(lbxContacts.SelectedItem)
+			lbxContacts.Items.Refresh()
+		End If
+	End Sub
+
 
 	'Private Sub cbxCompanies_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxCompanies.SelectionChanged
 	'	gbxCompany.DataContext = cbxCompanies.SelectedItem

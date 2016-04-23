@@ -155,6 +155,12 @@
             <End Role="Quote" EntitySet="Quotes" />
             <End Role="QuoteLine" EntitySet="QuoteLines" />
           </AssociationSet>
+          <EntitySet Name="QuoteSections" EntityType="Database.QuoteSection" />
+          <EntitySet Name="QuoteSectionDetails" EntityType="Database.QuoteSectionDetail" />
+          <AssociationSet Name="QuoteSectionQuoteSectionDetail" Association="Database.QuoteSectionQuoteSectionDetail">
+            <End Role="QuoteSection" EntitySet="QuoteSections" />
+            <End Role="QuoteSectionDetail" EntitySet="QuoteSectionDetails" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Company">
           <Key>
@@ -224,10 +230,35 @@
           <Property Name="UNIT" Type="String" Nullable="false" />
           <Property Name="COST" Type="Decimal" Nullable="false" />
           <Property Name="DESC" Type="String" Nullable="false" />
+          <Property Name="IsCentered" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="QuoteQuoteLine">
           <End Type="Database.Quote" Role="Quote" Multiplicity="1" />
           <End Type="Database.QuoteLine" Role="QuoteLine" Multiplicity="*" />
+        </Association>
+        <EntityType Name="QuoteSection">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="QuoteSectionDetails" Relationship="Database.QuoteSectionQuoteSectionDetail" FromRole="QuoteSection" ToRole="QuoteSectionDetail" />
+          <Property Name="Name" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QuoteSectionDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="QuoteSection" Relationship="Database.QuoteSectionQuoteSectionDetail" FromRole="QuoteSectionDetail" ToRole="QuoteSection" />
+          <Property Name="Display" Type="Int32" Nullable="false" />
+          <Property Name="UNIT" Type="String" Nullable="false" />
+          <Property Name="COST" Type="Decimal" Nullable="false" />
+          <Property Name="DESC" Type="String" Nullable="false" />
+          <Property Name="IsCentered" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="QuoteSectionQuoteSectionDetail">
+          <End Type="Database.QuoteSection" Role="QuoteSection" Multiplicity="1" />
+          <End Type="Database.QuoteSectionDetail" Role="QuoteSectionDetail" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>

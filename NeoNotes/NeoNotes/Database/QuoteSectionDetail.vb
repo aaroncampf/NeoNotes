@@ -10,7 +10,7 @@
 Imports System
 Imports System.Collections.Generic
 
-Partial Public Class QuoteLine
+Partial Public Class QuoteSectionDetail
     Public Property ID As Integer
     Public Property Display As Integer
     Public Property UNIT As String
@@ -18,6 +18,6 @@ Partial Public Class QuoteLine
     Public Property DESC As String
     Public Property IsCentered As Boolean
 
-    Public Overridable Property Quote As Quote
+    Public Overridable Property QuoteSection As QuoteSection
 
 End Class

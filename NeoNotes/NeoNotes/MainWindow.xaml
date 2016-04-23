@@ -7,12 +7,18 @@
         xmlns:NeoNotes="clr-namespace:NeoNotes" x:Name="window" x:Class="MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="726.985" Width="1069.581">
+
+	<Window.Resources>
+		<local:IsNothingConverter x:Key="IsNothingConverter"/>
+	</Window.Resources>
+
+
 	<Grid x:Name="grid">
-		<ComboBox x:Name="cbxCompanies" HorizontalAlignment="Left" Margin="86,15,0,0" VerticalAlignment="Top" Width="166" DisplayMemberPath="Name"/>
+		<ComboBox x:Name="cbxCompanies" HorizontalAlignment="Left" Margin="86,15,0,0" VerticalAlignment="Top" Width="166" DisplayMemberPath="Name" IsEditable="True"/>
 		<Label x:Name="label_Copy4" Content="Company" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top"/>
-		<TabControl x:Name="tabControl" Margin="373,51,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+		<TabControl x:Name="tabControl" Margin="274,51,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
 			<TabItem Header="Contact">
-				<Grid Background="#FFE5E5E5" Margin="0,2,0,-2">
+				<Grid Background="#FFE5E5E5" IsEnabled="{Binding SelectedItem, ElementName=lbxContacts, Converter={StaticResource IsNothingConverter}}">
 					<TextBox x:Name="txtContactName" HorizontalAlignment="Left" Height="23" Margin="76,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding SelectedItem.Name, ElementName=lbxContacts}"/>
 					<Label x:Name="label_Copy6" Content="Name" HorizontalAlignment="Left" Margin="6,7,0,0" VerticalAlignment="Top" Width="65" />
 					<Label x:Name="label2" Content="Phone" HorizontalAlignment="Left" Margin="6,33,0,0" VerticalAlignment="Top"/>
@@ -21,12 +27,12 @@
 					<TextBox x:Name="txtContactEmail" HorizontalAlignment="Left" Height="23" Margin="76,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding SelectedItem.Email, ElementName=lbxContacts}"/>
 					<Label x:Name="label2_Copy1" Content="Position" HorizontalAlignment="Left" Margin="6,92,0,0" VerticalAlignment="Top"/>
 					<TextBox x:Name="txtContactPosition" HorizontalAlignment="Left" Height="23" Margin="76,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.533,2.696" Text="{Binding SelectedItem.Position, ElementName=lbxContacts}"/>
-					<GroupBox x:Name="groupBox" Header="Notes" HorizontalAlignment="Left" Margin="240,246,0,0" VerticalAlignment="Top" Height="371" Width="433">
+					<GroupBox x:Name="groupBox" Header="Notes" Margin="240,246,109,0" VerticalAlignment="Top" Height="346" IsEnabled="{Binding SelectedItem, ElementName=dgNotes, Converter={StaticResource IsNothingConverter}}">
 						<Grid >
 							<Label x:Name="label6" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,8,0,0"/>
 							<Label x:Name="label7" Content="Text" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
-							<TextBox x:Name="textBox" Height="23" Margin="78,12,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Text="{Binding SelectedItem.Name, ElementName=dgNotes}"/>
-							<TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="309" Margin="78,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="343" Text="{Binding SelectedItem.Text, ElementName=dgNotes}"/>
+							<TextBox x:Name="textBox" Height="23" Margin="78,12,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Text="{Binding SelectedItem.Name, ElementName=dgNotes}" />
+							<TextBox x:Name="textBox1" Margin="78,40,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Text, ElementName=dgNotes}"/>
 						</Grid>
 					</GroupBox>
 					<Label x:Name="label3" Content="Notes" HorizontalAlignment="Left" Margin="240,7,0,0" VerticalAlignment="Top"/>
@@ -39,17 +45,26 @@
 					</DataGrid>
 					<Label x:Name="label4" HorizontalAlignment="Left" Margin="195,277,0,0" VerticalAlignment="Top"/>
 					<Label x:Name="label5" Content="Make the Grid editable&#xD;&#xA;" Margin="530,10,10,577" RenderTransformOrigin="1.262,1.217"/>
+					<Button x:Name="btnContactRemove" Content="Remove" Margin="0,597,0,0" VerticalAlignment="Top"/>
 
 				</Grid>
 			</TabItem>
-			<TabItem Header="Quotes">
-				<Grid Background="#FFE5E5E5"/>
+			<TabItem Header="Quotes" HorizontalAlignment="Right" Width="54">
+				<Grid Background="#FFE5E5E5" IsEnabled="{Binding SelectedItem, ElementName=lbxContacts, Converter={StaticResource IsNothingConverter}}">
+					<Label x:Name="label8" Content="Quotes" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+					<ListBox x:Name="listBox" HorizontalAlignment="Left" Height="542" Margin="10,36,0,0" VerticalAlignment="Top" Width="296"/>
+					<Button x:Name="button" Content="Add" HorizontalAlignment="Left" Margin="10,587,0,0" VerticalAlignment="Top" Width="296"/>
+					<GroupBox x:Name="groupBox1" Header="Details" HorizontalAlignment="Left" Margin="311,36,0,0" VerticalAlignment="Top" Height="542" Width="471">
+						
+					</GroupBox>
+				</Grid>
 			</TabItem>
+			<Button x:Name="btnQuoteAdd" Content="Button" Height="100" Width="75"/>
 		</TabControl>
-		<Button x:Name="btnPrintCompanies" Content="Print Companies" HorizontalAlignment="Left" Margin="649,10,0,0" VerticalAlignment="Top" Width="98"/>
-		<ComboBox x:Name="cbxSearchContacts" HorizontalAlignment="Left" Margin="372,15,0,0" VerticalAlignment="Top" Width="214" DisplayMemberPath="Name"/>
+		<Button x:Name="btnPrintCompanies" Content="Print Companies" HorizontalAlignment="Left" Margin="605,15,0,0" VerticalAlignment="Top" Width="98"/>
+		<ComboBox x:Name="cbxSearchContacts" HorizontalAlignment="Left" Margin="372,15,0,0" VerticalAlignment="Top" Width="214" DisplayMemberPath="Name" IsEditable="True"/>
 		<Label x:Name="label_Copy5" Content="Search Contacts" HorizontalAlignment="Left" Margin="272,14,0,0" VerticalAlignment="Top"/>
-		<GroupBox x:Name="gbxCompany" Header="Company" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Height="633" Width="311">
+		<GroupBox x:Name="gbxCompany" Header="Company" HorizontalAlignment="Left" Margin="0,51,0,0" VerticalAlignment="Top" Height="645" Width="269" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
 			<Grid>
 				<TextBox x:Name="txtCompanyName" HorizontalAlignment="Left" Height="23" Margin="83,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Text="{Binding SelectedItem.Name, ElementName=cbxCompanies}"  />
 				<Label x:Name="label" Content="Name" HorizontalAlignment="Left" Margin="7,6,0,0" VerticalAlignment="Top" Width="65"/>
