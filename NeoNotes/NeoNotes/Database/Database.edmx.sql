@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 04/21/2016 19:17:02
+-- Date Created: 04/23/2016 16:32:45
 -- Generated from EDMX file: C:\Users\aaron\Documents\GitHub\NeoNotes\NeoNotes\NeoNotes\Database\Database.edmx
 -- --------------------------------------------------
 
@@ -73,7 +73,7 @@ CREATE TABLE [dbo].[Contacts] (
     [Phone] nvarchar(max)  NULL,
     [Email] nvarchar(max)  NULL,
     [Position] nvarchar(max)  NULL,
-    [Customer_ID] int  NOT NULL
+    [Company_ID] int  NOT NULL
 );
 GO
 
@@ -82,7 +82,7 @@ CREATE TABLE [dbo].[Quotes] (
     [ID] int IDENTITY(1,1) NOT NULL,
     [Date] datetime  NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
-    [Customer_ID] int  NOT NULL
+    [Company_ID] int  NOT NULL
 );
 GO
 
@@ -103,7 +103,27 @@ CREATE TABLE [dbo].[QuoteLines] (
     [UNIT] nvarchar(max)  NOT NULL,
     [COST] decimal(18,0)  NOT NULL,
     [DESC] nvarchar(max)  NOT NULL,
+    [IsCentered] bit  NOT NULL,
     [Quote_ID] int  NOT NULL
+);
+GO
+
+-- Creating table 'QuoteSections'
+CREATE TABLE [dbo].[QuoteSections] (
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(max)  NOT NULL
+);
+GO
+
+-- Creating table 'QuoteSectionDetails'
+CREATE TABLE [dbo].[QuoteSectionDetails] (
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [Display] int  NOT NULL,
+    [UNIT] nvarchar(max)  NOT NULL,
+    [COST] decimal(18,0)  NOT NULL,
+    [DESC] nvarchar(max)  NOT NULL,
+    [IsCentered] bit  NOT NULL,
+    [QuoteSection_ID] int  NOT NULL
 );
 GO
 
@@ -141,6 +161,18 @@ ADD CONSTRAINT [PK_QuoteLines]
     PRIMARY KEY CLUSTERED ([ID] ASC);
 GO
 
+-- Creating primary key on [ID] in table 'QuoteSections'
+ALTER TABLE [dbo].[QuoteSections]
+ADD CONSTRAINT [PK_QuoteSections]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'QuoteSectionDetails'
+ALTER TABLE [dbo].[QuoteSectionDetails]
+ADD CONSTRAINT [PK_QuoteSectionDetails]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
@@ -160,10 +192,10 @@ ON [dbo].[Notes]
     ([Contact_ID]);
 GO
 
--- Creating foreign key on [Customer_ID] in table 'Contacts'
+-- Creating foreign key on [Company_ID] in table 'Contacts'
 ALTER TABLE [dbo].[Contacts]
 ADD CONSTRAINT [FK_CustomerContact]
-    FOREIGN KEY ([Customer_ID])
+    FOREIGN KEY ([Company_ID])
     REFERENCES [dbo].[Companies]
         ([ID])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -172,13 +204,13 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_CustomerContact'
 CREATE INDEX [IX_FK_CustomerContact]
 ON [dbo].[Contacts]
-    ([Customer_ID]);
+    ([Company_ID]);
 GO
 
--- Creating foreign key on [Customer_ID] in table 'Quotes'
+-- Creating foreign key on [Company_ID] in table 'Quotes'
 ALTER TABLE [dbo].[Quotes]
 ADD CONSTRAINT [FK_CustomerQuote]
-    FOREIGN KEY ([Customer_ID])
+    FOREIGN KEY ([Company_ID])
     REFERENCES [dbo].[Companies]
         ([ID])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -187,7 +219,7 @@ GO
 -- Creating non-clustered index for FOREIGN KEY 'FK_CustomerQuote'
 CREATE INDEX [IX_FK_CustomerQuote]
 ON [dbo].[Quotes]
-    ([Customer_ID]);
+    ([Company_ID]);
 GO
 
 -- Creating foreign key on [Quote_ID] in table 'QuoteLines'
@@ -203,6 +235,21 @@ GO
 CREATE INDEX [IX_FK_QuoteQuoteLine]
 ON [dbo].[QuoteLines]
     ([Quote_ID]);
+GO
+
+-- Creating foreign key on [QuoteSection_ID] in table 'QuoteSectionDetails'
+ALTER TABLE [dbo].[QuoteSectionDetails]
+ADD CONSTRAINT [FK_QuoteSectionQuoteSectionDetail]
+    FOREIGN KEY ([QuoteSection_ID])
+    REFERENCES [dbo].[QuoteSections]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_QuoteSectionQuoteSectionDetail'
+CREATE INDEX [IX_FK_QuoteSectionQuoteSectionDetail]
+ON [dbo].[QuoteSectionDetails]
+    ([QuoteSection_ID]);
 GO
 
 -- --------------------------------------------------

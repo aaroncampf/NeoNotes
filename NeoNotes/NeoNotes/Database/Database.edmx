@@ -11,6 +11,8 @@
     <EntitySet Name="Quotes" EntityType="Database.Store.Quotes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Notes" EntityType="Database.Store.Notes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="QuoteLines" EntityType="Database.Store.QuoteLines" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="QuoteSections" EntityType="Database.Store.QuoteSections" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="QuoteSectionDetails" EntityType="Database.Store.QuoteSectionDetails" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ContactNote" Association="Database.Store.ContactNote">
       <End Role="Contact" EntitySet="Contacts" />
       <End Role="Note" EntitySet="Notes" />
@@ -26,6 +28,10 @@
     <AssociationSet Name="QuoteQuoteLine" Association="Database.Store.QuoteQuoteLine">
       <End Role="Quote" EntitySet="Quotes" />
       <End Role="QuoteLine" EntitySet="QuoteLines" />
+    </AssociationSet>
+    <AssociationSet Name="QuoteSectionQuoteSectionDetail" Association="Database.Store.QuoteSectionQuoteSectionDetail">
+      <End Role="QuoteSection" EntitySet="QuoteSections" />
+      <End Role="QuoteSectionDetail" EntitySet="QuoteSectionDetails" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Companies">
@@ -49,7 +55,7 @@
     <Property Name="Phone" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Email" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Position" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="Customer_ID" Type="int" Nullable="false" />
+    <Property Name="Company_ID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Quotes">
     <Key>
@@ -58,7 +64,7 @@
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Customer_ID" Type="int" Nullable="false" />
+    <Property Name="Company_ID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Notes">
     <Key>
@@ -79,7 +85,27 @@
     <Property Name="UNIT" Type="nvarchar(max)" Nullable="false" />
     <Property Name="COST" Type="decimal" Nullable="false" />
     <Property Name="DESC" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsCentered" Type="bit" Nullable="false" />
     <Property Name="Quote_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="QuoteSections">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="QuoteSectionDetails">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Display" Type="int" Nullable="false" />
+    <Property Name="UNIT" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="COST" Type="decimal" Nullable="false" />
+    <Property Name="DESC" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsCentered" Type="bit" Nullable="false" />
+    <Property Name="QuoteSection_ID" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="ContactNote">
     <End Role="Contact" Type="Database.Store.Contacts" Multiplicity="1" />
@@ -101,7 +127,7 @@
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="Contact">
-        <PropertyRef Name="Customer_ID" />
+        <PropertyRef Name="Company_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -113,7 +139,7 @@
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="Quote">
-        <PropertyRef Name="Customer_ID" />
+        <PropertyRef Name="Company_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -126,6 +152,18 @@
       </Principal>
       <Dependent Role="QuoteLine">
         <PropertyRef Name="Quote_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="QuoteSectionQuoteSectionDetail">
+    <End Role="QuoteSection" Type="Database.Store.QuoteSections" Multiplicity="1" />
+    <End Role="QuoteSectionDetail" Type="Database.Store.QuoteSectionDetails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="QuoteSection">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="QuoteSectionDetail">
+        <PropertyRef Name="QuoteSection_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -317,6 +355,27 @@
           <ScalarProperty Name="UNIT" ColumnName="UNIT" />
           <ScalarProperty Name="COST" ColumnName="COST" />
           <ScalarProperty Name="DESC" ColumnName="DESC" />
+          <ScalarProperty Name="IsCentered" ColumnName="IsCentered" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuoteSections">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.QuoteSection)">
+        <MappingFragment StoreEntitySet="QuoteSections">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QuoteSectionDetails">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.QuoteSectionDetail)">
+        <MappingFragment StoreEntitySet="QuoteSectionDetails">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Display" ColumnName="Display" />
+          <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+          <ScalarProperty Name="COST" ColumnName="COST" />
+          <ScalarProperty Name="DESC" ColumnName="DESC" />
+          <ScalarProperty Name="IsCentered" ColumnName="IsCentered" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -330,7 +389,7 @@
     </AssociationSetMapping>
     <AssociationSetMapping Name="CustomerContact" TypeName="Database.CustomerContact" StoreEntitySet="Contacts">
       <EndProperty Name="Customer">
-        <ScalarProperty Name="ID" ColumnName="Customer_ID" />
+        <ScalarProperty Name="ID" ColumnName="Company_ID" />
       </EndProperty>
       <EndProperty Name="Contact">
         <ScalarProperty Name="ID" ColumnName="ID" />
@@ -338,7 +397,7 @@
     </AssociationSetMapping>
     <AssociationSetMapping Name="CustomerQuote" TypeName="Database.CustomerQuote" StoreEntitySet="Quotes">
       <EndProperty Name="Customer">
-        <ScalarProperty Name="ID" ColumnName="Customer_ID" />
+        <ScalarProperty Name="ID" ColumnName="Company_ID" />
       </EndProperty>
       <EndProperty Name="Quote">
         <ScalarProperty Name="ID" ColumnName="ID" />
@@ -349,6 +408,14 @@
         <ScalarProperty Name="ID" ColumnName="Quote_ID" />
       </EndProperty>
       <EndProperty Name="QuoteLine">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="QuoteSectionQuoteSectionDetail" TypeName="Database.QuoteSectionQuoteSectionDetail" StoreEntitySet="QuoteSectionDetails">
+      <EndProperty Name="QuoteSection">
+        <ScalarProperty Name="ID" ColumnName="QuoteSection_ID" />
+      </EndProperty>
+      <EndProperty Name="QuoteSectionDetail">
         <ScalarProperty Name="ID" ColumnName="ID" />
       </EndProperty>
     </AssociationSetMapping>

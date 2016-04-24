@@ -12,6 +12,11 @@
 		context.Contacts.Find(1).Notes.Add(New Note With {.ID = 1, .Date = Now, .Name = "Test", .Text = "Hello World"})
 		context.Contacts.Find(1).Notes.Add(New Note With {.ID = 2, .Date = Now.AddDays(-1), .Name = "Test 2", .Text = "Hello World 2"})
 
+		context.Companies.Find(1).Quotes.Add(New Quote With {.ID = 1, .Date = Now, .Name = "Test"})
+		context.Quotes.Find(1).Lines.Add(New QuoteLine With {.ID = 1, .Display = 2, .DESC = "Desc 1", .UNIT = "Unit", .COST = 1.25})
+		context.Quotes.Find(1).Lines.Add(New QuoteLine With {.ID = 1, .Display = 1, .DESC = "Desc 2", .UNIT = "Unit", .COST = 1.25})
+
+
 	End Sub
 
 End Class

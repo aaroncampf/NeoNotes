@@ -12,6 +12,8 @@ Class MainWindow
 		db.Database.CreateIfNotExists()
 		db.Database.Initialize(True)
 
+		colQuoteDetailDescription.ItemsSource = {"A", "B", "C"}
+
 
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
@@ -22,6 +24,9 @@ Class MainWindow
 		For Each Item In db.Contacts
 			cbxSearchContacts.Items.Add(Item)
 		Next
+
+
+		dgQuoteDetails.Items.SortDescriptions.Add(New ComponentModel.SortDescription With {.PropertyName = "Display", .Direction = ComponentModel.ListSortDirection.Ascending})
 	End Sub
 
 	Private Sub btnPrintCompanies_Click(sender As Object, e As RoutedEventArgs) Handles btnPrintCompanies.Click
@@ -71,8 +76,33 @@ Class MainWindow
 		End If
 	End Sub
 
+	Private Sub btnQuoteAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteAdd.Click
+		Dim Quote As New Quote With {.Name = "New Quote"}
+		CType(cbxCompanies.SelectedItem, Company).Quotes.Add(Quote)
+
+		lbxQuotes.SelectedItem = Quote
+		lbxQuotes.Items.Refresh()
+	End Sub
+
+	Private Sub btnQuoteDetailAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAdd.Click
+		Dim QuoteLine As New QuoteLine With {.DESC = "Text"}
+		CType(lbxQuotes.SelectedItem, Quote).Lines.Add(QuoteLine)
+
+		dgQuoteDetails.SelectedItem = QuoteLine
+		dgQuoteDetails.Items.Refresh()
+	End Sub
+
+	Private Sub btnQuoteLineUp_Click(sender As Object, e As RoutedEventArgs) 'Handles btnQuoteLineUp.Click
+
+	End Sub
+
+	'Private Sub dgQuoteDetails_LoadingRow(sender As Object, e As DataGridRowEventArgs) Handles dgQuoteDetails.LoadingRow
+	'	Dim Items As HashSet(Of QuoteLine) = dgQuoteDetails.ItemsSource
+	'	Items.OrderBy(Function(x) x.Display)
+	'End Sub
+
 
 	'Private Sub cbxCompanies_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxCompanies.SelectionChanged
 	'	gbxCompany.DataContext = cbxCompanies.SelectedItem
-	'End Sub
+	'End	
 End Class
