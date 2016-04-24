@@ -93,8 +93,58 @@ Class MainWindow
 	End Sub
 
 	Private Sub btnQuoteLineUp_Click(sender As Object, e As RoutedEventArgs) 'Handles btnQuoteLineUp.Click
-
+		Quote_ShiftDetail(LogicalDirection.Forward)
 	End Sub
+
+	Private Sub btnQuoteLineDown_Click(sender As Object, e As RoutedEventArgs) 'Handles btnQuoteLineUp.Click
+		Quote_ShiftDetail(LogicalDirection.Backward)
+	End Sub
+
+
+	''' <summary>
+	'''
+	''' </summary>
+	''' <param name="Direction">The Direction you want to Move the Detail; -1 = No movement.</param>
+	''' <remarks></remarks>
+	''' <stepthrough></stepthrough>
+	Private Sub Quote_ShiftDetail(Direction As LogicalDirection)
+		If dgQuoteDetails.SelectedItem Is Nothing Then Exit Sub
+		Dim CurrentLine As QuoteLine = CType(dgQuoteDetails.SelectedItem, QuoteLine)
+		Dim Quote As Quote = CurrentLine.Quote
+
+
+		Dim Sorter = Function(x As QuoteLine, y As QuoteLine) If(x.Display = y.Display, x.ID.CompareTo(y.ID), x.Display).CompareTo(y.Display)
+
+		Dim Data = Quote.Lines.ToList
+		Data.Sort(Sorter)
+
+		Dim List As New LinkedList(Of QuoteLine)
+		For I As Integer = 0 To Data.Count - 1
+			Data(I).Display = I
+			List.AddLast(Data(I))
+		Next
+
+		If Direction = -1 Then
+		ElseIf Direction = LogicalDirection.Backward Then
+			CurrentLine.Display = CurrentLine.Display + 1
+
+			If List.Find(CurrentLine).Next IsNot Nothing Then
+				List.Find(CurrentLine).Next.Value.Display = List.Find(CurrentLine).Next.Value.Display - 1
+			End If
+
+		ElseIf Val(CurrentLine.Display) > 0 Then
+			CurrentLine.Display = CurrentLine.Display - 1
+
+			If List.Find(CurrentLine).Previous IsNot Nothing Then
+				List.Find(CurrentLine).Previous.Value.Display = List.Find(CurrentLine).Previous.Value.Display + 1
+			End If
+		End If
+
+		dgQuoteDetails.Items.SortDescriptions.Add(New ComponentModel.SortDescription With {.PropertyName = "Display", .Direction = ComponentModel.ListSortDirection.Ascending})
+		dgQuoteDetails.Items.Refresh()
+	End Sub
+
+
 
 	'Private Sub dgQuoteDetails_LoadingRow(sender As Object, e As DataGridRowEventArgs) Handles dgQuoteDetails.LoadingRow
 	'	Dim Items As HashSet(Of QuoteLine) = dgQuoteDetails.ItemsSource
