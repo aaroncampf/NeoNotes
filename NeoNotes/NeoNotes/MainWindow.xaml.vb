@@ -172,8 +172,13 @@ Class MainWindow
 
 	Private Sub btnQuoteEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail.Click
 		Dim Contact As Contact = lbxContacts.SelectedItem
+		If Contact.Email Is Nothing Then
+			MsgBox("Contact has no email")
+			Exit Sub
+		End If
+
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-		If lbxQuotes Is Nothing Then
+		If Quote Is Nothing Then
 			MsgBox("No Quote has been selected")
 			Exit Sub
 		End If
@@ -191,15 +196,8 @@ Class MainWindow
 				Dim Body As XElement
 				Body = XElement.Parse(GetBody.Item2.Item2).<BODY>(0)
 				Body.Name = XName.Get("P")
-				Dim Message As New Gmail(Settings.Name, Settings.Gmail, Settings.GmailPassword, GetBody.Item2.Item1, Body, {Contact.Email}.ToList, Nothing)
-
-
-				Dim Quote_Printout = Create_Quote_Printout()
-				'Quote_Printout.Show()
-				Quote_Printout.AsPDF()
-
-
-				Message.Attachments = New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout().AsPDF}}
+				Dim Message As New Gmail(Settings.Name, Settings.Gmail, Settings.GmailPassword, GetBody.Item2.Item1, Body, {Contact.Email}.ToList)
+				Message.Attachments.Add("Quote.pdf", Create_Quote_Printout().AsPDF)
 				Message.Send(Body)
 			End If
 		End If
@@ -219,7 +217,7 @@ Class MainWindow
 
 		Items.Table.CellSpacing = 0 '<-- I don't think this is having any affect due to the CustomXAML
 
-        For Each Detail In Quote.Lines.OrderBy(Function(x) Val(x.Display))
+		For Each Detail In Quote.Lines.OrderBy(Function(x) Val(x.Display))
 			If Val(Detail.COST) > 0.0 Then
 				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormatCurrency(Val(Detail.COST), 2))
 			Else
@@ -278,11 +276,8 @@ Class MainWindow
 		Property Body As String
 		Property SendTo As List(Of String)
 		''' <summary>A Dictionary(Of String(As Name), String(As Path))</summary>
-		Property Attachments As Dictionary(Of String, String)
+		ReadOnly Property Attachments As New Dictionary(Of String, String)
 
-		Property XMLBody As XElement
-
-		Property LinkedResources As New List(Of M.LinkedResource)
 
 		''' <summary>
 		'''
@@ -295,36 +290,13 @@ Class MainWindow
 		''' <param name="Attachments"></param>
 		''' <remarks></remarks>
 		''' <stepthrough></stepthrough>
-		Sub New(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As List(Of String), Attachments As Dictionary(Of String, String))
+		Sub New(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As List(Of String))
 
 			Me.Email = Email
 			Me.Password = Password
 			Me.Subject = Subject
 			Me.Body = Body
 			Me.SendTo = SendTo
-			Me.Attachments = Attachments
-		End Sub
-
-		''' <summary>
-		'''
-		''' </summary>
-		''' <param name="Email"></param>
-		''' <param name="Password"></param>
-		''' <param name="Subject"></param>
-		''' <param name="XMLBody"></param>
-		''' <param name="SendTo"></param>
-		''' <param name="Attachments"></param>
-		''' <remarks></remarks>
-		''' <stepthrough></stepthrough>
-		Sub New(DisplayName As String, Email As String, Password As String, Subject As String, XMLBody As XElement, SendTo As List(Of String),
-				Attachments As Dictionary(Of String, String))
-
-			Me.Email = Email
-			Me.Password = Password
-			Me.Subject = Subject
-			Me.XMLBody = XMLBody
-			Me.SendTo = SendTo
-			Me.Attachments = Attachments
 		End Sub
 
 		''' <summary>
@@ -345,11 +317,9 @@ Class MainWindow
 					Mail.To.Add(Item)
 				Next
 
-				If Attachments IsNot Nothing Then
-					For Each Item In Attachments
-						Mail.Attachments.Add(New M.Attachment(Item.Value) With {.Name = Item.Key})
-					Next
-				End If
+				For Each Item In Attachments
+					Mail.Attachments.Add(New M.Attachment(Item.Value) With {.Name = Item.Key})
+				Next
 
 				If Extra_Attachments IsNot Nothing Then
 					For Each Item In Extra_Attachments
@@ -362,26 +332,15 @@ Class MainWindow
 				End If
 
 				Dim alternateView1 As M.AlternateView
-				'If Node Is Nothing Then
-				'    alternateView1 = M.AlternateView.CreateAlternateViewFromString(Body, Nothing, Net.Mime.MediaTypeNames.Text.Html)
-				'Else
-				'    alternateView1 = M.AlternateView.CreateAlternateViewFromString(Node.ToString + Body, Nothing, Net.Mime.MediaTypeNames.Text.Html)
-				'End If
 				If Node Is Nothing Then
 					alternateView1 = M.AlternateView.CreateAlternateViewFromString(Nothing, Nothing, Net.Mime.MediaTypeNames.Text.Html)
 				Else
 					alternateView1 = M.AlternateView.CreateAlternateViewFromString(Node.ToString, Nothing, Net.Mime.MediaTypeNames.Text.Html)
 				End If
 
-				For Each Item In Me.LinkedResources
-					alternateView1.LinkedResources.Add(Item)
-				Next
-
 				Mail.AlternateViews.Add(alternateView1)
 				Mail.IsBodyHtml = True
 				Mail.DeliveryNotificationOptions = M.DeliveryNotificationOptions.OnFailure
-				'mail.ReplyToList.Add(New M.MailAddress(SendTo))
-
 				AddHandler SmtpServer.SendCompleted,
 					Sub()
 						MsgBox("Email Sent")
@@ -389,8 +348,6 @@ Class MainWindow
 					End Sub
 
 				SmtpServer.SendAsync(Mail, "")
-				'SmtpServer.Send(Mail)
-
 			Catch ex As M.SmtpException
 				SmtpServer.Dispose()
 				Select Case ex.StatusCode

@@ -715,7 +715,7 @@ Aaron.Reports
  <remarks></remarks>
  <stepthrough>Enabled</stepthrough>
 </member>
-<member name="M:Aaron.Reports.Basic.AddPage(System.Boolean,System.IO.MemoryStream,iTextSharp.text.Document@,iTextSharp.text.pdf.PdfWriter)">
+<member name="M:Aaron.Reports.Basic.AddPage(System.Boolean,System.String,iTextSharp.text.Document@,iTextSharp.text.pdf.PdfWriter)">
  <summary>
  
  </summary>
