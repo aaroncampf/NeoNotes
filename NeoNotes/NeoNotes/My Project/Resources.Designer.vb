@@ -59,5 +59,21 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;FlowDocument xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot; 
+        '''			  xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
+        '''			  xmlns:xrd=&quot;clr-namespace:Aaron.Reports;assembly=Aaron.Reports&quot;
+        '''              ColumnWidth=&quot;21cm&quot; PageHeight=&quot;27.0cm&quot; PageWidth=&quot;21cm&quot; FontFamily=&quot;Century Gothic&quot;&gt;
+        '''    &lt;!--
+        '''    ColumnWidth=&quot;21cm&quot; PageHeight=&quot;29.7cm&quot; PageWidth=&quot;21cm&quot;
+        '''    xmlns:crcv=&quot;clr-namespace:CodeReason.Reports.Charts.Visifire;assembly=CodeReason.Reports.Charts.Visifire&quot; 
+        '''    xmlns:xrd=&quot;c [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property Hand_Made_Quote() As String
+            Get
+                Return ResourceManager.GetString("Hand_Made_Quote", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

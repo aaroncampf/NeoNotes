@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 04/23/2016 16:32:45
+-- Date Created: 04/24/2016 11:05:24
 -- Generated from EDMX file: C:\Users\aaron\Documents\GitHub\NeoNotes\NeoNotes\NeoNotes\Database\Database.edmx
 -- --------------------------------------------------
 
@@ -29,6 +29,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_QuoteQuoteLine]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[QuoteLines] DROP CONSTRAINT [FK_QuoteQuoteLine];
 GO
+IF OBJECT_ID(N'[dbo].[FK_QuoteSectionQuoteSectionDetail]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[QuoteSectionDetails] DROP CONSTRAINT [FK_QuoteSectionQuoteSectionDetail];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -48,6 +51,12 @@ IF OBJECT_ID(N'[dbo].[Notes]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[QuoteLines]', 'U') IS NOT NULL
     DROP TABLE [dbo].[QuoteLines];
+GO
+IF OBJECT_ID(N'[dbo].[QuoteSections]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[QuoteSections];
+GO
+IF OBJECT_ID(N'[dbo].[QuoteSectionDetails]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[QuoteSectionDetails];
 GO
 
 -- --------------------------------------------------
@@ -127,6 +136,18 @@ CREATE TABLE [dbo].[QuoteSectionDetails] (
 );
 GO
 
+-- Creating table 'Settings'
+CREATE TABLE [dbo].[Settings] (
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(max)  NOT NULL,
+    [Gmail] nvarchar(max)  NOT NULL,
+    [GmailPassword] nvarchar(max)  NOT NULL,
+    [Email] nvarchar(max)  NOT NULL,
+    [Address] nvarchar(max)  NOT NULL,
+    [Phone] nvarchar(max)  NOT NULL
+);
+GO
+
 -- --------------------------------------------------
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
@@ -170,6 +191,12 @@ GO
 -- Creating primary key on [ID] in table 'QuoteSectionDetails'
 ALTER TABLE [dbo].[QuoteSectionDetails]
 ADD CONSTRAINT [PK_QuoteSectionDetails]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'Settings'
+ALTER TABLE [dbo].[Settings]
+ADD CONSTRAINT [PK_Settings]
     PRIMARY KEY CLUSTERED ([ID] ASC);
 GO
 

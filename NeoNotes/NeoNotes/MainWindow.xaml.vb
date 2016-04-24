@@ -1,11 +1,12 @@
 ﻿Imports Aaron.Reports
+Imports M = System.Net.Mail
 
 Class MainWindow
 	Dim db As New DatabaseContainer
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
-		AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory())
-		System.Data.Entity.Database.SetInitializer(Of DatabaseContainer)(New DatabaseDbInitializer)
+		AppDomain.CurrentDomain.SetData("DataDirectory", IO.Directory.GetCurrentDirectory())
+		Data.Entity.Database.SetInitializer(Of DatabaseContainer)(New DatabaseDbInitializer)
 
 		db.Database.CreateIfNotExists()
 		db.Database.Delete()
@@ -13,7 +14,7 @@ Class MainWindow
 		db.Database.Initialize(True)
 
 		colQuoteDetailDescription.ItemsSource = {"A", "B", "C"}
-
+		cbxQuoteLineDescription.ItemsSource = {"AAtest", "AAABBB", "AAVBBHJ"}
 
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
@@ -85,8 +86,9 @@ Class MainWindow
 	End Sub
 
 	Private Sub btnQuoteDetailAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAdd.Click
-		Dim QuoteLine As New QuoteLine With {.DESC = "Text"}
-		CType(lbxQuotes.SelectedItem, Quote).Lines.Add(QuoteLine)
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		Dim QuoteLine As New QuoteLine With {.DESC = "Text", .Quote = Quote}
+		Quote.Lines.Add(QuoteLine)
 
 		dgQuoteDetails.SelectedItem = QuoteLine
 		dgQuoteDetails.Items.Refresh()
@@ -144,15 +146,262 @@ Class MainWindow
 		dgQuoteDetails.Items.Refresh()
 	End Sub
 
+	Private Sub btnCompanyPrintContacts_Click(sender As Object, e As RoutedEventArgs) Handles btnCompanyPrintContacts.Click
+		Dim Company As Company = cbxCompanies.SelectedItem
+
+		Dim ContactReport As New Basic()
+		Dim Info As New Sections.Table("Contacts For " & Company.Name)
+		Info.Header.TextAlignment = TextAlignment.Center
+
+		Info.Table.Columns.Add(New TableColumn With {.Tag = "Name"})
+		Info.Table.Columns.Add(New TableColumn With {.Tag = "Position"})
+		Info.Table.Columns.Add(New TableColumn With {.Tag = "Phone"})
+		Info.Table.Columns.Add(New TableColumn With {.Tag = "Email"})
+
+		For Each Item In Company.Contacts.OrderBy(Function(x) x.Name)
+			Info.Table.AddRow(0, TextAlignment.Left, Item.Name, Item.Position, Item.Phone, Item.Email)
+		Next
+
+		ContactReport.Sections.Add(Info)
+		ContactReport.Show()
+	End Sub
+
+	Private Sub btnContactEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnContactEmail.Click
+		Process.Start($"https://mail.google.com/mail/?view=cm&fs=1&tf=1&to={CType(lbxContacts.SelectedItem, Contact).Email}")
+	End Sub
+
+	Private Sub btnQuoteEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail.Click
+		Dim Contact As Contact = lbxContacts.SelectedItem
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		If lbxQuotes Is Nothing Then
+			MsgBox("No Quote has been selected")
+			Exit Sub
+		End If
+
+		Dim Settings = New DatabaseContainer().Settings.First
+		If String.IsNullOrWhiteSpace(Settings.Gmail) Or String.IsNullOrWhiteSpace(Settings.GmailPassword) Then
+			MsgBox("Please Setup the GMail Email And Password Settings")
+		Else
+			If My.User.Name.Contains("Aaron Campf") Then
+				If MsgBox("Are you Sure you want to send then Email to: " & Contact.Email, MsgBoxStyle.YesNo) = MsgBoxResult.No Then Exit Sub
+			End If
+
+			Dim GetBody = frmMsgBuilder.ShowDialog(True, False, "Send Email to " & Contact.Name)
+			If GetBody IsNot Nothing AndAlso GetBody.Item1 = Forms.DialogResult.OK Then
+				Dim Body As XElement
+				Body = XElement.Parse(GetBody.Item2.Item2).<BODY>(0)
+				Body.Name = XName.Get("P")
+				Dim Message As New Gmail(Settings.Name, Settings.Gmail, Settings.GmailPassword, GetBody.Item2.Item1, Body, {Contact.Email}.ToList, Nothing)
 
 
-	'Private Sub dgQuoteDetails_LoadingRow(sender As Object, e As DataGridRowEventArgs) Handles dgQuoteDetails.LoadingRow
-	'	Dim Items As HashSet(Of QuoteLine) = dgQuoteDetails.ItemsSource
-	'	Items.OrderBy(Function(x) x.Display)
-	'End Sub
+				Dim Quote_Printout = Create_Quote_Printout()
+				'Quote_Printout.Show()
+				Quote_Printout.AsPDF()
 
 
-	'Private Sub cbxCompanies_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxCompanies.SelectionChanged
-	'	gbxCompany.DataContext = cbxCompanies.SelectedItem
-	'End	
+				Message.Attachments = New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout().AsPDF}}
+				Message.Send(Body)
+			End If
+		End If
+	End Sub
+
+
+
+	Private Function Create_Quote_Printout() As Basic
+		Dim Company As Company = cbxCompanies.SelectedItem
+		Dim Contact As Contact = lbxContacts.SelectedItem
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		Dim Settings = New DatabaseContainer().Settings.First
+
+		Dim Items As New Sections.Table(New TableColumn With {.Tag = "UNIT", .Width = New GridLength(150)},
+										New TableColumn With {.Tag = "Description"},
+										New TableColumn With {.Tag = "COST", .Width = New GridLength(100)})
+
+		Items.Table.CellSpacing = 0 '<-- I don't think this is having any affect due to the CustomXAML
+
+        For Each Detail In Quote.Lines.OrderBy(Function(x) Val(x.Display))
+			If Val(Detail.COST) > 0.0 Then
+				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormatCurrency(Val(Detail.COST), 2))
+			Else
+				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, "")
+			End If
+
+			Items.Table.RowGroups(0).Rows.Last.Cells(1).Blocks(0).TextAlignment = TextAlignment.Left
+
+			If Detail.IsCentered Then
+				Items.Table.RowGroups(0).Rows.Last.Cells(1).Blocks(0).TextAlignment = TextAlignment.Center
+			End If
+		Next
+
+		'TODO: Inline this Soon!
+
+		'{"Quote_Title", If(Quote.Title Is Nothing, "Quote", Quote.Title)},
+		Dim Temp_Holder As New Dictionary(Of String, Object) From {
+			{"Company", Company.Name},
+			{"Address", Company.Address},
+			{"Contact", Contact.Name},
+			{"CityZip", Company.City & " " & Company.Zip},
+			{"Phone", Company.Phone},
+			{"Quote_Title", Quote.Name},
+			{"User_Cell", Settings.Phone},
+			{"User_Address", Settings.Address},
+			{"Salesperson", Settings.Name},
+			{"Email", Settings.Email}
+		}
+
+		Dim CustomXAML As String = My.Resources.Hand_Made_Quote.Replace("<!--{0}-->", Items.Table.RowGroups(0).ToXML.ToString)
+		If Company Is Nothing Then CustomXAML = CustomXAML.Replace("To:", "")
+
+		Dim XAML = CustomXAML.Replace("xmlns:xrd=""clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports""",
+									  "xmlns:xrd=""clr-namespace:Aaron.Xaml;assembly=Aaron.Xaml""")
+
+		Dim Test_Report As New Basic()
+		Test_Report.CustomXAML = XAML
+		Test_Report.DocumentValues = Temp_Holder
+
+		Return Test_Report
+	End Function
+
+
+	''' <summary>
+	'''
+	''' </summary>
+	''' <remarks></remarks>
+	''' <features></features>
+	''' <stepthrough></stepthrough>
+	Public Class Gmail
+		Property DisplayName As String
+		Property Email As String
+		Property Password As String
+		Property Mail As New M.MailMessage()
+		Property Subject As String
+		Property Body As String
+		Property SendTo As List(Of String)
+		''' <summary>A Dictionary(Of String(As Name), String(As Path))</summary>
+		Property Attachments As Dictionary(Of String, String)
+
+		Property XMLBody As XElement
+
+		Property LinkedResources As New List(Of M.LinkedResource)
+
+		''' <summary>
+		'''
+		''' </summary>
+		''' <param name="Email"></param>
+		''' <param name="Password"></param>
+		''' <param name="Subject"></param>
+		''' <param name="Body"></param>
+		''' <param name="SendTo"></param>
+		''' <param name="Attachments"></param>
+		''' <remarks></remarks>
+		''' <stepthrough></stepthrough>
+		Sub New(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As List(Of String), Attachments As Dictionary(Of String, String))
+
+			Me.Email = Email
+			Me.Password = Password
+			Me.Subject = Subject
+			Me.Body = Body
+			Me.SendTo = SendTo
+			Me.Attachments = Attachments
+		End Sub
+
+		''' <summary>
+		'''
+		''' </summary>
+		''' <param name="Email"></param>
+		''' <param name="Password"></param>
+		''' <param name="Subject"></param>
+		''' <param name="XMLBody"></param>
+		''' <param name="SendTo"></param>
+		''' <param name="Attachments"></param>
+		''' <remarks></remarks>
+		''' <stepthrough></stepthrough>
+		Sub New(DisplayName As String, Email As String, Password As String, Subject As String, XMLBody As XElement, SendTo As List(Of String),
+				Attachments As Dictionary(Of String, String))
+
+			Me.Email = Email
+			Me.Password = Password
+			Me.Subject = Subject
+			Me.XMLBody = XMLBody
+			Me.SendTo = SendTo
+			Me.Attachments = Attachments
+		End Sub
+
+		''' <summary>
+		'''
+		''' </summary>
+		''' <param name="Extra_Attachments"></param>
+		''' <remarks></remarks>
+		''' <stepthrough></stepthrough>
+		Sub Send(Node As XElement, ParamArray Extra_Attachments As Tuple(Of String, IO.MemoryStream)())
+			Dim SmtpServer As New M.SmtpClient("smtp.gmail.com", 587) With {
+				.EnableSsl = True, .UseDefaultCredentials = False, .Credentials = New Net.NetworkCredential(Email, Password)}
+
+			'From Text.Encoding.UTF8 --> Text.Encoding.Default --> Text.Encoding.UTF8
+			Mail = New M.MailMessage() With {.Subject = Subject, .Body = Body, .From = New M.MailAddress(Email, DisplayName, System.Text.Encoding.UTF8)}
+
+			Try
+				For Each Item In Me.SendTo
+					Mail.To.Add(Item)
+				Next
+
+				If Attachments IsNot Nothing Then
+					For Each Item In Attachments
+						Mail.Attachments.Add(New M.Attachment(Item.Value) With {.Name = Item.Key})
+					Next
+				End If
+
+				If Extra_Attachments IsNot Nothing Then
+					For Each Item In Extra_Attachments
+						'This Extra MemoryStream is Required for the Attachment to actually work!!
+						Dim MemoryStream As New IO.MemoryStream
+						MemoryStream.Write(Item.Item2.ToArray, 0, Item.Item2.Length)
+						MemoryStream.Seek(0, IO.SeekOrigin.Begin)
+						Mail.Attachments.Add(New M.Attachment(MemoryStream, Item.Item1))
+					Next
+				End If
+
+				Dim alternateView1 As M.AlternateView
+				'If Node Is Nothing Then
+				'    alternateView1 = M.AlternateView.CreateAlternateViewFromString(Body, Nothing, Net.Mime.MediaTypeNames.Text.Html)
+				'Else
+				'    alternateView1 = M.AlternateView.CreateAlternateViewFromString(Node.ToString + Body, Nothing, Net.Mime.MediaTypeNames.Text.Html)
+				'End If
+				If Node Is Nothing Then
+					alternateView1 = M.AlternateView.CreateAlternateViewFromString(Nothing, Nothing, Net.Mime.MediaTypeNames.Text.Html)
+				Else
+					alternateView1 = M.AlternateView.CreateAlternateViewFromString(Node.ToString, Nothing, Net.Mime.MediaTypeNames.Text.Html)
+				End If
+
+				For Each Item In Me.LinkedResources
+					alternateView1.LinkedResources.Add(Item)
+				Next
+
+				Mail.AlternateViews.Add(alternateView1)
+				Mail.IsBodyHtml = True
+				Mail.DeliveryNotificationOptions = M.DeliveryNotificationOptions.OnFailure
+				'mail.ReplyToList.Add(New M.MailAddress(SendTo))
+
+				AddHandler SmtpServer.SendCompleted,
+					Sub()
+						MsgBox("Email Sent")
+						SmtpServer.Dispose()
+					End Sub
+
+				SmtpServer.SendAsync(Mail, "")
+				'SmtpServer.Send(Mail)
+
+			Catch ex As M.SmtpException
+				SmtpServer.Dispose()
+				Select Case ex.StatusCode
+					Case M.SmtpStatusCode.MustIssueStartTlsFirst
+						MsgBox("Error when Sending Message" & vbCrLf & vbCrLf & "Check your Email and Password", MsgBoxStyle.Critical)
+					Case Else
+						MsgBox(ex.ToString)
+				End Select
+			End Try
+		End Sub
+	End Class
+
+
 End Class

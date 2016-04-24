@@ -29,5 +29,6 @@ Partial Public Class DatabaseContainer
     Public Overridable Property QuoteLines() As DbSet(Of QuoteLine)
     Public Overridable Property QuoteSections() As DbSet(Of QuoteSection)
     Public Overridable Property QuoteSectionDetails() As DbSet(Of QuoteSectionDetail)
+    Public Overridable Property Settings() As DbSet(Of Setting)
 
 End Class

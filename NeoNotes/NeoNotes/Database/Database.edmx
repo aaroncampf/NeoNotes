@@ -13,6 +13,7 @@
     <EntitySet Name="QuoteLines" EntityType="Database.Store.QuoteLines" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="QuoteSections" EntityType="Database.Store.QuoteSections" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="QuoteSectionDetails" EntityType="Database.Store.QuoteSectionDetails" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Settings" EntityType="Database.Store.Settings" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ContactNote" Association="Database.Store.ContactNote">
       <End Role="Contact" EntitySet="Contacts" />
       <End Role="Note" EntitySet="Notes" />
@@ -107,6 +108,18 @@
     <Property Name="IsCentered" Type="bit" Nullable="false" />
     <Property Name="QuoteSection_ID" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="Settings">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Gmail" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GmailPassword" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
   <Association Name="ContactNote">
     <End Role="Contact" Type="Database.Store.Contacts" Multiplicity="1" />
     <End Role="Note" Type="Database.Store.Notes" Multiplicity="*" />
@@ -199,6 +212,7 @@
             <End Role="QuoteSection" EntitySet="QuoteSections" />
             <End Role="QuoteSectionDetail" EntitySet="QuoteSectionDetails" />
           </AssociationSet>
+          <EntitySet Name="Settings" EntityType="Database.Setting" />
         </EntityContainer>
         <EntityType Name="Company">
           <Key>
@@ -298,6 +312,18 @@
           <End Type="Database.QuoteSection" Role="QuoteSection" Multiplicity="1" />
           <End Type="Database.QuoteSectionDetail" Role="QuoteSectionDetail" Multiplicity="*" />
         </Association>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Gmail" Type="String" Nullable="false" />
+          <Property Name="GmailPassword" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" />
+          <Property Name="Phone" Type="String" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -376,6 +402,19 @@
           <ScalarProperty Name="COST" ColumnName="COST" />
           <ScalarProperty Name="DESC" ColumnName="DESC" />
           <ScalarProperty Name="IsCentered" ColumnName="IsCentered" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Settings">
+      <EntityTypeMapping TypeName="IsTypeOf(Database.Setting)">
+        <MappingFragment StoreEntitySet="Settings">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Gmail" ColumnName="Gmail" />
+          <ScalarProperty Name="GmailPassword" ColumnName="GmailPassword" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

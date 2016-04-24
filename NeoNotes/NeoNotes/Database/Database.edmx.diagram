@@ -17,6 +17,7 @@
         <EntityTypeShape EntityType="Database.QuoteSection" Width="1.5" PointX="4.125" PointY="6.375" />
         <EntityTypeShape EntityType="Database.QuoteSectionDetail" Width="1.5" PointX="6.75" PointY="6.875" />
         <AssociationConnector Association="Database.QuoteSectionQuoteSectionDetail" />
+        <EntityTypeShape EntityType="Database.Setting" Width="1.5" PointX="9.5" PointY="1.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
