@@ -1,4 +1,6 @@
 ﻿Imports Aaron.Reports
+Imports AppLimit.CloudComputing.SharpBox
+Imports AppLimit.CloudComputing.SharpBox.StorageProvider.API
 Imports M = System.Net.Mail
 
 Class MainWindow
@@ -196,9 +198,9 @@ Class MainWindow
 				Dim Body As XElement
 				Body = XElement.Parse(GetBody.Item2.Item2).<BODY>(0)
 				Body.Name = XName.Get("P")
-				Dim Message As New Gmail(Settings.Name, Settings.Gmail, Settings.GmailPassword, GetBody.Item2.Item1, Body, {Contact.Email}.ToList)
-				Message.Attachments.Add("Quote.pdf", Create_Quote_Printout().AsPDF)
-				Message.Send(Body)
+				Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout().AsPDF}}
+
+				SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, GetBody.Item2.Item1, Body, {Contact.Email}, Attachments)
 			End If
 		End If
 	End Sub
@@ -261,104 +263,89 @@ Class MainWindow
 	End Function
 
 
-	''' <summary>
-	'''
-	''' </summary>
-	''' <remarks></remarks>
-	''' <features></features>
-	''' <stepthrough></stepthrough>
-	Public Class Gmail
-		Property DisplayName As String
-		Property Email As String
-		Property Password As String
-		Property Mail As New M.MailMessage()
-		Property Subject As String
-		Property Body As String
-		Property SendTo As List(Of String)
-		''' <summary>A Dictionary(Of String(As Name), String(As Path))</summary>
-		ReadOnly Property Attachments As New Dictionary(Of String, String)
+	Private Sub SendMail(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As IEnumerable(Of String), Attachments As Dictionary(Of String, String))
+		Dim Mail As New M.MailMessage()
 
-
-		''' <summary>
-		'''
-		''' </summary>
-		''' <param name="Email"></param>
-		''' <param name="Password"></param>
-		''' <param name="Subject"></param>
-		''' <param name="Body"></param>
-		''' <param name="SendTo"></param>
-		''' <param name="Attachments"></param>
-		''' <remarks></remarks>
-		''' <stepthrough></stepthrough>
-		Sub New(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As List(Of String))
-
-			Me.Email = Email
-			Me.Password = Password
-			Me.Subject = Subject
-			Me.Body = Body
-			Me.SendTo = SendTo
-		End Sub
-
-		''' <summary>
-		'''
-		''' </summary>
-		''' <param name="Extra_Attachments"></param>
-		''' <remarks></remarks>
-		''' <stepthrough></stepthrough>
-		Sub Send(Node As XElement, ParamArray Extra_Attachments As Tuple(Of String, IO.MemoryStream)())
-			Dim SmtpServer As New M.SmtpClient("smtp.gmail.com", 587) With {
+		Dim SmtpServer As New M.SmtpClient("smtp.gmail.com", 587) With {
 				.EnableSsl = True, .UseDefaultCredentials = False, .Credentials = New Net.NetworkCredential(Email, Password)}
 
-			'From Text.Encoding.UTF8 --> Text.Encoding.Default --> Text.Encoding.UTF8
-			Mail = New M.MailMessage() With {.Subject = Subject, .Body = Body, .From = New M.MailAddress(Email, DisplayName, System.Text.Encoding.UTF8)}
+		'From Text.Encoding.UTF8 --> Text.Encoding.Default --> Text.Encoding.UTF8
+		Mail = New M.MailMessage() With {.Subject = Subject, .Body = Body, .From = New M.MailAddress(Email, DisplayName, Text.Encoding.UTF8)}
 
-			Try
-				For Each Item In Me.SendTo
-					Mail.To.Add(Item)
-				Next
+		Try
+			For Each Item In SendTo
+				Mail.To.Add(Item)
+			Next
 
-				For Each Item In Attachments
-					Mail.Attachments.Add(New M.Attachment(Item.Value) With {.Name = Item.Key})
-				Next
+			For Each Item In Attachments
+				Mail.Attachments.Add(New M.Attachment(Item.Value) With {.Name = Item.Key})
+			Next
 
-				If Extra_Attachments IsNot Nothing Then
-					For Each Item In Extra_Attachments
-						'This Extra MemoryStream is Required for the Attachment to actually work!!
-						Dim MemoryStream As New IO.MemoryStream
-						MemoryStream.Write(Item.Item2.ToArray, 0, Item.Item2.Length)
-						MemoryStream.Seek(0, IO.SeekOrigin.Begin)
-						Mail.Attachments.Add(New M.Attachment(MemoryStream, Item.Item1))
-					Next
-				End If
+			Mail.IsBodyHtml = True
+			Mail.DeliveryNotificationOptions = M.DeliveryNotificationOptions.OnFailure
+			AddHandler SmtpServer.SendCompleted,
+				Sub()
+					MsgBox("Email Sent")
+					SmtpServer.Dispose()
+				End Sub
 
-				Dim alternateView1 As M.AlternateView
-				If Node Is Nothing Then
-					alternateView1 = M.AlternateView.CreateAlternateViewFromString(Nothing, Nothing, Net.Mime.MediaTypeNames.Text.Html)
-				Else
-					alternateView1 = M.AlternateView.CreateAlternateViewFromString(Node.ToString, Nothing, Net.Mime.MediaTypeNames.Text.Html)
-				End If
+			SmtpServer.SendAsync(Mail, "")
+		Catch ex As M.SmtpException
+			SmtpServer.Dispose()
+			Select Case ex.StatusCode
+				Case M.SmtpStatusCode.MustIssueStartTlsFirst
+					MsgBox("Error when Sending Message" & vbCrLf & vbCrLf & "Check your Email and Password", MsgBoxStyle.Critical)
+				Case Else
+					MsgBox(ex.ToString)
+			End Select
+		End Try
+	End Sub
 
-				Mail.AlternateViews.Add(alternateView1)
-				Mail.IsBodyHtml = True
-				Mail.DeliveryNotificationOptions = M.DeliveryNotificationOptions.OnFailure
-				AddHandler SmtpServer.SendCompleted,
-					Sub()
-						MsgBox("Email Sent")
-						SmtpServer.Dispose()
-					End Sub
+	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
+		Try
+			Me.db.SaveChanges()
 
-				SmtpServer.SendAsync(Mail, "")
-			Catch ex As M.SmtpException
-				SmtpServer.Dispose()
-				Select Case ex.StatusCode
-					Case M.SmtpStatusCode.MustIssueStartTlsFirst
-						MsgBox("Error when Sending Message" & vbCrLf & vbCrLf & "Check your Email and Password", MsgBoxStyle.Critical)
-					Case Else
-						MsgBox(ex.ToString)
-				End Select
-			End Try
-		End Sub
-	End Class
+			Dim Settings = New DatabaseContainer().Settings.First
 
+			'Dim MyNotes = XElement.Load(N.frmNotes.File) '.Save(SaveFile1.SelectedPath & "\Notes_To_Droid.txt")
+
+
+
+			Dim MyNotes =
+			<Customers>
+				<%= From Company In db.Companies.ToArray Select Company.ToXML %>
+			</Customers>
+
+			'Do not use [.ForEach()] for this or[Visual Studio] Will Crash
+			For Each Node In MyNotes...<Quote>
+				Node.@Date = If(Node.@Date = "", Date.MinValue.ToShortDateString, CDate(Node.@Date).ToShortDateString)
+			Next
+
+			For Each Node In MyNotes...<Note>
+				Node.@Date = If(Node.@Date = "", Date.MinValue.ToShortDateString, CDate(Node.@Date).ToShortDateString)
+			Next
+
+			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
+
+
+			'The example totally works!!!
+			Dim dropBoxStorage As New CloudStorage()
+			Dim dropBoxConfig = CloudStorage.GetCloudConfigurationEasy(nSupportedCloudConfigurations.DropBox)
+			Dim accessToken As ICloudStorageAccessToken
+
+			'load a valid security token from file
+			Dim byt As Byte() = System.Text.Encoding.UTF8.GetBytes(My.Resources.DropBox_Token)
+			accessToken = dropBoxStorage.DeserializeSecurityTokenFromBase64(Convert.ToBase64String(byt))
+
+
+			'open the connection
+			Dim storageToken = dropBoxStorage.Open(dropBoxConfig, accessToken)
+
+			dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & Settings.Name)
+		Catch ex As Exception
+			MsgBox(ex.ToString, MsgBoxStyle.OkOnly, ex.GetType.Name)
+			e.Cancel = True
+		End Try
+	End Sub
 
 End Class

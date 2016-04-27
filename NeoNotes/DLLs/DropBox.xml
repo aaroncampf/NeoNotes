@@ -1,0 +1,684 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+DropBox
+</name>
+</assembly>
+<members>
+<member name="T:DropBox.App">
+ <summary>
+
+ </summary>
+ <remarks></remarks>
+ <features></features>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="P:DropBox.App.IsOnline(System.Boolean)">
+ <summary>
+
+ </summary>
+ <param name="ShowMessageIfOffline">If True then Displays A Message If wwww.DropBox.com is Unavailable
+ [<code>MsgBox("You are Either not Connected to the Internet or www.DropBox.com is Offline")</code>]</param>
+ <value></value>
+ <remarks></remarks>
+ <ComfortWrapper>True</ComfortWrapper>
+</member>
+<member name="M:DropBox.App.CreateApp(System.Boolean,System.String,System.String,System.String,System.String)">
+ <summary>
+ Creates the Single Instance of the App
+ </summary>
+ <param name="KeepOld">If True then If the App has Already been created Then the CreateApp will be Canceled</param>
+ <param name="Email">The DropBox Account Email</param>
+ <param name="Password">The Account's Password</param>
+ <param name="ConsumerKey">The Application's ConsumerKey</param>
+ <param name="ConsumerSecret">The Application's ConsumerSecret</param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.App.GenerateSecurityToken(AppLimit.CloudComputing.SharpBox.StorageProvider.DropBox.DropBoxConfiguration,AppLimit.CloudComputing.SharpBox.CloudStorage,System.String,System.String,System.String)">
+ <summary>
+ Generates A DropBox SecurityToken, Serializes it in the File at the Specified Path [Creates the File], Then Return
+ </summary>
+ <param name="Config">The DropBoxConfiguration you are using for the DropBox App</param>
+ <param name="ConsumerKey">The ConsumerKey for the App</param>
+ <param name="ConsumerSecret">The ConsumerSecret for the App</param>
+ <param name="Path">The Path where you want to Serialize the Key</param>
+ <remarks><para>
+ Do Not Delete this! You will Need it.
+ If you save the Created XML File in A Resource File, Then Save it as Binary so you can Add it to A MemoryStream Directly [Also Prevents an Error]
+ </para></remarks>
+ <exception cref="T:System.Net.WebException">The Program was Unable to Access DropBox.com</exception>
+ <stepthrough>Disabled</stepthrough>
+</member>
+<member name="M:DropBox.App.#ctor(System.String,System.String,System.String,System.String)">
+ <summary>
+
+ </summary>
+ <param name="Email"></param>
+ <param name="Password"></param>
+ <param name="ConsumerKey"></param>
+ <param name="ConsumerSecret"></param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="T:DropBox.AppUsers">
+ <summary>
+ 
+ </summary>
+ <remarks></remarks>
+ <features></features>
+ <stepthrough></stepthrough>
+</member>
+<member name="P:DropBox.AppUsers.UserNames">
+ <summary>
+ 
+ </summary>
+ <value></value>
+ <remarks></remarks>
+ <ComfortWrapper>True</ComfortWrapper>
+</member>
+<member name="M:DropBox.AppUsers.#ctor(AppLimit.CloudComputing.SharpBox.CloudStorage@)">
+ <summary>
+ 
+ </summary>
+ <param name="Cloud"></param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.AppUsers.AddUser(System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Name">The of the User you want to Add</param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.AppUsers.DeleteUser(System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Name">The Name of the User you want to Delete</param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="T:DropBox.BaseDirectory">
+ <summary>
+ A Comfort Wrapper for A <see cref="T:AppLimit.CloudComputing.SharpBox.ICloudDirectoryEntry">ICloudDirectoryEntry</see>
+ 
+ MERGE WITH <see cref="T:DropBox.BaseFolder">BaseFolder</see> 
+ At Least I think I should Merge them O.o?!
+ </summary>
+ <remarks></remarks>
+ <features></features>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.BaseDirectory.CreateTextFile(System.String,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="FileName"></param>
+ <param name="Text"></param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough></stepthrough>
+</member>
+<member name="M:DropBox.BaseDirectory.SaveObjectAsXMLFile(System.String,System.Object)">
+ <summary>
+ Serializes an Object into A File and Uploads it into this Folder
+ </summary>
+ <param name="FileName">The Name of the File you want to the File</param>
+ <param name="Thing">The Object you want to Seralize</param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.BaseDirectory.UpLoadXML(System.String,System.Xml.Linq.XElement)">
+ <summary>
+ Serializes an Object into A File and Uploads it into this Folder
+ </summary>
+ <param name="FileName">The Name of the File you want to the File</param>
+ <param name="Node">The Node Upload</param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.BaseDirectory.CreateFolder(System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Path">The Path of the File</param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.BaseDirectory.#ctor(System.Boolean,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Create">If True then Folder Online</param>
+ <param name="Location">The Location of the Folder</param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="T:DropBox.BaseFolder">
+ <summary>
+ Represents A Basic Folder in A <see cref="T:AppLimit.CloudComputing.SharpBox.CloudStorage">CloudStorage</see>
+ </summary>
+ <remarks></remarks>
+ <features></features>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="P:DropBox.BaseFolder.Cloud">
+ <summary>
+ The <see cref="T:AppLimit.CloudComputing.SharpBox.CloudStorage"/> that this Folder is From
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:DropBox.BaseFolder.Location">
+ <summary>
+ The Path of the Current Folder
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:DropBox.BaseFolder.Folder">
+ <summary>
+ Returns the <see cref="T:AppLimit.CloudComputing.SharpBox.ICloudDirectoryEntry"/> for this Folder. 
+ If the Folder does not exist then it is Created
+ </summary>
+ <value></value>
+ <remarks></remarks>
+</member>
+<member name="M:DropBox.BaseFolder.#ctor(AppLimit.CloudComputing.SharpBox.CloudStorage@,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Cloud">The CloudStorage that the Folder Belongs in</param>
+ <param name="Location">The Location of the Folder</param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.BaseFolder.UploadFile(System.String,System.String)">
+ <summary>
+ Uploads A File into this Folder
+ </summary>
+ <param name="Path">The Path(With FullName) of the </param>
+    <param name="FileName">Optionally Replaces the Original File Name</param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough></stepthrough>
+</member>
+<member name="M:DropBox.BaseFolder.DownloadFile(System.String,System.String)">
+ <summary>
+ Downloads A File From the Current Folder into <paramref name="Folder">Folder</paramref>
+ </summary>
+ <param name="FileName">The name of the File you want to Download</param>
+ <param name="Folder">The Path of the Folder you want to Download the File to</param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.BaseFolder.AddFolder(System.String)">
+ <summary>
+ Adds A New Child Folders to this Current Folder
+ </summary>
+ <param name="Name">The Name for the New Folder</param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.BaseFolder.DeleteChild(System.String)">
+ <summary>
+ Deletes A Child File/Folder
+ </summary>
+ <param name="Name">The name of the File/Folder</param>
+ <remarks></remarks>
+ <stepthrough></stepthrough>
+</member>
+<member name="M:DropBox.BaseFolder.GetChild(System.String)">
+ <summary>
+ Normally file based storage systems are supporting a hierarchical folder structure.
+ This interface will be used to get access on the folders in the cloud storage
+ </summary> 
+</member>
+<member name="T:DropBox.Khendys.Controls.ExRichTextBox">
+ <summary>
+ This class adds the following functionality to RichTextBox:
+
+ 1.	Allows plain text to be inserted or appended programmatically to RTF
+		content.
+ 2.	Allows the font, text color, and highlight color of plain text to be
+		specified when inserting or appending text as RTF.
+	3.	Allows images to be inserted programmatically, or with interaction from
+		the user.
+ </summary>
+ <remarks>
+ Many solutions to the problem of programmatically inserting images
+ into a RichTextBox use the clipboard or hard code the RTF for
+ the image in the program.  This class is an attempt to make the process of
+ inserting images at runtime more flexible without the overhead of maintaining
+ the clipboard or the use of huge, cumbersome strings.
+
+ RTF Specification v1.6 was used and is referred to many times in this document.
+ http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnrtfspec/html/rtfspec.asp
+
+ For information about the RichEdit (Unmanaged RichTextBox) ...
+ http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/richedit/richeditcontrols/aboutricheditcontrols.asp
+ 
+ "http://www.codeproject.com/KB/edit/csexrichtextbox.aspx"
+ </remarks>
+</member>
+<member name="P:DropBox.Khendys.Controls.ExRichTextBox.TextColor">
+ <summary>
+ The color of the text
+ </summary>
+ <value></value>
+ <remarks></remarks>
+</member>
+<member name="P:DropBox.Khendys.Controls.ExRichTextBox.HighlightColor">
+ <summary>
+ The color of the highlight
+ </summary>
+ <value></value>
+ <remarks></remarks>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.#ctor">
+ <summary>
+ Initializes the text colors, creates dictionaries for RTF colors and
+ font families, and stores the horizontal and vertical resolution of
+ the RichTextBox's graphics context.
+ </summary>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.#ctor(DropBox.Khendys.Controls.RtfColors)">
+ <summary>
+ Calls the default constructor then sets the text color.
+ </summary>
+ <param name="_textColor"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.#ctor(DropBox.Khendys.Controls.RtfColors,DropBox.Khendys.Controls.RtfColors)">
+ <summary>
+ Calls the default constructor then sets te text and highlight colors.
+ </summary>
+ <param name="_textColor"></param>
+ <param name="_highlightColor"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.AppendRtf(System.String)">
+ <summary>
+ Assumes the string passed as a paramter is valid RTF text and attempts
+ to append it as RTF to the content of the control.
+ </summary>
+ <param name="_rtf"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.InsertRtf(System.String)">
+ <summary>
+ Assumes that the string passed as a parameter is valid RTF text and
+ attempts to insert it as RTF into the content of the control.
+ </summary>
+ <remarks>
+ NOTE: The text is inserted wherever the caret is at the time of the call,
+ and if any text is selected, that text is replaced.
+ </remarks>
+ <param name="_rtf"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.AppendTextAsRtf(System.String)">
+ <summary>
+ Appends the text using the current font, text, and highlight colors.
+ </summary>
+ <param name="_text"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.AppendTextAsRtf(System.String,System.Drawing.Font)">
+ <summary>
+ Appends the text using the given font, and current text and highlight
+ colors.
+ </summary>
+ <param name="_text"></param>
+ <param name="_font"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.AppendTextAsRtf(System.String,System.Drawing.Font,DropBox.Khendys.Controls.RtfColors)">
+ <summary>
+ Appends the text using the given font and text color, and the current
+ highlight color.
+ </summary>
+ <param name="_text"></param>
+ <param name="_font"></param>
+ <param name="_textColor"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.AppendTextAsRtf(System.String,System.Drawing.Font,DropBox.Khendys.Controls.RtfColors,DropBox.Khendys.Controls.RtfColors)">
+ <summary>
+ Appends the text using the given font, text, and highlight colors.  Simply
+ moves the caret to the end of the RichTextBox's text and makes a call to
+ insert.
+ </summary>
+ <param name="_text"></param>
+ <param name="_font"></param>
+ <param name="_textColor"></param>
+ <param name="_backColor"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.InsertTextAsRtf(System.String)">
+ <summary>
+ Inserts the text using the current font, text, and highlight colors.
+ </summary>
+ <param name="_text"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.InsertTextAsRtf(System.String,System.Drawing.Font)">
+ <summary>
+ Inserts the text using the given font, and current text and highlight
+ colors.
+ </summary>
+ <param name="_text"></param>
+ <param name="_font"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.InsertTextAsRtf(System.String,System.Drawing.Font,DropBox.Khendys.Controls.RtfColors)">
+ <summary>
+ Inserts the text using the given font and text color, and the current
+ highlight color.
+ </summary>
+ <param name="_text"></param>
+ <param name="_font"></param>
+ <param name="_textColor"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.InsertTextAsRtf(System.String,System.Drawing.Font,DropBox.Khendys.Controls.RtfColors,DropBox.Khendys.Controls.RtfColors)">
+ <summary>
+ Inserts the text using the given font, text, and highlight colors.  The
+ text is wrapped in RTF codes so that the specified formatting is kept.
+ You can only assign valid RTF to the RichTextBox.Rtf property, else
+ an exception is thrown.  The RTF string should follow this format ...
+
+ {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{[FONTS]}{\colortbl ;[COLORS]}}
+ \viewkind4\uc1\pard\cf1\f0\fs20 [DOCUMENT AREA] }
+
+ </summary>
+ <remarks>
+ NOTE: The text is inserted wherever the caret is at the time of the call,
+ and if any text is selected, that text is replaced.
+ </remarks>
+ <param name="_text"></param>
+ <param name="_font"></param>
+ <param name="_textColor"></param>
+ <param name="_backColor"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.GetDocumentArea(System.String,System.Drawing.Font)">
+ <summary>
+ Creates the Document Area of the RTF being inserted. The document area
+ (in this case) consists of the text being added as RTF and all the
+ formatting specified in the Font object passed in. This should have the
+ form ...
+
+ \viewkind4\uc1\pard\cf1\f0\fs20 [DOCUMENT AREA] }
+
+ </summary>
+ <param name="_text"></param>
+ <param name="_font"></param>
+ <returns>
+ The document area as a string.
+ </returns>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.InsertImage(System.Drawing.Image)">
+ <summary>
+ Inserts an image into the RichTextBox.  The image is wrapped in a Windows
+ Format Metafile, because although Microsoft discourages the use of a WMF,
+ the RichTextBox (and even MS Word), wraps an image in a WMF before inserting
+ the image into a document.  The WMF is attached in HEX format (a string of
+ HEX numbers).
+
+ The RTF Specification v1.6 says that you should be able to insert bitmaps,
+ .jpegs, .gifs, .pngs, and Enhanced Metafiles (.emf) directly into an RTF
+ document without the WMF wrapper. This works fine with MS Word,
+ however, when you don't wrap images in a WMF, WordPad and
+ RichTextBoxes simply ignore them.  Both use the riched20.dll or msfted.dll.
+ </summary>
+ <remarks>
+ NOTE: The image is inserted wherever the caret is at the time of the call,
+ and if any text is selected, that text is replaced.
+ </remarks>
+ <param name="_image"></param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.GetImagePrefix(System.Drawing.Image)">
+ <summary>
+ Creates the RTF control string that describes the image being inserted.
+ This description (in this case) specifies that the image is an
+ MM_ANISOTROPIC metafile, meaning that both X and Y axes can be scaled
+ independently.  The control string also gives the images current dimensions,
+ and its target dimensions, so if you want to control the size of the
+ image being inserted, this would be the place to do it. The prefix should
+ have the form ...
+
+ {\pict\wmetafile8\picw[A]\pich[B]\picwgoal[C]\pichgoal[D]
+
+ where ...
+
+ A	= current width of the metafile in hundredths of millimeters (0.01mm)
+		= Image Width in Inches * Number of (0.01mm) per inch
+		= (Image Width in Pixels / Graphics Context's Horizontal Resolution) * 2540
+		= (Image Width in Pixels / Graphics.DpiX) * 2540
+
+ B	= current height of the metafile in hundredths of millimeters (0.01mm)
+		= Image Height in Inches * Number of (0.01mm) per inch
+		= (Image Height in Pixels / Graphics Context's Vertical Resolution) * 2540
+		= (Image Height in Pixels / Graphics.DpiX) * 2540
+
+ C	= target width of the metafile in twips
+		= Image Width in Inches * Number of twips per inch
+		= (Image Width in Pixels / Graphics Context's Horizontal Resolution) * 1440
+		= (Image Width in Pixels / Graphics.DpiX) * 1440
+
+ D	= target height of the metafile in twips
+		= Image Height in Inches * Number of twips per inch
+		= (Image Height in Pixels / Graphics Context's Horizontal Resolution) * 1440
+		= (Image Height in Pixels / Graphics.DpiX) * 1440
+
+ </summary>
+ <remarks>
+ The Graphics Context's resolution is simply the current resolution at which
+ windows is being displayed.  Normally it's 96 dpi, but instead of assuming
+ I just added the code.
+
+ According to Ken Howe at pbdr.com, "Twips are screen-independent units
+ used to ensure that the placement and proportion of screen elements in
+ your screen application are the same on all display systems."
+
+ Units Used
+ ----------
+ 1 Twip = 1/20 Point
+ 1 Point = 1/72 Inch
+ 1 Twip = 1/1440 Inch
+
+ 1 Inch = 2.54 cm
+ 1 Inch = 25.4 mm
+ 1 Inch = 2540 (0.01)mm
+ </remarks>
+ <param name="_image"></param>
+ <returns></returns>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.GdipEmfToWmfBits(System.IntPtr,System.UInt32,System.Byte[],System.Int32,DropBox.Khendys.Controls.ExRichTextBox.EmfToWmfBitsFlags)">
+ <summary>
+ Use the EmfToWmfBits function in the GDI+ specification to convert a
+ Enhanced Metafile to a Windows Metafile
+ </summary>
+ <param name="_hEmf">
+ A handle to the Enhanced Metafile to be converted
+ </param>
+ <param name="_bufferSize">
+ The size of the buffer used to store the Windows Metafile bits returned
+ </param>
+ <param name="_buffer">
+ An array of bytes used to hold the Windows Metafile bits returned
+ </param>
+ <param name="_mappingMode">
+ The mapping mode of the image.  This control uses MM_ANISOTROPIC.
+ </param>
+ <param name="_flags">
+ Flags used to specify the format of the Windows Metafile returned
+ </param>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.GetRtfImage(System.Drawing.Image)">
+ <summary>
+ Wraps the image in an Enhanced Metafile by drawing the image onto the
+ graphics context, then converts the Enhanced Metafile to a Windows
+ Metafile, and finally appends the bits of the Windows Metafile in HEX
+ to a string and returns the string.
+ </summary>
+ <param name="_image"></param>
+ <returns>
+ A string containing the bits of a Windows Metafile in HEX
+ </returns>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.GetFontTable(System.Drawing.Font)">
+ <summary>
+ Creates a font table from a font object.  When an Insert or Append
+ operation is performed a font is either specified or the default font
+ is used.  In any case, on any Insert or Append, only one font is used,
+ thus the font table will always contain a single font.  The font table
+ should have the form ...
+
+ {\fonttbl{\f0\[FAMILY]\fcharset0 [FONT_NAME];}
+ </summary>
+ <param name="_font"></param>
+ <returns></returns>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.GetColorTable(DropBox.Khendys.Controls.RtfColors,DropBox.Khendys.Controls.RtfColors)">
+ <summary>
+ Creates a font table from the RtfColor structure.  When an Insert or Append
+ operation is performed, _textColor and _backColor are either specified
+ or the default is used.  In any case, on any Insert or Append, only three
+ colors are used.  The default color of the RichTextBox (signified by a
+ semicolon (;) without a definition), is always the first color (index 0) in
+ the color table.  The second color is always the text color, and the third
+ is always the highlight color (color behind the text).  The color table
+ should have the form ...
+
+ {\colortbl ;[TEXT_COLOR];[HIGHLIGHT_COLOR];}
+
+ </summary>
+ <param name="_textColor"></param>
+ <param name="_backColor"></param>
+ <returns></returns>
+</member>
+<member name="M:DropBox.Khendys.Controls.ExRichTextBox.RemoveBadChars(System.String)">
+ <summary>
+ Called by overrided RichTextBox.Rtf accessor.
+ Removes the null character from the RTF.  This is residue from developing
+ the control for a specific instant messaging protocol and can be ommitted.
+ </summary>
+ <param name="_originalRtf"></param>
+ <returns>RTF without null character</returns>
+</member>
+<member name="T:DropBox.RichTextBoxEditor">
+<summary>
+RichTextBoxEditor
+</summary>
+</member>
+<member name="M:DropBox.RichTextBoxEditor.#ctor(System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Text">The Text the RichTextBox will Start with</param>
+ <remarks></remarks> 
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="M:DropBox.RichTextBoxEditor.InitializeComponent">
+<summary>
+InitializeComponent
+</summary>
+</member>
+<member name="T:DropBox.frmMsgBuilder">
+ <summary>
+ 
+ </summary>
+ <remarks></remarks>
+ <features></features>
+ <stepthrough></stepthrough>
+</member>
+<member name="M:DropBox.frmMsgBuilder.ShowDialog(System.Boolean,System.Boolean,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="GetHTML"></param>
+ <param name="Multiline_Subject"></param>
+ <param name="Title"></param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough></stepthrough>
+</member>
+<member name="T:DropBox.IFileName">
+ <summary>
+ Think of some Use for this!!
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:DropBox.IFileName.FileName">
+ <summary>
+ If this Object is ever Saved into A File Then this is what that Files Name will be
+ </summary>
+ <value></value>
+ <remarks></remarks>
+</member>
+<member name="T:DropBox.User">
+ <summary>
+ Represents A [User]/[User Folder] from the Cloud
+ </summary>
+ <remarks></remarks>
+ <features></features>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="P:DropBox.User.Name">
+ <summary>
+ Make sure all Comparisons use Name.ToUpper
+ </summary>
+ <value></value>
+ <remarks>
+ Make sure all Comparisons use Name.ToUpper
+ </remarks>
+</member>
+<member name="M:DropBox.User.#ctor(AppLimit.CloudComputing.SharpBox.CloudStorage@,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="Cloud">The <see cref="T:AppLimit.CloudComputing.SharpBox.CloudStorage"/> the User is From</param>
+ <param name="Name">The Name of the User</param>
+ <remarks></remarks>
+ <stepthrough>Enabled</stepthrough>
+</member>
+<member name="T:DropBox.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:DropBox.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:DropBox.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="T:DropBox.UserSettings">
+ <summary>
+ 
+ </summary>
+ <remarks></remarks>
+ <features></features>
+ <stepthrough></stepthrough>
+</member>
+<member name="M:DropBox.UserSettings.#ctor(DropBox.User@)">
+ <summary>
+ 
+ </summary>
+ <param name="User">The User who the Settings Belong to</param>
+ <remarks></remarks>
+ <stepthrough></stepthrough>
+</member>
+<member name="M:DropBox.UserSettings.Save(System.Boolean)">
+ <summary>
+ Not Constructed Yet
+ </summary>
+ <param name="ShowMessageIfOffline">If True Then Shows the Following Message If Offline 
+ [<code>MsgBox("You are Either not Connected to the Internet or www.DropBox.com is Offline")</code>]</param>
+ <returns></returns>
+ <remarks></remarks>
+ <stepthrough></stepthrough>
+</member>
+</members>
+</doc>

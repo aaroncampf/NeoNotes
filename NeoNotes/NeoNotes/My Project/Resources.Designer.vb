@@ -61,6 +61,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to &lt;ArrayOfKeyValueOfstringstring xmlns=&quot;http://schemas.microsoft.com/2003/10/Serialization/Arrays&quot; xmlns:i=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;&lt;KeyValueOfstringstring&gt;&lt;Key&gt;TokenProvConfigType&lt;/Key&gt;&lt;Value&gt;AppLimit.CloudComputing.SharpBox.StorageProvider.DropBox.DropBoxConfiguration&lt;/Value&gt;&lt;/KeyValueOfstringstring&gt;&lt;KeyValueOfstringstring&gt;&lt;Key&gt;TokenCredType&lt;/Key&gt;&lt;Value&gt;AppLimit.CloudComputing.SharpBox.StorageProvider.DropBox.DropBoxToken&lt;/Value&gt;&lt;/KeyValueOfstringstring&gt;&lt;KeyValueOfstringstring&gt;&lt;Key&gt;TokenD [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property DropBox_Token() As String
+            Get
+                Return ResourceManager.GetString("DropBox_Token", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &lt;FlowDocument xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot; 
         '''			  xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
         '''			  xmlns:xrd=&quot;clr-namespace:Aaron.Reports;assembly=Aaron.Reports&quot;

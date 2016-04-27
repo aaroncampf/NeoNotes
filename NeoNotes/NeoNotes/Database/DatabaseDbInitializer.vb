@@ -17,12 +17,14 @@
 		context.Quotes.Find(1).Lines.Add(New QuoteLine With {.ID = 1, .Display = 1, .DESC = "Desc 2", .UNIT = "Unit", .COST = 1.25})
 
 
+
+		Dim XML = XElement.Load("C:\Aaron\UserSettings.xml")
 		context.Settings.Add(New Setting With {
 							 .ID = 1,
 							 .Address = "Address",
 							 .Email = "a@gmail.com",
-							 .Gmail = "aaroncampf@gmail.com",
-							 .GmailPassword = "aaron2023",
+							 .Gmail = XML.@GMail,
+							 .GmailPassword = XML.@GMailPassword,
 							 .Name = "Aaron Campf",
 							 .Phone = "(503) 929-8022"
 							})
