@@ -17,12 +17,8 @@ Class MainWindow
 
 
 		Dim Items = AJP.Get_Item_Names()
-
 		colQuoteDetailDescription.ItemsSource = Items
 		cbxQuoteLineDescription.ItemsSource = Items
-
-
-
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
 		For Each Item In db.Companies
