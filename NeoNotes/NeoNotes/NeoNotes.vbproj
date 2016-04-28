@@ -334,7 +334,6 @@
       <LastGenOutput>Database.vb</LastGenOutput>
       <DependentUpon>Database.edmx</DependentUpon>
     </Content>
-    <None Include="Resources\DropBox_Token.txt" />
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
