@@ -73,7 +73,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Text" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Contact_ID" Type="int" Nullable="false" />
   </EntityType>
@@ -257,7 +257,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Contact" Relationship="Database.ContactNote" FromRole="Note" ToRole="Contact" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" />
           <Property Name="Text" Type="String" Nullable="true" />
         </EntityType>
         <Association Name="ContactNote">
@@ -368,7 +368,7 @@
         <MappingFragment StoreEntitySet="Notes">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="Text" ColumnName="Text" />
         </MappingFragment>
       </EntityTypeMapping>

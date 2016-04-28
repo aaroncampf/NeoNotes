@@ -9,8 +9,8 @@
 
 
 		context.Companies.Find(1).Contacts.Add(New Contact With {.ID = 1, .Name = "Aaron Campf", .Phone = "5039298022", .Position = "CEO"})
-		context.Contacts.Find(1).Notes.Add(New Note With {.ID = 1, .Date = Now, .Name = "Test", .Text = "Hello World"})
-		context.Contacts.Find(1).Notes.Add(New Note With {.ID = 2, .Date = Now.AddDays(-1), .Name = "Test 2", .Text = "Hello World 2"})
+		context.Contacts.Find(1).Notes.Add(New Note With {.ID = 1, .Date = Now, .Title = "Test", .Text = "Hello World"})
+		context.Contacts.Find(1).Notes.Add(New Note With {.ID = 2, .Date = Now.AddDays(-1), .Title = "Test 2", .Text = "Hello World 2"})
 
 		context.Companies.Find(1).Quotes.Add(New Quote With {.ID = 1, .Date = Now, .Name = "Test"})
 		context.Quotes.Find(1).Lines.Add(New QuoteLine With {.ID = 1, .Display = 2, .DESC = "Desc 1", .UNIT = "Unit", .COST = 1.25})

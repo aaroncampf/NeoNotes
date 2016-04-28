@@ -24,7 +24,7 @@ End Class
 <PropertyChanged.ImplementPropertyChanged>
 Partial Public Class Note
 	Public Function ToXML() As XElement
-		Return <Note ID=<%= Me.ID %> Name=<%= Me.Name %> Text=<%= Me.Text %>/>
+		Return <Note ID=<%= Me.ID %> Title=<%= Me.Title %> Text=<%= Me.Text %>/>
 	End Function
 End Class
 

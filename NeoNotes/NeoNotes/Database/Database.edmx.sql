@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 04/24/2016 11:05:24
+-- Date Created: 04/27/2016 18:03:22
 -- Generated from EDMX file: C:\Users\aaron\Documents\GitHub\NeoNotes\NeoNotes\NeoNotes\Database\Database.edmx
 -- --------------------------------------------------
 
@@ -58,6 +58,9 @@ GO
 IF OBJECT_ID(N'[dbo].[QuoteSectionDetails]', 'U') IS NOT NULL
     DROP TABLE [dbo].[QuoteSectionDetails];
 GO
+IF OBJECT_ID(N'[dbo].[Settings]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Settings];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -99,7 +102,7 @@ GO
 CREATE TABLE [dbo].[Notes] (
     [ID] int IDENTITY(1,1) NOT NULL,
     [Date] datetime  NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Title] nvarchar(max)  NOT NULL,
     [Text] nvarchar(max)  NULL,
     [Contact_ID] int  NOT NULL
 );

@@ -15,8 +15,13 @@ Class MainWindow
 		db.Database.CreateIfNotExists()
 		db.Database.Initialize(True)
 
-		colQuoteDetailDescription.ItemsSource = {"A", "B", "C"}
-		cbxQuoteLineDescription.ItemsSource = {"AAtest", "AAABBB", "AAVBBHJ"}
+
+		Dim Items = AJP.Get_Item_Names()
+
+		colQuoteDetailDescription.ItemsSource = Items
+		cbxQuoteLineDescription.ItemsSource = Items
+
+
 
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
@@ -27,7 +32,6 @@ Class MainWindow
 		For Each Item In db.Contacts
 			cbxSearchContacts.Items.Add(Item)
 		Next
-
 
 		dgQuoteDetails.Items.SortDescriptions.Add(New ComponentModel.SortDescription With {.PropertyName = "Display", .Direction = ComponentModel.ListSortDirection.Ascending})
 	End Sub
@@ -55,7 +59,6 @@ Class MainWindow
 		lbxContacts.SelectedItem = Contact
 		lbxContacts.Items.Refresh()
 	End Sub
-
 
 	Private Sub lbxContacts_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lbxContacts.SelectionChanged
 		If lbxContacts.SelectedItem Is Nothing Then Exit Sub
@@ -104,7 +107,6 @@ Class MainWindow
 		Quote_ShiftDetail(LogicalDirection.Backward)
 	End Sub
 
-
 	''' <summary>
 	'''
 	''' </summary>
@@ -115,7 +117,6 @@ Class MainWindow
 		If dgQuoteDetails.SelectedItem Is Nothing Then Exit Sub
 		Dim CurrentLine As QuoteLine = CType(dgQuoteDetails.SelectedItem, QuoteLine)
 		Dim Quote As Quote = CurrentLine.Quote
-
 
 		Dim Sorter = Function(x As QuoteLine, y As QuoteLine) If(x.Display = y.Display, x.ID.CompareTo(y.ID), x.Display).CompareTo(y.Display)
 
@@ -205,8 +206,6 @@ Class MainWindow
 		End If
 	End Sub
 
-
-
 	Private Function Create_Quote_Printout() As Basic
 		Dim Company As Company = cbxCompanies.SelectedItem
 		Dim Contact As Contact = lbxContacts.SelectedItem
@@ -233,10 +232,15 @@ Class MainWindow
 			End If
 		Next
 
-		'TODO: Inline this Soon!
+		Dim CustomXAML As String = My.Resources.Hand_Made_Quote.Replace("<!--{0}-->", Items.Table.RowGroups(0).ToXML.ToString)
+		If Company Is Nothing Then CustomXAML = CustomXAML.Replace("To:", "")
 
-		'{"Quote_Title", If(Quote.Title Is Nothing, "Quote", Quote.Title)},
-		Dim Temp_Holder As New Dictionary(Of String, Object) From {
+		Dim XAML = CustomXAML.Replace("xmlns:xrd=""clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports""",
+									  "xmlns:xrd=""clr-namespace:Aaron.Xaml;assembly=Aaron.Xaml""")
+
+		Dim Test_Report As New Basic()
+		Test_Report.CustomXAML = XAML
+		Test_Report.DocumentValues = New Dictionary(Of String, Object) From {
 			{"Company", Company.Name},
 			{"Address", Company.Address},
 			{"Contact", Contact.Name},
@@ -249,19 +253,8 @@ Class MainWindow
 			{"Email", Settings.Email}
 		}
 
-		Dim CustomXAML As String = My.Resources.Hand_Made_Quote.Replace("<!--{0}-->", Items.Table.RowGroups(0).ToXML.ToString)
-		If Company Is Nothing Then CustomXAML = CustomXAML.Replace("To:", "")
-
-		Dim XAML = CustomXAML.Replace("xmlns:xrd=""clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports""",
-									  "xmlns:xrd=""clr-namespace:Aaron.Xaml;assembly=Aaron.Xaml""")
-
-		Dim Test_Report As New Basic()
-		Test_Report.CustomXAML = XAML
-		Test_Report.DocumentValues = Temp_Holder
-
 		Return Test_Report
 	End Function
-
 
 	Private Sub SendMail(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As IEnumerable(Of String), Attachments As Dictionary(Of String, String))
 		Dim Mail As New M.MailMessage()
@@ -309,8 +302,6 @@ Class MainWindow
 
 			'Dim MyNotes = XElement.Load(N.frmNotes.File) '.Save(SaveFile1.SelectedPath & "\Notes_To_Droid.txt")
 
-
-
 			Dim MyNotes =
 			<Customers>
 				<%= From Company In db.Companies.ToArray Select Company.ToXML %>
@@ -327,16 +318,14 @@ Class MainWindow
 
 			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
 
-
 			'The example totally works!!!
 			Dim dropBoxStorage As New CloudStorage()
 			Dim dropBoxConfig = CloudStorage.GetCloudConfigurationEasy(nSupportedCloudConfigurations.DropBox)
 			Dim accessToken As ICloudStorageAccessToken
 
 			'load a valid security token from file
-			Dim byt As Byte() = System.Text.Encoding.UTF8.GetBytes(My.Resources.DropBox_Token)
+			Dim byt As Byte() = Text.Encoding.UTF8.GetBytes(My.Resources.DropBox_Token)
 			accessToken = dropBoxStorage.DeserializeSecurityTokenFromBase64(Convert.ToBase64String(byt))
-
 
 			'open the connection
 			Dim storageToken = dropBoxStorage.Open(dropBoxConfig, accessToken)
