@@ -10,7 +10,7 @@
         mc:Ignorable="d"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		xmlns:s="clr-namespace:System;assembly=mscorlib" 
-        Title="MainWindow" Height="726.985" Width="1069.581">
+        Title="MainWindow" Height="726.985" Width="1069.581" WindowState="Maximized">
 
 	<Window.Resources>
 		<local:IsNothingConverter x:Key="IsNothingConverter"/>
@@ -122,9 +122,9 @@
 				</Grid>
 			</TabItem>
 		</TabControl>
-		<Button x:Name="btnPrintCompanies" Content="Print Companies" HorizontalAlignment="Left" Margin="605,15,0,0" VerticalAlignment="Top" Width="98"/>
-		<ComboBox x:Name="cbxSearchContacts" HorizontalAlignment="Left" Margin="372,15,0,0" VerticalAlignment="Top" Width="214" DisplayMemberPath="Name" IsEditable="True"/>
-		<Label x:Name="label_Copy5" Content="Search Contacts" HorizontalAlignment="Left" Margin="272,14,0,0" VerticalAlignment="Top"/>
+		<Button x:Name="btnPrintCompanies" Content="Print Companies" HorizontalAlignment="Left" Margin="725,15,0,0" VerticalAlignment="Top" Width="98"/>
+		<ComboBox x:Name="cbxSearchContacts" HorizontalAlignment="Left" Margin="492,15,0,0" VerticalAlignment="Top" Width="214" DisplayMemberPath="Name" IsEditable="True"/>
+		<Label x:Name="label_Copy5" Content="Search Contacts" HorizontalAlignment="Left" Margin="392,14,0,0" VerticalAlignment="Top"/>
 		<GroupBox x:Name="gbxCompany" Header="Company" HorizontalAlignment="Left" Margin="0,51,0,0" VerticalAlignment="Top" Height="645" Width="269" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
 			<Grid>
 				<TextBox x:Name="txtCompanyName" HorizontalAlignment="Left" Height="23" Margin="83,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="166" Text="{Binding SelectedItem.Name, ElementName=cbxCompanies}"  />
@@ -143,5 +143,6 @@
 				<Button x:Name="btnCompanyPrintContacts" Content="Print Contacts" Margin="7,593,142,0" VerticalAlignment="Top"/>
 			</Grid>
 		</GroupBox>
+		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
 	</Grid>
 </Window>

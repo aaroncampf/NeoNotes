@@ -7,13 +7,17 @@ Class MainWindow
 	Dim db As New DatabaseContainer
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
-		AppDomain.CurrentDomain.SetData("DataDirectory", IO.Directory.GetCurrentDirectory())
-		Data.Entity.Database.SetInitializer(Of DatabaseContainer)(New DatabaseDbInitializer)
+		AppDomain.CurrentDomain.SetData("DataDirectory", My.Application.Info.DirectoryPath)
+		'Data.Entity.Database.SetInitializer(Of DatabaseContainer)(New DatabaseDbInitializer)
 
-		db.Database.CreateIfNotExists()
-		db.Database.Delete()
-		db.Database.CreateIfNotExists()
-		db.Database.Initialize(True)
+		If Not My.Computer.FileSystem.FileExists("C:\Aaron\NeoNotes.mdf") Then
+			db.Database.Create()
+		End If
+
+		'db.Database.CreateIfNotExists()
+		'db.Database.Delete()
+		'db.Database.CreateIfNotExists()
+		'db.Database.Initialize(True)
 
 
 		Dim Items = AJP.Get_Item_Names()
@@ -294,7 +298,13 @@ Class MainWindow
 		Try
 			Me.db.SaveChanges()
 
-			Dim Settings = New DatabaseContainer().Settings.First
+			'Dim Settings = New DatabaseContainer().Settings.First
+
+
+			Dim XML = XElement.Load("C:\Aaron\UserSettings.xml")
+
+
+
 
 			'Dim MyNotes = XElement.Load(N.frmNotes.File) '.Save(SaveFile1.SelectedPath & "\Notes_To_Droid.txt")
 
@@ -326,11 +336,21 @@ Class MainWindow
 			'open the connection
 			Dim storageToken = dropBoxStorage.Open(dropBoxConfig, accessToken)
 
-			dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & Settings.Name)
+
+			If MsgBox("This is only a test so we will not upload the notes to the phone") <> MsgBoxResult.Ok Then
+				dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & XML.@Name)
+			End If
+
 		Catch ex As Exception
 			MsgBox(ex.ToString, MsgBoxStyle.OkOnly, ex.GetType.Name)
 			e.Cancel = True
 		End Try
 	End Sub
 
+	Private Sub btnCompany_Add_Click(sender As Object, e As RoutedEventArgs) Handles btnCompany_Add.Click
+		Dim Company As New Company With {.Name = "New Name"}
+		db.Companies.Add(Company)
+		cbxCompanies.Items.Add(Company)
+		cbxCompanies.SelectedItem = Company
+	End Sub
 End Class

@@ -18,14 +18,12 @@ Public NotInheritable Class AJP
 		dropBoxStorage.DownloadFile("/Storage/AJP_ANS_Cache.sdf", "")
 	End Sub
 
-
 	Public Shared Function Get_Item_Names() As List(Of String)
-		If IO.File.GetCreationTime("AJP_ANS_Cache.sdf") < Today.AddDays(-3) Then
+		If IO.File.GetCreationTime("AJP_ANS_Cache.sdf") < Today.AddDays(-7) Then
 			DownloadDatabase()
 		End If
 
 		Return Aggregate x In New AJP_DB().Items Select x.DESCRIP Into ToList
 	End Function
-
 
 End Class
