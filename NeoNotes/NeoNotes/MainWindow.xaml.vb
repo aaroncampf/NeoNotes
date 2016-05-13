@@ -10,9 +10,13 @@ Class MainWindow
 		AppDomain.CurrentDomain.SetData("DataDirectory", My.Application.Info.DirectoryPath)
 		'Data.Entity.Database.SetInitializer(Of DatabaseContainer)(New DatabaseDbInitializer)
 
-		If Not My.Computer.FileSystem.FileExists("C:\Aaron\NeoNotes.mdf") Then
-			db.Database.Create()
-		End If
+		'|DataDirectory|NeoNotes.sdf'
+
+		'If Not My.Computer.FileSystem.FileExists(AppDomain.CurrentDomain.GetData("DataDirectory") & "\NeoNotes.mdf") Then
+		'	db.Database.Create()
+		'End If
+
+		db.Database.CreateIfNotExists()
 
 		'db.Database.CreateIfNotExists()
 		'db.Database.Delete()
