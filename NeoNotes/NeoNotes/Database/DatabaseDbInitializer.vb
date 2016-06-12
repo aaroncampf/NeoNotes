@@ -1,7 +1,7 @@
 ﻿Public Class DatabaseDbInitializer
-	Inherits System.Data.Entity.DropCreateDatabaseAlways(Of DatabaseContainer)
+	Inherits System.Data.Entity.DropCreateDatabaseAlways(Of NeoNotesContainer)
 
-	Protected Overrides Sub Seed(context As DatabaseContainer)
+	Protected Overrides Sub Seed(context As NeoNotesContainer)
 		MyBase.Seed(context)
 		context.Companies.Add(New Company With {.ID = 1, .Name = "USA Market #1", .Address = "1245 Oxford Dr"})
 		context.Companies.Add(New Company With {.ID = 2, .Name = "Canada Market #1", .Address = "1245 Oxford Dr"})
@@ -18,7 +18,8 @@
 
 
 
-		Dim XML = XElement.Load("C:\Aaron\UserSettings.xml")
+		Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications"
+		Dim XML = XElement.Load(AppFolder & "NeoInfo.xml")
 		context.Settings.Add(New Setting With {
 							 .ID = 1,
 							 .Address = "Address",

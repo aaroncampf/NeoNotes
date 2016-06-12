@@ -11,29 +11,24 @@ Imports System
 Imports System.Data.Entity
 Imports System.Data.Entity.Infrastructure
 
-Partial Public Class DatabaseContainer
-	Inherits DbContext
+Partial Public Class NeoNotesContainer
+    Inherits DbContext
 
-	'Public Sub New()
-	'    MyBase.New("name=DatabaseContainer")
-	'End Sub
-
-	Public Sub New(Optional Database_Name As String = "NeoNotes.sdf")
-        'MyBase.New("name=LocalDB")
-        MyBase.New(Database_Name)
-	End Sub
-
-	Protected Overrides Sub OnModelCreating(modelBuilder As DbModelBuilder)
-        'Throw New UnintentionalCodeFirstException()
+    Public Sub New()
+        MyBase.New("name=NeoNotesContainer")
     End Sub
 
-	Public Overridable Property Companies() As DbSet(Of Company)
-	Public Overridable Property Contacts() As DbSet(Of Contact)
-	Public Overridable Property Quotes() As DbSet(Of Quote)
-	Public Overridable Property Notes() As DbSet(Of Note)
-	Public Overridable Property QuoteLines() As DbSet(Of QuoteLine)
-	Public Overridable Property QuoteSections() As DbSet(Of QuoteSection)
-	Public Overridable Property QuoteSectionDetails() As DbSet(Of QuoteSectionDetail)
-	Public Overridable Property Settings() As DbSet(Of Setting)
+    Protected Overrides Sub OnModelCreating(modelBuilder As DbModelBuilder)
+        Throw New UnintentionalCodeFirstException()
+    End Sub
+
+    Public Overridable Property Companies() As DbSet(Of Company)
+    Public Overridable Property Contacts() As DbSet(Of Contact)
+    Public Overridable Property Quotes() As DbSet(Of Quote)
+    Public Overridable Property Notes() As DbSet(Of Note)
+    Public Overridable Property QuoteLines() As DbSet(Of QuoteLine)
+    Public Overridable Property QuoteSections() As DbSet(Of QuoteSection)
+    Public Overridable Property QuoteSectionDetails() As DbSet(Of QuoteSectionDetail)
+    Public Overridable Property Settings() As DbSet(Of Setting)
 
 End Class

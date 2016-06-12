@@ -4,10 +4,14 @@ Imports AppLimit.CloudComputing.SharpBox.StorageProvider.API
 Imports M = System.Net.Mail
 
 Class MainWindow
-	Dim db As New DatabaseContainer
+	Dim db As New NeoNotesContainer
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
-		AppDomain.CurrentDomain.SetData("DataDirectory", My.Application.Info.DirectoryPath)
+		Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications"
+		If Not IO.Directory.Exists(AppFolder) Then IO.Directory.CreateDirectory(AppFolder)
+		'AppDomain.CurrentDomain.SetData("DataDirectory", My.Application.Info.DirectoryPath)
+		AppDomain.CurrentDomain.SetData("DataDirectory", AppFolder)
+
 		'Data.Entity.Database.SetInitializer(Of DatabaseContainer)(New DatabaseDbInitializer)
 
 		'|DataDirectory|NeoNotes.sdf'
@@ -190,7 +194,7 @@ Class MainWindow
 			Exit Sub
 		End If
 
-		Dim Settings = New DatabaseContainer().Settings.First
+		Dim Settings = New NeoNotesContainer().Settings.First
 		If String.IsNullOrWhiteSpace(Settings.Gmail) Or String.IsNullOrWhiteSpace(Settings.GmailPassword) Then
 			MsgBox("Please Setup the GMail Email And Password Settings")
 		Else
@@ -214,7 +218,7 @@ Class MainWindow
 		Dim Company As Company = cbxCompanies.SelectedItem
 		Dim Contact As Contact = lbxContacts.SelectedItem
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-		Dim Settings = New DatabaseContainer().Settings.First
+		Dim Settings = New NeoNotesContainer().Settings.First
 
 		Dim Items As New Sections.Table(New TableColumn With {.Tag = "UNIT", .Width = New GridLength(150)},
 										New TableColumn With {.Tag = "Description"},

@@ -183,36 +183,36 @@
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Database" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="DatabaseContainer" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Companies" EntityType="Database.Company" />
-          <EntitySet Name="Contacts" EntityType="Database.Contact" />
-          <EntitySet Name="Quotes" EntityType="Database.Quote" />
-          <EntitySet Name="Notes" EntityType="Database.Note" />
-          <AssociationSet Name="ContactNote" Association="Database.ContactNote">
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="NeoNotes" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="NeoNotesContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="NeoNotes.Company" />
+          <EntitySet Name="Contacts" EntityType="NeoNotes.Contact" />
+          <EntitySet Name="Quotes" EntityType="NeoNotes.Quote" />
+          <EntitySet Name="Notes" EntityType="NeoNotes.Note" />
+          <AssociationSet Name="ContactNote" Association="NeoNotes.ContactNote">
             <End Role="Contact" EntitySet="Contacts" />
             <End Role="Note" EntitySet="Notes" />
           </AssociationSet>
-          <AssociationSet Name="CustomerContact" Association="Database.CustomerContact">
+          <AssociationSet Name="CustomerContact" Association="NeoNotes.CustomerContact">
             <End Role="Customer" EntitySet="Companies" />
             <End Role="Contact" EntitySet="Contacts" />
           </AssociationSet>
-          <AssociationSet Name="CustomerQuote" Association="Database.CustomerQuote">
+          <AssociationSet Name="CustomerQuote" Association="NeoNotes.CustomerQuote">
             <End Role="Customer" EntitySet="Companies" />
             <End Role="Quote" EntitySet="Quotes" />
           </AssociationSet>
-          <EntitySet Name="QuoteLines" EntityType="Database.QuoteLine" />
-          <AssociationSet Name="QuoteQuoteLine" Association="Database.QuoteQuoteLine">
+          <EntitySet Name="QuoteLines" EntityType="NeoNotes.QuoteLine" />
+          <AssociationSet Name="QuoteQuoteLine" Association="NeoNotes.QuoteQuoteLine">
             <End Role="Quote" EntitySet="Quotes" />
             <End Role="QuoteLine" EntitySet="QuoteLines" />
           </AssociationSet>
-          <EntitySet Name="QuoteSections" EntityType="Database.QuoteSection" />
-          <EntitySet Name="QuoteSectionDetails" EntityType="Database.QuoteSectionDetail" />
-          <AssociationSet Name="QuoteSectionQuoteSectionDetail" Association="Database.QuoteSectionQuoteSectionDetail">
+          <EntitySet Name="QuoteSections" EntityType="NeoNotes.QuoteSection" />
+          <EntitySet Name="QuoteSectionDetails" EntityType="NeoNotes.QuoteSectionDetail" />
+          <AssociationSet Name="QuoteSectionQuoteSectionDetail" Association="NeoNotes.QuoteSectionQuoteSectionDetail">
             <End Role="QuoteSection" EntitySet="QuoteSections" />
             <End Role="QuoteSectionDetail" EntitySet="QuoteSectionDetails" />
           </AssociationSet>
-          <EntitySet Name="Settings" EntityType="Database.Setting" />
+          <EntitySet Name="Settings" EntityType="NeoNotes.Setting" />
         </EntityContainer>
         <EntityType Name="Company">
           <Key>
@@ -220,8 +220,8 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" />
-          <NavigationProperty Name="Contacts" Relationship="Database.CustomerContact" FromRole="Customer" ToRole="Contact" />
-          <NavigationProperty Name="Quotes" Relationship="Database.CustomerQuote" FromRole="Customer" ToRole="Quote" />
+          <NavigationProperty Name="Contacts" Relationship="NeoNotes.CustomerContact" FromRole="Customer" ToRole="Contact" />
+          <NavigationProperty Name="Quotes" Relationship="NeoNotes.CustomerQuote" FromRole="Customer" ToRole="Quote" />
           <Property Name="Address" Type="String" Nullable="true" />
           <Property Name="City" Type="String" Nullable="true" />
           <Property Name="Phone" Type="String" Nullable="true" />
@@ -233,8 +233,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Notes" Relationship="Database.ContactNote" FromRole="Contact" ToRole="Note" />
-          <NavigationProperty Name="Company" Relationship="Database.CustomerContact" FromRole="Contact" ToRole="Customer" />
+          <NavigationProperty Name="Notes" Relationship="NeoNotes.ContactNote" FromRole="Contact" ToRole="Note" />
+          <NavigationProperty Name="Company" Relationship="NeoNotes.CustomerContact" FromRole="Contact" ToRole="Customer" />
           <Property Name="Name" Type="String" Nullable="false" />
           <Property Name="Phone" Type="String" Nullable="true" />
           <Property Name="Email" Type="String" Nullable="true" />
@@ -245,8 +245,8 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Company" Relationship="Database.CustomerQuote" FromRole="Quote" ToRole="Customer" />
-          <NavigationProperty Name="Lines" Relationship="Database.QuoteQuoteLine" FromRole="Quote" ToRole="QuoteLine" />
+          <NavigationProperty Name="Company" Relationship="NeoNotes.CustomerQuote" FromRole="Quote" ToRole="Customer" />
+          <NavigationProperty Name="Lines" Relationship="NeoNotes.QuoteQuoteLine" FromRole="Quote" ToRole="QuoteLine" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" />
         </EntityType>
@@ -255,29 +255,29 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Contact" Relationship="Database.ContactNote" FromRole="Note" ToRole="Contact" />
+          <NavigationProperty Name="Contact" Relationship="NeoNotes.ContactNote" FromRole="Note" ToRole="Contact" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
           <Property Name="Title" Type="String" Nullable="false" />
           <Property Name="Text" Type="String" Nullable="true" />
         </EntityType>
         <Association Name="ContactNote">
-          <End Type="Database.Contact" Role="Contact" Multiplicity="1" />
-          <End Type="Database.Note" Role="Note" Multiplicity="*" />
+          <End Type="NeoNotes.Contact" Role="Contact" Multiplicity="1" />
+          <End Type="NeoNotes.Note" Role="Note" Multiplicity="*" />
         </Association>
         <Association Name="CustomerContact">
-          <End Type="Database.Company" Role="Customer" Multiplicity="1" />
-          <End Type="Database.Contact" Role="Contact" Multiplicity="*" />
+          <End Type="NeoNotes.Company" Role="Customer" Multiplicity="1" />
+          <End Type="NeoNotes.Contact" Role="Contact" Multiplicity="*" />
         </Association>
         <Association Name="CustomerQuote">
-          <End Type="Database.Company" Role="Customer" Multiplicity="1" />
-          <End Type="Database.Quote" Role="Quote" Multiplicity="*" />
+          <End Type="NeoNotes.Company" Role="Customer" Multiplicity="1" />
+          <End Type="NeoNotes.Quote" Role="Quote" Multiplicity="*" />
         </Association>
         <EntityType Name="QuoteLine">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Quote" Relationship="Database.QuoteQuoteLine" FromRole="QuoteLine" ToRole="Quote" />
+          <NavigationProperty Name="Quote" Relationship="NeoNotes.QuoteQuoteLine" FromRole="QuoteLine" ToRole="Quote" />
           <Property Name="Display" Type="Int32" Nullable="false" />
           <Property Name="UNIT" Type="String" Nullable="false" />
           <Property Name="COST" Type="Decimal" Nullable="false" />
@@ -285,15 +285,15 @@
           <Property Name="IsCentered" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="QuoteQuoteLine">
-          <End Type="Database.Quote" Role="Quote" Multiplicity="1" />
-          <End Type="Database.QuoteLine" Role="QuoteLine" Multiplicity="*" />
+          <End Type="NeoNotes.Quote" Role="Quote" Multiplicity="1" />
+          <End Type="NeoNotes.QuoteLine" Role="QuoteLine" Multiplicity="*" />
         </Association>
         <EntityType Name="QuoteSection">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="QuoteSectionDetails" Relationship="Database.QuoteSectionQuoteSectionDetail" FromRole="QuoteSection" ToRole="QuoteSectionDetail" />
+          <NavigationProperty Name="QuoteSectionDetails" Relationship="NeoNotes.QuoteSectionQuoteSectionDetail" FromRole="QuoteSection" ToRole="QuoteSectionDetail" />
           <Property Name="Name" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="QuoteSectionDetail">
@@ -301,7 +301,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="QuoteSection" Relationship="Database.QuoteSectionQuoteSectionDetail" FromRole="QuoteSectionDetail" ToRole="QuoteSection" />
+          <NavigationProperty Name="QuoteSection" Relationship="NeoNotes.QuoteSectionQuoteSectionDetail" FromRole="QuoteSectionDetail" ToRole="QuoteSection" />
           <Property Name="Display" Type="Int32" Nullable="false" />
           <Property Name="UNIT" Type="String" Nullable="false" />
           <Property Name="COST" Type="Decimal" Nullable="false" />
@@ -309,8 +309,8 @@
           <Property Name="IsCentered" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="QuoteSectionQuoteSectionDetail">
-          <End Type="Database.QuoteSection" Role="QuoteSection" Multiplicity="1" />
-          <End Type="Database.QuoteSectionDetail" Role="QuoteSectionDetail" Multiplicity="*" />
+          <End Type="NeoNotes.QuoteSection" Role="QuoteSection" Multiplicity="1" />
+          <End Type="NeoNotes.QuoteSectionDetail" Role="QuoteSectionDetail" Multiplicity="*" />
         </Association>
         <EntityType Name="Setting">
           <Key>
@@ -329,9 +329,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="DatabaseStoreContainer" CdmEntityContainer="DatabaseContainer">
+  <EntityContainerMapping StorageEntityContainer="DatabaseStoreContainer" CdmEntityContainer="NeoNotesContainer">
     <EntitySetMapping Name="Companies">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.Company)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.Company)">
         <MappingFragment StoreEntitySet="Companies">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -344,7 +344,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Contacts">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.Contact)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.Contact)">
         <MappingFragment StoreEntitySet="Contacts">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -355,7 +355,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Quotes">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.Quote)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.Quote)">
         <MappingFragment StoreEntitySet="Quotes">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Date" ColumnName="Date" />
@@ -364,7 +364,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Notes">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.Note)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.Note)">
         <MappingFragment StoreEntitySet="Notes">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Date" ColumnName="Date" />
@@ -374,7 +374,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="QuoteLines">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.QuoteLine)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.QuoteLine)">
         <MappingFragment StoreEntitySet="QuoteLines">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Display" ColumnName="Display" />
@@ -386,7 +386,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="QuoteSections">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.QuoteSection)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.QuoteSection)">
         <MappingFragment StoreEntitySet="QuoteSections">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -394,7 +394,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="QuoteSectionDetails">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.QuoteSectionDetail)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.QuoteSectionDetail)">
         <MappingFragment StoreEntitySet="QuoteSectionDetails">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Display" ColumnName="Display" />
@@ -406,7 +406,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Settings">
-      <EntityTypeMapping TypeName="IsTypeOf(Database.Setting)">
+      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.Setting)">
         <MappingFragment StoreEntitySet="Settings">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -418,7 +418,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="ContactNote" TypeName="Database.ContactNote" StoreEntitySet="Notes">
+    <AssociationSetMapping Name="ContactNote" TypeName="NeoNotes.ContactNote" StoreEntitySet="Notes">
       <EndProperty Name="Contact">
         <ScalarProperty Name="ID" ColumnName="Contact_ID" />
       </EndProperty>
@@ -426,7 +426,7 @@
         <ScalarProperty Name="ID" ColumnName="ID" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="CustomerContact" TypeName="Database.CustomerContact" StoreEntitySet="Contacts">
+    <AssociationSetMapping Name="CustomerContact" TypeName="NeoNotes.CustomerContact" StoreEntitySet="Contacts">
       <EndProperty Name="Customer">
         <ScalarProperty Name="ID" ColumnName="Company_ID" />
       </EndProperty>
@@ -434,7 +434,7 @@
         <ScalarProperty Name="ID" ColumnName="ID" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="CustomerQuote" TypeName="Database.CustomerQuote" StoreEntitySet="Quotes">
+    <AssociationSetMapping Name="CustomerQuote" TypeName="NeoNotes.CustomerQuote" StoreEntitySet="Quotes">
       <EndProperty Name="Customer">
         <ScalarProperty Name="ID" ColumnName="Company_ID" />
       </EndProperty>
@@ -442,7 +442,7 @@
         <ScalarProperty Name="ID" ColumnName="ID" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="QuoteQuoteLine" TypeName="Database.QuoteQuoteLine" StoreEntitySet="QuoteLines">
+    <AssociationSetMapping Name="QuoteQuoteLine" TypeName="NeoNotes.QuoteQuoteLine" StoreEntitySet="QuoteLines">
       <EndProperty Name="Quote">
         <ScalarProperty Name="ID" ColumnName="Quote_ID" />
       </EndProperty>
@@ -450,7 +450,7 @@
         <ScalarProperty Name="ID" ColumnName="ID" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="QuoteSectionQuoteSectionDetail" TypeName="Database.QuoteSectionQuoteSectionDetail" StoreEntitySet="QuoteSectionDetails">
+    <AssociationSetMapping Name="QuoteSectionQuoteSectionDetail" TypeName="NeoNotes.QuoteSectionQuoteSectionDetail" StoreEntitySet="QuoteSectionDetails">
       <EndProperty Name="QuoteSection">
         <ScalarProperty Name="ID" ColumnName="QuoteSection_ID" />
       </EndProperty>

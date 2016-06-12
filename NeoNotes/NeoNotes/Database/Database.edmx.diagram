@@ -5,19 +5,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="f769f8fdb71c46a1b0e442df7ce3bf20" Name="Diagram1" >
-        <EntityTypeShape EntityType="Database.Company" Width="1.5" PointX="1" PointY="0.5" />
-        <EntityTypeShape EntityType="Database.Contact" Width="1.5" PointX="4.125" PointY="0.5" />
-        <EntityTypeShape EntityType="Database.Quote" Width="1.5" PointX="4.125" PointY="3.25" />
-        <EntityTypeShape EntityType="Database.Note" Width="1.5" PointX="6.375" PointY="0.5" />
-        <AssociationConnector Association="Database.ContactNote" />
-        <AssociationConnector Association="Database.CustomerContact" />
-        <AssociationConnector Association="Database.CustomerQuote" />
-        <EntityTypeShape EntityType="Database.QuoteLine" Width="1.5" PointX="6.375" PointY="3.25" />
-        <AssociationConnector Association="Database.QuoteQuoteLine" />
-        <EntityTypeShape EntityType="Database.QuoteSection" Width="1.5" PointX="4.125" PointY="6.375" />
-        <EntityTypeShape EntityType="Database.QuoteSectionDetail" Width="1.5" PointX="6.75" PointY="6.875" />
-        <AssociationConnector Association="Database.QuoteSectionQuoteSectionDetail" />
-        <EntityTypeShape EntityType="Database.Setting" Width="1.5" PointX="9.5" PointY="1.5" />
+        <EntityTypeShape EntityType="NeoNotes.Company" Width="1.5" PointX="0.75" PointY="2.5" />
+        <EntityTypeShape EntityType="NeoNotes.Contact" Width="1.5" PointX="3" PointY="1.125" />
+        <EntityTypeShape EntityType="NeoNotes.Quote" Width="1.5" PointX="3" PointY="4.375" />
+        <EntityTypeShape EntityType="NeoNotes.Note" Width="1.5" PointX="5.25" PointY="1.25" />
+        <AssociationConnector Association="NeoNotes.ContactNote" />
+        <AssociationConnector Association="NeoNotes.CustomerContact" />
+        <AssociationConnector Association="NeoNotes.CustomerQuote" />
+        <EntityTypeShape EntityType="NeoNotes.QuoteLine" Width="1.5" PointX="5.25" PointY="4.25" />
+        <AssociationConnector Association="NeoNotes.QuoteQuoteLine" />
+        <EntityTypeShape EntityType="NeoNotes.QuoteSection" Width="1.5" PointX="7.75" PointY="1.375" />
+        <EntityTypeShape EntityType="NeoNotes.QuoteSectionDetail" Width="1.5" PointX="10" PointY="1" />
+        <AssociationConnector Association="NeoNotes.QuoteSectionQuoteSectionDetail" />
+        <EntityTypeShape EntityType="NeoNotes.Setting" Width="1.5" PointX="0.75" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
