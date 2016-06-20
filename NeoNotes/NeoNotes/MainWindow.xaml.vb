@@ -6,26 +6,24 @@ Imports M = System.Net.Mail
 Class MainWindow
 	Dim db As New NeoNotesContainer
 
+	'	Private ReadOnly Property AppFolder As String
+	'		Get
+	'#If DEBUG Then
+	'			Return My.Application.Info.DirectoryPath
+	'#Else
+	'			Return AppDomain.CurrentDomain.GetData("DataDirectory")
+	'#End If
+	'		End Get
+	'	End Property
+
+
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
 		Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications"
-		If Not IO.Directory.Exists(AppFolder) Then IO.Directory.CreateDirectory(AppFolder)
-		'AppDomain.CurrentDomain.SetData("DataDirectory", My.Application.Info.DirectoryPath)
 		AppDomain.CurrentDomain.SetData("DataDirectory", AppFolder)
+		'Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications"
 
-		'Data.Entity.Database.SetInitializer(Of DatabaseContainer)(New DatabaseDbInitializer)
 
-		'|DataDirectory|NeoNotes.sdf'
-
-		'If Not My.Computer.FileSystem.FileExists(AppDomain.CurrentDomain.GetData("DataDirectory") & "\NeoNotes.mdf") Then
-		'	db.Database.Create()
-		'End If
-
-		db.Database.CreateIfNotExists()
-
-		'db.Database.CreateIfNotExists()
-		'db.Database.Delete()
-		'db.Database.CreateIfNotExists()
-		'db.Database.Initialize(True)
+		If Not IO.Directory.Exists(AppFolder) Then IO.Directory.CreateDirectory(AppFolder)
 
 
 		Dim Items = AJP.Get_Item_Names()
@@ -36,6 +34,12 @@ Class MainWindow
 		For Each Item In db.Companies
 			cbxCompanies.Items.Add(Item)
 		Next
+
+
+		Dim Test = db.Contacts.Where(Function(x) x.ID > 10).ToList
+
+		Dim Trest2 = Aggregate x In db.Contacts Where x.ID > 10 Into ToList
+
 
 		For Each Item In db.Contacts
 			cbxSearchContacts.Items.Add(Item)
@@ -66,6 +70,8 @@ Class MainWindow
 
 		lbxContacts.SelectedItem = Contact
 		lbxContacts.Items.Refresh()
+		txtContactName.Focus()
+		txtContactName.SelectAll()
 	End Sub
 
 	Private Sub lbxContacts_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lbxContacts.SelectionChanged
@@ -346,7 +352,7 @@ Class MainWindow
 
 
 			If MsgBox("This is only a test so we will not upload the notes to the phone") <> MsgBoxResult.Ok Then
-				dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & XML.@Name)
+				dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.Test.xml", "/Users/" & XML.@Name)
 			End If
 
 		Catch ex As Exception
@@ -360,5 +366,18 @@ Class MainWindow
 		db.Companies.Add(Company)
 		cbxCompanies.Items.Add(Company)
 		cbxCompanies.SelectedItem = Company
+
+		txtCompanyName.Focus()
+		txtCompanyName.SelectAll()
+	End Sub
+
+	Private Sub btnAddNote_Click(sender As Object, e As RoutedEventArgs) Handles btnAddNote.Click
+		Dim Contact As Contact = lbxContacts.SelectedItem
+		Dim Note = New Note With {.Contact = Contact, .Date = Now}
+		Contact.Notes.Add(Note)
+
+		dgNotes.Items.Refresh()
+		dgNotes.SelectedItem = Note
+		txtNoteName.Focus()
 	End Sub
 End Class

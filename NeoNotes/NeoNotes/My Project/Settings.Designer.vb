@@ -52,6 +52,17 @@ Partial Friend NotInheritable Class MySettings
             Return defaultInstance
         End Get
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+    Public Property LastUpdated() As Date
+        Get
+            Return CType(Me("LastUpdated"),Date)
+        End Get
+        Set
+            Me("LastUpdated") = value
+        End Set
+    End Property
 End Class
 
 Namespace My

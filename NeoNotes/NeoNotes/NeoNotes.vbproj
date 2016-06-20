@@ -28,7 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://localhost/NeoNotes/</UpdateUrl>
     <PublisherName>AJP Northwest</PublisherName>
-    <ApplicationRevision>24</ApplicationRevision>
+    <ApplicationRevision>37</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -48,7 +48,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <DefineDebug>false</DefineDebug>
@@ -85,8 +85,9 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aaron.Reports">
-      <HintPath>..\DLLs\Aaron.Reports.dll</HintPath>
+    <Reference Include="Aaron.Reports, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Work\AJP-Everything\Backend\DLL Folder\Aaron.Reports.dll</HintPath>
     </Reference>
     <Reference Include="AppLimit.CloudComputing.SharpBox, Version=1.2.0.542, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AppLimit.CloudComputing.SharpBox.1.2.0.542\lib\net40-full\AppLimit.CloudComputing.SharpBox.dll</HintPath>
@@ -415,4 +416,9 @@
     if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
     xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
   </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties DocumentXCommentEditorState="&lt;HtmlEditState&gt;&#xA;  &lt;Attributes /&gt;&#xA;&lt;/HtmlEditState&gt;" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

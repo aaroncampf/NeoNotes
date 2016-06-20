@@ -18,7 +18,7 @@
 
 
 	<Grid x:Name="grid">
-		<ComboBox x:Name="cbxCompanies" HorizontalAlignment="Left" Margin="86,15,0,0" VerticalAlignment="Top" Width="166" DisplayMemberPath="Name" IsEditable="True"/>
+		<ComboBox x:Name="cbxCompanies" HorizontalAlignment="Left" Margin="86,15,0,0" VerticalAlignment="Top" Width="166" DisplayMemberPath="Name"  IsEditable="True"/>
 		<Label x:Name="label_Copy4" Content="Company" HorizontalAlignment="Left" Margin="10,14,0,0" VerticalAlignment="Top"/>
 		<TabControl x:Name="tabControl" Margin="274,51,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
 			<TabItem Header="Contact">
@@ -31,28 +31,29 @@
 					<TextBox x:Name="txtContactEmail" HorizontalAlignment="Left" Height="23" Margin="76,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding SelectedItem.Email, ElementName=lbxContacts}"/>
 					<Label x:Name="label2_Copy1" Content="Position" HorizontalAlignment="Left" Margin="6,92,0,0" VerticalAlignment="Top"/>
 					<TextBox x:Name="txtContactPosition" HorizontalAlignment="Left" Height="23" Margin="76,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" RenderTransformOrigin="0.533,2.696" Text="{Binding SelectedItem.Position, ElementName=lbxContacts}"/>
-					<GroupBox x:Name="groupBox" Header="Notes" Margin="318,246,31,0" VerticalAlignment="Top" Height="346" IsEnabled="{Binding SelectedItem, ElementName=dgNotes, Converter={StaticResource IsNothingConverter}}">
-						<Grid >
-							<Label x:Name="label6" Content="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,8,0,0"/>
+					<GroupBox x:Name="groupBox" Header="Notes" Margin="318,246,10,0" VerticalAlignment="Top" Height="346" IsEnabled="{Binding SelectedItem, ElementName=dgNotes, Converter={StaticResource IsNothingConverter}}">
+						<Grid>
+							<Label x:Name="label6" Content="Title" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,8,0,0"/>
 							<Label x:Name="label7" Content="Text" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top"/>
-							<TextBox x:Name="textBox" Height="23" Margin="78,12,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Text="{Binding SelectedItem.Name, ElementName=dgNotes}" />
-							<TextBox x:Name="textBox1" Margin="78,40,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Text, ElementName=dgNotes}"/>
+							<TextBox x:Name="txtNoteName" Height="23" Margin="78,12,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Text="{Binding SelectedItem.Title, ElementName=dgNotes}" />
+							<TextBox x:Name="textBox1" Margin="78,40,0,31" TextWrapping="Wrap" Text="{Binding SelectedItem.Text, ElementName=dgNotes}"/>
+							<Button x:Name="btnNoteRemove" Content="Remove" Margin="0,298,0,6"/>
 						</Grid>
 					</GroupBox>
 					<Label x:Name="label3" Content="Notes" HorizontalAlignment="Left" Margin="318,7,0,0" VerticalAlignment="Top"/>
-					<DataGrid x:Name="dgNotes" HorizontalAlignment="Left" Margin="318,33,0,0" VerticalAlignment="Top" Height="208" Width="433" ItemsSource="{Binding SelectedItem.Notes, ElementName=lbxContacts}" AutoGenerateColumns="False" IsReadOnly="True">
+					<DataGrid x:Name="dgNotes" d:DataContext="{d:DesignInstance Type=NeoNotes:Note}" Margin="318,33,10,0" VerticalAlignment="Top" Height="208" ItemsSource="{Binding SelectedItem.Notes, ElementName=lbxContacts}" AutoGenerateColumns="False" IsReadOnly="True">
 						<!-- ItemsSource="{Binding SelectedItem.Notes, ElementName=lbxContacts}" AutoGenerateColumns="False" -->
 						<DataGrid.Columns>
 							<DataGridTextColumn Binding="{Binding Path=Date, StringFormat=\{0:dd/MM/yyyy\}}" Header="Date" Width="100" SortDirection="Descending"/>
-							<DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" Width="*"/>
+							<DataGridTextColumn Binding="{Binding Path=Title}" Header="Title" Width="*"/>
 						</DataGrid.Columns>
 					</DataGrid>
 					<Label x:Name="label4" HorizontalAlignment="Left" Margin="195,277,0,0" VerticalAlignment="Top"/>
 					<Label x:Name="label5" Content="Make the Grid editable&#xD;&#xA;" Margin="608,10,31,577" RenderTransformOrigin="1.262,1.217"/>
-					<Button x:Name="btnContactRemove" Content="Remove" Margin="0,597,0,0" VerticalAlignment="Top"/>
+					<Button x:Name="btnContactRemove" Content="Remove" Height="18" VerticalAlignment="Bottom"/>
 					<Button x:Name="btnContactEmail" Content="Email" HorizontalAlignment="Left" Margin="76,152,0,0" VerticalAlignment="Top" Width="190"/>
 					<Button x:Name="btnQuoteEmail" Content="Email Quote" HorizontalAlignment="Left" Margin="76,177,0,0" VerticalAlignment="Top" Width="190"/>
-					<Label x:Name="label12" Content="Convert button into a combobox or something" HorizontalAlignment="Left" Margin="37,202,0,0" VerticalAlignment="Top"/>
+					<Button x:Name="btnAddNote" Content="Add Note" HorizontalAlignment="Left" Margin="76,202,0,0" VerticalAlignment="Top" Width="190"/>
 
 				</Grid>
 			</TabItem>
@@ -63,28 +64,30 @@
 					<Button x:Name="btnQuoteAdd" Content="Add" HorizontalAlignment="Left" Margin="10,587,0,0" VerticalAlignment="Top" Width="248"/>
 					<GroupBox x:Name="groupBox1" Header="Details" HorizontalAlignment="Left" Margin="263,36,0,0" VerticalAlignment="Top" Height="542" Width="519" IsEnabled="{Binding SelectedItem, ElementName=lbxQuotes, Converter={StaticResource IsNothingConverter}}">
 						<Grid>
-							<DataGrid x:Name="dgQuoteDetails" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Height="263" Width="391" ItemsSource="{Binding SelectedItem.Lines, ElementName=lbxQuotes}" AutoGenerateColumns="False" CanUserAddRows="False">
+							<DataGrid x:Name="dgQuoteDetails" d:DataContext="{d:DesignInstance Type=NeoNotes:QuoteLine}" Margin="0,0,0,221" ItemsSource="{Binding SelectedItem.Lines, ElementName=lbxQuotes}" AutoGenerateColumns="False" CanUserAddRows="False">
 								<DataGrid.Columns>
 									<!--<DataGridTextColumn Visibility="Visible" Binding="{Binding Path=Display}" SortDirection="Descending" />-->
 									<DataGridComboBoxColumn x:Name="colQuoteDetailDescription" ClipboardContentBinding="{x:Null}" SelectedValueBinding="{x:Null}" SelectedItemBinding="{x:Null}" TextBinding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>
 									<DataGridTextColumn Binding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>
 									<DataGridTextColumn Binding="{Binding Path=UNIT}" ClipboardContentBinding="{x:Null}" Header="Unit" Width="75" IsReadOnly="True"/>
 									<DataGridTextColumn Binding="{Binding Path=COST}" ClipboardContentBinding="{x:Null}" Header="Cost" Width="75" IsReadOnly="True"/>
-									<DataGridTemplateColumn>
+									<!--<DataGridTemplateColumn >
 										<DataGridTemplateColumn.CellTemplate>
 											<DataTemplate>
 												<Button Click="btnQuoteLineUp_Click" Content="Up"/>
 											</DataTemplate>
 										</DataGridTemplateColumn.CellTemplate>
 									</DataGridTemplateColumn>
+									-->
 									<!--<DataGridHyperlinkColumn Header="Up"/>-->
+									<!--
 									<DataGridTemplateColumn>
 										<DataGridTemplateColumn.CellTemplate>
 											<DataTemplate>
 												<Button Name="btnQuoteLineUp" Click="btnQuoteLineDown_Click" Content="Down"/>
 											</DataTemplate>
 										</DataGridTemplateColumn.CellTemplate>
-									</DataGridTemplateColumn>
+									</DataGridTemplateColumn>-->
 									<!--<DataGridTemplateColumn Header="Down">
 										<DataGridTemplateColumn.CellTemplate>
 											<DataTemplate>
@@ -103,7 +106,7 @@
 									</DataGridTemplateColumn>
 								</DataGrid.Columns>-->
 							</DataGrid>
-							<Button x:Name="btnQuoteDetailAdd" Content="Add" HorizontalAlignment="Left" Margin="10,304,0,0" VerticalAlignment="Top" Width="391"/>
+							<Button x:Name="btnQuoteDetailAdd" Content="Add" Margin="0,304,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="507"/>
 							<GroupBox x:Name="groupBox2" Header="GroupBox" HorizontalAlignment="Left" Margin="10,329,0,0" VerticalAlignment="Top" Height="181" Width="487" IsEnabled="{Binding SelectedItem, ElementName=dgQuoteDetails, Converter={StaticResource IsNothingConverter}}">
 								<Grid>
 									<Label x:Name="label9" Content="Description" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
@@ -118,7 +121,6 @@
 							</GroupBox>
 						</Grid>
 					</GroupBox>
-					<Label x:Name="label5_Copy" Content="Make the Grid editable&#xA;" Margin="530,54,115,533" RenderTransformOrigin="1.262,1.217"/>
 				</Grid>
 			</TabItem>
 		</TabControl>
