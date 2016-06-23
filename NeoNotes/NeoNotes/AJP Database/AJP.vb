@@ -15,19 +15,19 @@ Public NotInheritable Class AJP
 
 		'open the connection
 		Dim storageToken = dropBoxStorage.Open(dropBoxConfig, accessToken)
-		dropBoxStorage.DownloadFile("/Storage/AJP_ANS_Cache.sdf", "")
+		dropBoxStorage.DownloadFile("/Storage/AJP_ANS_Cache.sdf", AppDomain.CurrentDomain.GetData("DataDirectory"))
 
 		My.Settings.LastUpdated = Now
 		My.Settings.Save() '<--- Do I need this?
 	End Sub
 
 	Public Shared Function Get_Item_Names() As List(Of String)
-		If My.Computer.Network.IsAvailable Then
-			If My.Settings.LastUpdated < Now.AddDays(-7) Then DownloadDatabase()
+		If My.Computer.Network.IsAvailable And My.Settings.LastUpdated < Now.AddDays(-7) Then
+			DownloadDatabase()
 		End If
 
 
-		Return Aggregate x In New AJP_DB().Items Select x.DESCRIP Into ToList
+		Return Aggregate x In New AJP_DB().AJP_INVMAs Select x.DESCRIP Into ToList
 	End Function
 
 End Class

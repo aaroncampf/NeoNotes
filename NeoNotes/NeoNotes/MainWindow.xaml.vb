@@ -2,6 +2,7 @@
 Imports AppLimit.CloudComputing.SharpBox
 Imports AppLimit.CloudComputing.SharpBox.StorageProvider.API
 Imports M = System.Net.Mail
+Imports System.Linq
 
 Class MainWindow
 	Dim db As New NeoNotesContainer
@@ -18,28 +19,36 @@ Class MainWindow
 
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
-		Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications"
-		AppDomain.CurrentDomain.SetData("DataDirectory", AppFolder)
-		'Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications"
+		'Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications
+		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
+		If Not IO.Directory.Exists(DataDirectory) Then IO.Directory.CreateDirectory(DataDirectory)
 
-
-		If Not IO.Directory.Exists(AppFolder) Then IO.Directory.CreateDirectory(AppFolder)
+		If IO.File.Exists(DataDirectory + "\NeoInfo.xml") Then
+			Dim XML As XElement = XElement.Load(DataDirectory + "\NeoInfo.xml")
+			db.Settings.RemoveRange(db.Settings)
+			db.Settings.Add(New Setting With {
+					 .ID = 1,
+					 .Name = XML.@Name,
+					 .Address = XML.@Address,
+					 .Email = XML.@Email,
+					 .Gmail = XML.@GMail,
+					 .GmailPassword = XML.@GMailPassword,
+					 .Phone = XML.@Phone
+			})
+			db.SaveChanges()
+		Else
+			MsgBox("Settings file not found")
+		End If
 
 
 		Dim Items = AJP.Get_Item_Names()
-		colQuoteDetailDescription.ItemsSource = Items
+		'colQuoteDetailDescription.ItemsSource = Items
 		cbxQuoteLineDescription.ItemsSource = Items
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
 		For Each Item In db.Companies
 			cbxCompanies.Items.Add(Item)
 		Next
-
-
-		Dim Test = db.Contacts.Where(Function(x) x.ID > 10).ToList
-
-		Dim Trest2 = Aggregate x In db.Contacts Where x.ID > 10 Into ToList
-
 
 		For Each Item In db.Contacts
 			cbxSearchContacts.Items.Add(Item)
@@ -97,10 +106,17 @@ Class MainWindow
 	End Sub
 
 	Private Sub btnQuoteAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteAdd.Click
-		Dim Quote As New Quote With {.Name = "New Quote"}
+		Dim Quote As New Quote With {.Name = "New Quote", .Date = Now}
 		CType(cbxCompanies.SelectedItem, Company).Quotes.Add(Quote)
 
 		lbxQuotes.SelectedItem = Quote
+		lbxQuotes.Items.Refresh()
+	End Sub
+
+	Private Sub btnQuoteRemove_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteRemove.Click
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+
+		CType(cbxCompanies.SelectedItem, Company).Quotes.Remove(Quote)
 		lbxQuotes.Items.Refresh()
 	End Sub
 
@@ -110,6 +126,13 @@ Class MainWindow
 		Quote.Lines.Add(QuoteLine)
 
 		dgQuoteDetails.SelectedItem = QuoteLine
+		dgQuoteDetails.Items.Refresh()
+	End Sub
+
+
+	Private Sub btnRemoveQuoteLine_Click(sender As Object, e As RoutedEventArgs) Handles btnRemoveQuoteLine.Click
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		Quote.Lines.Remove(dgQuoteDetails.SelectedItem)
 		dgQuoteDetails.Items.Refresh()
 	End Sub
 
@@ -200,7 +223,7 @@ Class MainWindow
 			Exit Sub
 		End If
 
-		Dim Settings = New NeoNotesContainer().Settings.First
+		Dim Settings = db.Settings.First
 		If String.IsNullOrWhiteSpace(Settings.Gmail) Or String.IsNullOrWhiteSpace(Settings.GmailPassword) Then
 			MsgBox("Please Setup the GMail Email And Password Settings")
 		Else
@@ -224,7 +247,7 @@ Class MainWindow
 		Dim Company As Company = cbxCompanies.SelectedItem
 		Dim Contact As Contact = lbxContacts.SelectedItem
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-		Dim Settings = New NeoNotesContainer().Settings.First
+		Dim Settings = db.Settings.First
 
 		Dim Items As New Sections.Table(New TableColumn With {.Tag = "UNIT", .Width = New GridLength(150)},
 										New TableColumn With {.Tag = "Description"},
@@ -315,7 +338,7 @@ Class MainWindow
 			'Dim Settings = New DatabaseContainer().Settings.First
 
 
-			Dim XML = XElement.Load("C:\Aaron\UserSettings.xml")
+			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
 
 
 
@@ -356,8 +379,9 @@ Class MainWindow
 			End If
 
 		Catch ex As Exception
-			MsgBox(ex.ToString, MsgBoxStyle.OkOnly, ex.GetType.Name)
-			e.Cancel = True
+			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.Yes Then
+				e.Cancel = True
+			End If
 		End Try
 	End Sub
 
@@ -380,4 +404,14 @@ Class MainWindow
 		dgNotes.SelectedItem = Note
 		txtNoteName.Focus()
 	End Sub
+
+	Private Sub btnQuotePrint_Click(sender As Object, e As RoutedEventArgs) Handles btnQuotePrint.Click
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		If Quote.Lines.Any Then
+			Create_Quote_Printout().Show()
+		Else
+			MsgBox("You cannot print an empty quote")
+		End If
+	End Sub
+
 End Class
