@@ -1,8 +1,6 @@
 ﻿Imports Aaron.Reports
 Imports AppLimit.CloudComputing.SharpBox
-Imports AppLimit.CloudComputing.SharpBox.StorageProvider.API
 Imports M = System.Net.Mail
-Imports System.Linq
 
 Class MainWindow
 	Dim db As New NeoNotesContainer
@@ -122,7 +120,7 @@ Class MainWindow
 
 	Private Sub btnQuoteDetailAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAdd.Click
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-		Dim QuoteLine As New QuoteLine With {.DESC = "Text", .Quote = Quote}
+		Dim QuoteLine As New QuoteLine With {.DESC = "Text", .Quote = Quote, .Display = Quote.Lines.Max(Function(x) x.Display) + 1}
 		Quote.Lines.Add(QuoteLine)
 
 		dgQuoteDetails.SelectedItem = QuoteLine
@@ -414,4 +412,32 @@ Class MainWindow
 		End If
 	End Sub
 
+	Private Sub btnPrintNotes_Click(sender As Object, e As RoutedEventArgs) Handles btnPrintNotes.Click
+		Dim Contact As Contact = lbxContacts.SelectedItem
+
+		Dim NotePrintout As New Basic($"Notes For {Contact.Name}")
+		'Dim Info As New Sections.Table(
+		'	New TableColumn With {.Tag = "Company"},
+		'	New TableColumn With {.Tag = "Contact"},
+		'	New TableColumn With {.Tag = "Position"},
+		'	New TableColumn With {.Tag = "Phone"}
+		')
+
+		'Info.Table.AddRow(0, TextAlignment.Center, Contact.Company.Name, Contact.Name, Contact.Position, Contact.Phone)
+		'NotePrintout.Sections.Add(Info)
+
+		For Each Note In Contact.Notes.OrderByDescending(Function(x) x.Date)
+			Dim Header As New Sections.Table(
+				New TableColumn With {.Tag = "Date", .Width = New GridLength(110)},
+				New TableColumn With {.Tag = "Title"}
+			)
+
+			Header.Table.AddRow(0, TextAlignment.Center, Note.Date.ToShortDateString, Note.Title)
+			NotePrintout.Sections.Add(Header)
+
+			NotePrintout.Sections.Add(New Sections.Basic(Nothing, Note.Text))
+		Next
+
+		NotePrintout.Show()
+	End Sub
 End Class
