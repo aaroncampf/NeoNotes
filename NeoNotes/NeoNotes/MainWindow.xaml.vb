@@ -48,7 +48,7 @@ Class MainWindow
 			cbxCompanies.Items.Add(Item)
 		Next
 
-		For Each Item In db.Contacts
+		For Each Item In db.Contacts.OrderBy(Function(x) x.Name)
 			cbxSearchContacts.Items.Add(Item)
 		Next
 
@@ -120,7 +120,9 @@ Class MainWindow
 
 	Private Sub btnQuoteDetailAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAdd.Click
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-		Dim QuoteLine As New QuoteLine With {.DESC = "Text", .Quote = Quote, .Display = Quote.Lines.Max(Function(x) x.Display) + 1}
+
+		Dim Display = If(Quote.Lines.Any, Quote.Lines.Max(Function(x) x.Display), 0) + 1
+		Dim QuoteLine As New QuoteLine With {.DESC = "Text", .Quote = Quote, .Display = Display}
 		Quote.Lines.Add(QuoteLine)
 
 		dgQuoteDetails.SelectedItem = QuoteLine
@@ -234,8 +236,8 @@ Class MainWindow
 				Dim Body As XElement
 				Body = XElement.Parse(GetBody.Item2.Item2).<BODY>(0)
 				Body.Name = XName.Get("P")
-				Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout().AsPDF}}
 
+				Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout.AsPDF}}
 				SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, GetBody.Item2.Item1, Body, {Contact.Email}, Attachments)
 			End If
 		End If

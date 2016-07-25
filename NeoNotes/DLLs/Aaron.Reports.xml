@@ -6,6 +6,68 @@ Aaron.Reports
 </name>
 </assembly>
 <members>
+<member name="T:Aaron.Reports.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Aaron.Reports.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Aaron.Reports.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Aaron.Reports.My.Resources.Resources.ChartReport">
+<summary>
+  Looks up a localized string similar to &lt;FlowDocument xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+              xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+              xmlns:xrd=&quot;clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports&quot;
+              xmlns:crcv=&quot;clr-namespace:CodeReason.Reports.Charts.Visifire;assembly=CodeReason.Reports.Charts.Visifire&quot;
+              PageHeight=&quot;29.7cm&quot; PageWidth=&quot;21cm&quot; ColumnWidth=&quot;21cm&quot;&gt;
+    &lt;xrd:ReportProperties&gt;
+        &lt;xrd:ReportProperties.ReportName&gt;Ch [rest of string was truncated]&quot;;.
+</summary>
+</member>
+<member name="P:Aaron.Reports.My.Resources.Resources.ChartTable">
+<summary>
+  Looks up a localized string similar to &lt;Paragraph&gt;
+    &lt;crcv:ColumnChart TableName=&quot;{0}&quot; TableColumns=&quot;{1},{2}&quot; Width=&quot;{3}cm&quot; Height=&quot;{4}cm&quot; View3D=&quot;{5}&quot; Title=&quot;{6}&quot;&gt;&lt;/crcv:ColumnChart&gt;
+&lt;/Paragraph&gt;.
+</summary>
+</member>
+<member name="P:Aaron.Reports.My.Resources.Resources.MyText">
+<summary>
+  Looks up a localized string similar to &lt;xrd:SectionDataGroup DataGroupName=&quot;Group2&quot;&gt;
+    &lt;Paragraph FontSize=&quot;20&quot; FontWeight=&quot;Bold&quot; BorderThickness=&quot;2&quot;&gt;{1}&lt;/Paragraph&gt;
+    &lt;Table CellSpacing=&quot;0&quot; BorderBrush=&quot;Black&quot; BorderThickness=&quot;2&quot;&gt;
+        &lt;TableRowGroup Style=&quot;{StaticResource headerFooterRowStyle}&quot;&gt;
+            &lt;xrd:TableRowForDynamicHeader TableName=&quot;{2}&quot;/&gt;
+        &lt;/TableRowGroup&gt;
+
+        &lt;TableRowGroup Style=&quot;{StaticResource dataRowStyle}&quot;&gt;
+            &lt;xrd:TableRowForDynamicDataTable TableName=&quot;{0}&quot;/&gt;
+        &lt;/TableRowGroup&gt;
+ [rest of string was truncated]&quot;;.
+</summary>
+</member>
+<member name="P:Aaron.Reports.My.Resources.Resources.Template1">
+<summary>
+  Looks up a localized string similar to &lt;FlowDocument xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+              xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+              xmlns:xrd=&quot;clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports&quot;
+              PageHeight=&quot;29.7cm&quot; PageWidth=&quot;21cm&quot; ColumnWidth=&quot;21cm&quot;&gt;
+
+    &lt;FlowDocument.Resources&gt;
+        &lt;!-- Style for header/footer rows. --&gt;
+        &lt;Style x:Key=&quot;headerFooterRowStyle&quot; TargetType=&quot;{x:Type TableRowGroup}&quot;&gt;
+            &lt;Setter Property=&quot; [rest of string was truncated]&quot;;.
+</summary>
+</member>
 <member name="T:Aaron.Reports.DocSuperWalker">
  <summary>
  Dynamic cache class for report paginator
@@ -303,68 +365,6 @@ Aaron.Reports
  <param name="height">height</param>
  <param name="dpiX">X DPI resolution</param>
  <param name="dpiY">Y DPI resolution</param>
-</member>
-<member name="T:Aaron.Reports.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member>
-<member name="P:Aaron.Reports.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member>
-<member name="P:Aaron.Reports.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member>
-<member name="P:Aaron.Reports.My.Resources.Resources.ChartReport">
-<summary>
-  Looks up a localized string similar to &lt;FlowDocument xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
-              xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
-              xmlns:xrd=&quot;clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports&quot;
-              xmlns:crcv=&quot;clr-namespace:CodeReason.Reports.Charts.Visifire;assembly=CodeReason.Reports.Charts.Visifire&quot;
-              PageHeight=&quot;29.7cm&quot; PageWidth=&quot;21cm&quot; ColumnWidth=&quot;21cm&quot;&gt;
-    &lt;xrd:ReportProperties&gt;
-        &lt;xrd:ReportProperties.ReportName&gt;Ch [rest of string was truncated]&quot;;.
-</summary>
-</member>
-<member name="P:Aaron.Reports.My.Resources.Resources.ChartTable">
-<summary>
-  Looks up a localized string similar to &lt;Paragraph&gt;
-    &lt;crcv:ColumnChart TableName=&quot;{0}&quot; TableColumns=&quot;{1},{2}&quot; Width=&quot;{3}cm&quot; Height=&quot;{4}cm&quot; View3D=&quot;{5}&quot; Title=&quot;{6}&quot;&gt;&lt;/crcv:ColumnChart&gt;
-&lt;/Paragraph&gt;.
-</summary>
-</member>
-<member name="P:Aaron.Reports.My.Resources.Resources.MyText">
-<summary>
-  Looks up a localized string similar to &lt;xrd:SectionDataGroup DataGroupName=&quot;Group2&quot;&gt;
-    &lt;Paragraph FontSize=&quot;20&quot; FontWeight=&quot;Bold&quot; BorderThickness=&quot;2&quot;&gt;{1}&lt;/Paragraph&gt;
-    &lt;Table CellSpacing=&quot;0&quot; BorderBrush=&quot;Black&quot; BorderThickness=&quot;2&quot;&gt;
-        &lt;TableRowGroup Style=&quot;{StaticResource headerFooterRowStyle}&quot;&gt;
-            &lt;xrd:TableRowForDynamicHeader TableName=&quot;{2}&quot;/&gt;
-        &lt;/TableRowGroup&gt;
-
-        &lt;TableRowGroup Style=&quot;{StaticResource dataRowStyle}&quot;&gt;
-            &lt;xrd:TableRowForDynamicDataTable TableName=&quot;{0}&quot;/&gt;
-        &lt;/TableRowGroup&gt;
- [rest of string was truncated]&quot;;.
-</summary>
-</member>
-<member name="P:Aaron.Reports.My.Resources.Resources.Template1">
-<summary>
-  Looks up a localized string similar to &lt;FlowDocument xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
-              xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
-              xmlns:xrd=&quot;clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports&quot;
-              PageHeight=&quot;29.7cm&quot; PageWidth=&quot;21cm&quot; ColumnWidth=&quot;21cm&quot;&gt;
-
-    &lt;FlowDocument.Resources&gt;
-        &lt;!-- Style for header/footer rows. --&gt;
-        &lt;Style x:Key=&quot;headerFooterRowStyle&quot; TargetType=&quot;{x:Type TableRowGroup}&quot;&gt;
-            &lt;Setter Property=&quot; [rest of string was truncated]&quot;;.
-</summary>
 </member>
 <member name="T:Aaron.Reports.Extensions">
  <summary>
