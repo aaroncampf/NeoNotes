@@ -109,6 +109,9 @@ Class MainWindow
 
 		lbxQuotes.SelectedItem = Quote
 		lbxQuotes.Items.Refresh()
+
+		txtQuoteTitle.Focus()
+		txtQuoteTitle.SelectAll()
 	End Sub
 
 	Private Sub btnQuoteRemove_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteRemove.Click
@@ -441,5 +444,9 @@ Class MainWindow
 		Next
 
 		NotePrintout.Show()
+	End Sub
+
+	Private Sub button_Click(sender As Object, e As RoutedEventArgs) Handles button.Click
+		cbc
 	End Sub
 End Class

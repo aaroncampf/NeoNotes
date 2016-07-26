@@ -93,7 +93,7 @@
 								<MenuItem x:Name="btnQuotePrint" Header="Print" /> |
 								<MenuItem x:Name="btnQuoteRemove" Header="Delete"/> |
 							</Menu>
-							<TextBox x:Name="txtQuoteTitle" Height="23" Margin="37,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding SelectedItem.DESC, ElementName=lbxQuotes}"/>
+							<TextBox x:Name="txtQuoteTitle" Height="23" Margin="37,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding SelectedItem.Name, ElementName=lbxQuotes}"/>
 							<Label x:Name="label5" Content="Title" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top"/>
 						</Grid>
 					</GroupBox>
@@ -124,5 +124,6 @@
 			</Grid>
 		</GroupBox>
 		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
+		<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="930,35,0,0" VerticalAlignment="Top" Width="75"/>
 	</Grid>
 </Window>
