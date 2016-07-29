@@ -447,6 +447,68 @@ Class MainWindow
 	End Sub
 
 	Private Sub button_Click(sender As Object, e As RoutedEventArgs) Handles button.Click
-		cbc
+		If MsgBox("Rebuild Everything?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+			If InputBox("Enter Launch Code") = "543" Then
+				db.Database.Delete()
+				db.Database.Create()
+				'db.Companies.AddRange(Companies)
+				'db.SaveChanges()
+			End If
+
+		Else Exit Sub
+		End If
+
+
+		Dim Data = XElement.Load("C:\Aaron\Notes.xml")
+
+		Dim Companies As New List(Of Company)
+
+		For Each XCompany In Data.<Company>
+			Dim Company As New Company With {
+				.Address = XCompany.@Address,
+				.City = XCompany.@City,
+				.Zip = XCompany.@Zip,
+				.Phone = XCompany.@Phone,
+				.Misc = XCompany.@Misc,
+				.Name = XCompany.@Name
+			}
+			Companies.Add(Company)
+
+			For Each XContact In XCompany.<Contact>
+				Dim Contact As New Contact With {
+					.Name = XContact.@Name,
+					.Phone = XContact.@Phone,
+					.Email = XContact.@Email,
+					.Position = XContact.@Position
+				}
+				Company.Contacts.Add(Contact)
+
+
+				For Each XNote In XCompany.<Note>
+					Dim Note As New Note With {
+						.Title = XNote.@Title,
+						.Date = XNote.@Date,
+						.Text = XNote.@Text
+					}
+					Contact.Notes.Add(Note)
+				Next
+			Next
+
+			For Each XQuote In XCompany.<Quotes>.<Quote>
+				Dim Quote As New Quote With {.Date = XQuote.@Date, .Name = XQuote.@Name}
+				Company.Quotes.Add(Quote)
+
+				For Each XLine In XQuote.<Detail>
+					Dim Line As New QuoteLine With {.Display = XLine.@Display, .DESC = XLine.@DESC, .UNIT = XLine.@UNIT, .COST = Val(XLine.@COST)}
+					Quote.Lines.Add(Line)
+				Next
+			Next
+
+			db.Companies.Add(Company)
+			db.SaveChanges()
+		Next
+
+
+		End
 	End Sub
 End Class
