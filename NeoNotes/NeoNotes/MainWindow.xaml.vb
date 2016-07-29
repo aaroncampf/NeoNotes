@@ -499,7 +499,7 @@ Class MainWindow
 				Company.Quotes.Add(Quote)
 
 				For Each XLine In XQuote.<Detail>
-					Dim Line As New QuoteLine With {.Display = XLine.@Display, .DESC = XLine.@DESC, .UNIT = XLine.@UNIT, .COST = Val(XLine.@COST)}
+					Dim Line As New QuoteLine With {.Display = XLine.@Display, .DESC = XLine.@DESC, .UNIT = XLine.@UNIT, .COST = Val(XLine.@COST), .IsCentered = XLine.@IsCentered}
 					Quote.Lines.Add(Line)
 				Next
 			Next
