@@ -64,7 +64,7 @@
 					<Button x:Name="btnQuoteAdd" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,2" Width="248" Height="20" VerticalAlignment="Bottom"/>
 					<GroupBox x:Name="groupBox1" Header="Details" HorizontalAlignment="Left" Margin="262,36,0,10" Width="519" IsEnabled="{Binding SelectedItem, ElementName=lbxQuotes, Converter={StaticResource IsNothingConverter}}">
 						<Grid>
-							<DataGrid x:Name="dgQuoteDetails" d:DataContext="{d:DesignInstance Type=NeoNotes:QuoteLine}" ItemsSource="{Binding SelectedItem.Lines, ElementName=lbxQuotes}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,79,0,125">
+							<DataGrid x:Name="dgQuoteDetails" d:DataContext="{d:DesignInstance Type=NeoNotes:QuoteLine}" ItemsSource="{Binding SelectedItem.Lines, ElementName=lbxQuotes}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,79,0,141">
 								<DataGrid.Columns>
 									<!--<DataGridComboBoxColumn x:Name="colQuoteDetailDescription" ClipboardContentBinding="{x:Null}" SelectedValueBinding="{x:Null}" SelectedItemBinding="{x:Null}" TextBinding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>-->
 									<DataGridTextColumn Binding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>
@@ -73,7 +73,7 @@
 								</DataGrid.Columns>
 							</DataGrid>
 							<!--<Button x:Name="btnQuoteDetailAdd" Content="Add" Margin="0,385,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="507"/>-->
-							<GroupBox x:Name="groupBox2" Header="" IsEnabled="{Binding SelectedItem, ElementName=dgQuoteDetails, Converter={StaticResource IsNothingConverter}}" Height="125" VerticalAlignment="Bottom">
+							<GroupBox x:Name="groupBox2" Header="" IsEnabled="{Binding SelectedItem, ElementName=dgQuoteDetails, Converter={StaticResource IsNothingConverter}}" Height="141" VerticalAlignment="Bottom">
 								<Grid>
 									<Label x:Name="label9" Content="Description" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
 									<ComboBox x:Name="cbxQuoteLineDescription" HorizontalAlignment="Left" Margin="85,14,0,0" VerticalAlignment="Top" Width="198" IsEditable="True" Text="{Binding SelectedItem.DESC, ElementName=dgQuoteDetails}"/>
@@ -84,6 +84,7 @@
 									<Button x:Name="btnQuoteLineUp" Content="Up" HorizontalAlignment="Left" Margin="288,47,0,0" VerticalAlignment="Top" Width="75" Click="btnQuoteLineUp_Click"/>
 									<Button x:Name="btnQuoteLineDown" Content="Down" HorizontalAlignment="Left" Margin="288,75,0,0" VerticalAlignment="Top" Width="75" Click="btnQuoteLineDown_Click"/>
 									<Button x:Name="btnRemoveQuoteLine" Content="Remove" HorizontalAlignment="Left" Margin="420,0,0,0" VerticalAlignment="Top" Width="75"/>
+									<CheckBox x:Name="checkBox" Content="Centered" HorizontalAlignment="Left" Margin="85,104,0,0" VerticalAlignment="Top" IsChecked="{Binding SelectedItem.IsCentered, ElementName=dgQuoteDetails}"/>
 								</Grid>
 							</GroupBox>
 							<!--<Button x:Name="btnQuoteRemove" Content="Remove" HorizontalAlignment="Left" Margin="0,573,0,0" VerticalAlignment="Top" Width="497" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNothingConverter}, ElementName=lbxQuotes}"/>-->
@@ -115,15 +116,16 @@
 				<Label x:Name="label_Copy2" Content="Phone" HorizontalAlignment="Left" Margin="7,127,0,0" VerticalAlignment="Top" Width="68"/>
 				<TextBox x:Name="txtCompanyMisc" HorizontalAlignment="Left" Height="117" Margin="83,169,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Misc, ElementName=cbxCompanies}" VerticalAlignment="Top" Width="166" AcceptsReturn="True" TabIndex="6"/>
 				<Label x:Name="label_Copy3" Content="Misc" HorizontalAlignment="Left" Margin="7,165,0,0" VerticalAlignment="Top" Width="53"/>
-				<ListBox x:Name="lbxContacts" HorizontalAlignment="Left" Height="222" Margin="83,295,0,0" VerticalAlignment="Top" Width="166" ItemsSource="{Binding SelectedItem.Contacts, ElementName=cbxCompanies}" DisplayMemberPath="Name" />
+				<ListBox x:Name="lbxContacts" HorizontalAlignment="Left" Height="197" Margin="83,295,0,0" VerticalAlignment="Top" Width="166" ItemsSource="{Binding SelectedItem.Contacts, ElementName=cbxCompanies}" DisplayMemberPath="Name" />
 				<Label x:Name="label1" Content="Contacts" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="68"/>
-				<Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="83,522,0,0" VerticalAlignment="Top" Width="166"/>
-				<Button x:Name="btnCompanyPrintContacts" Content="Print Contacts" Margin="83,561,10,0" VerticalAlignment="Top"/>
+				<Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="83,497,0,0" VerticalAlignment="Top" Width="166"/>
+				<Button x:Name="btnCompanyPrintContacts" Content="Print Contacts" Margin="83,524,10,0" VerticalAlignment="Top"/>
 				<TextBox x:Name="txtCompanyZip" HorizontalAlignment="Left" Height="23" Margin="83,97,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Zip, ElementName=cbxCompanies}" VerticalAlignment="Top" Width="166" TabIndex="4"/>
 				<Label x:Name="label_Copy7" Content="Zip" HorizontalAlignment="Left" Margin="7,93,0,0" VerticalAlignment="Top" Width="46"/>
+				<Button x:Name="btnRemoveCompany" Content="Remove" Height="19" VerticalAlignment="Bottom"/>
 			</Grid>
 		</GroupBox>
 		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
-		<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="930,35,0,0" VerticalAlignment="Top" Width="75"/>
+		<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="930,31,0,0" VerticalAlignment="Top" Width="75"/>
 	</Grid>
 </Window>

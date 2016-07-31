@@ -1,5 +1,6 @@
 ﻿Imports AppLimit.CloudComputing.SharpBox
 
+''' <summary>Contains specific functionality for AJP Northwest</summary>
 Public NotInheritable Class AJP
 	Private Sub New()
 	End Sub
@@ -25,7 +26,6 @@ Public NotInheritable Class AJP
 		If My.Computer.Network.IsAvailable And My.Settings.LastUpdated < Now.AddDays(-7) Then
 			DownloadDatabase()
 		End If
-
 
 		Return Aggregate x In New AJP_DB().AJP_INVMAs Select x.DESCRIP Into ToList
 	End Function

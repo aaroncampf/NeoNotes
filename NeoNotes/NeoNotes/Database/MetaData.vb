@@ -10,6 +10,26 @@ Partial Public Class Company
 				   </Quotes>
 			   </Company>
 	End Function
+
+
+	'Public Function ToXML() As XElement
+	'	Return <Company ID=<%= Me.ID %> Name=<%= Me.Name %> Address=<%= Me.Address %> City=<%= Me.City %> Misc=<%= Me.Misc %>>
+	'			   <%= From Contact In Me.Contacts
+	'				   Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Me.Phone %> Position=<%= Contact.Position %>>
+	'							  <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %>/> %>
+	'						  </Contact>
+	'			   %>
+
+	'			   <Quotes>
+	'				   <%= From Quote In Me.Quotes
+	'					   Select <Quote ID=<%= Quote.ID %> Date=<%= Quote.Date %> Name=<%= Quote.Name %>>
+	'								  <%= From Line In Quote.Lines
+	'									  Select <Detail ID=<%= Line.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
+	'							  </Quote>
+	'				   %>
+	'			   </Quotes>
+	'		   </Company>
+	'End Function
 End Class
 
 <PropertyChanged.ImplementPropertyChanged>

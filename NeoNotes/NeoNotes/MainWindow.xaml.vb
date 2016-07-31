@@ -44,7 +44,7 @@ Class MainWindow
 		cbxQuoteLineDescription.ItemsSource = Items
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
-		For Each Item In db.Companies
+		For Each Item In db.Companies.OrderBy(Function(x) x.Name)
 			cbxCompanies.Items.Add(Item)
 		Next
 
@@ -252,6 +252,10 @@ Class MainWindow
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		Dim Settings = db.Settings.First
 
+
+
+
+
 		Dim Items As New Sections.Table(New TableColumn With {.Tag = "UNIT", .Width = New GridLength(150)},
 										New TableColumn With {.Tag = "Description"},
 										New TableColumn With {.Tag = "COST", .Width = New GridLength(100)})
@@ -348,10 +352,34 @@ Class MainWindow
 
 			'Dim MyNotes = XElement.Load(N.frmNotes.File) '.Save(SaveFile1.SelectedPath & "\Notes_To_Droid.txt")
 
+			Dim Watch = Stopwatch.StartNew()
+
+			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+
 			Dim MyNotes =
-			<Customers>
-				<%= From Company In db.Companies.ToArray Select Company.ToXML %>
-			</Customers>
+				<Customers>
+					<%= From Company In Companies
+						Select
+							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Address=<%= Company.Address %> City=<%= Company.City %> Misc=<%= Company.Misc %>>
+								<%= From Contact In Company.Contacts
+									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Company.Phone %> Position=<%= Contact.Position %>>
+											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %>/> %>
+										   </Contact>
+								%>
+
+								<Quotes>
+									<%= From Quote In Company.Quotes
+										Select <Quote ID=<%= Quote.ID %> Date=<%= Quote.Date %> Name=<%= Quote.Name %>>
+												   <%= From Line In Quote.Lines
+													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
+											   </Quote>
+									%>
+								</Quotes>
+							</Company>
+					%>
+				</Customers>
+
+			Watch.Stop()
 
 			'Do not use [.ForEach()] for this or[Visual Studio] Will Crash
 			For Each Node In MyNotes...<Quote>
@@ -377,9 +405,9 @@ Class MainWindow
 			Dim storageToken = dropBoxStorage.Open(dropBoxConfig, accessToken)
 
 
-			If MsgBox("This is only a test so we will not upload the notes to the phone") <> MsgBoxResult.Ok Then
-				dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.Test.xml", "/Users/" & XML.@Name)
-			End If
+			'If MsgBox("This is only a test so we will not upload the notes to the phone") <> MsgBoxResult.Ok Then
+			dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & XML.@Name)
+			'End If
 
 		Catch ex As Exception
 			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.Yes Then
@@ -409,6 +437,12 @@ Class MainWindow
 	End Sub
 
 	Private Sub btnQuotePrint_Click(sender As Object, e As RoutedEventArgs) Handles btnQuotePrint.Click
+		If lbxContacts.SelectedItem Is Nothing Then
+			MsgBox("Select a Contact")
+			Exit Sub
+		End If
+
+
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		If Quote.Lines.Any Then
 			Create_Quote_Printout().Show()
@@ -447,68 +481,96 @@ Class MainWindow
 	End Sub
 
 	Private Sub button_Click(sender As Object, e As RoutedEventArgs) Handles button.Click
-		If MsgBox("Rebuild Everything?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-			If InputBox("Enter Launch Code") = "543" Then
-				db.Database.Delete()
-				db.Database.Create()
-				'db.Companies.AddRange(Companies)
-				'db.SaveChanges()
-			End If
+		Exit Sub
 
-		Else Exit Sub
-		End If
+		Try
+			db.Dispose()
+			db = New NeoNotesContainer
+			db.Database.Delete()
+			db.Database.Create()
+
+			'If MsgBox("Rebuild Everything?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes AndAlso InputBox("Enter Launch Code") = "543" Then
+			'	db.Database.Delete()
+			'	db.Database.Create()
+			'	'db.Companies.AddRange(Companies)
+			'	'db.SaveChanges()
+			'Else
+			'	MsgBox("Wrong")
+			'	Exit Sub
+			'End If
 
 
-		Dim Data = XElement.Load("C:\Aaron\Notes.xml")
+			Dim Data = XElement.Load("C:\Aaron\Notes.xml")
 
-		Dim Companies As New List(Of Company)
+			Dim Companies As New List(Of Company)
 
-		For Each XCompany In Data.<Company>
-			Dim Company As New Company With {
-				.Address = XCompany.@Address,
-				.City = XCompany.@City,
-				.Zip = XCompany.@Zip,
-				.Phone = XCompany.@Phone,
-				.Misc = XCompany.@Misc,
-				.Name = XCompany.@Name
-			}
-			Companies.Add(Company)
-
-			For Each XContact In XCompany.<Contact>
-				Dim Contact As New Contact With {
-					.Name = XContact.@Name,
-					.Phone = XContact.@Phone,
-					.Email = XContact.@Email,
-					.Position = XContact.@Position
+			For Each XCompany In Data.<Company>
+				Dim Company As New Company With {
+					.Address = XCompany.@Address,
+					.City = XCompany.@City,
+					.Zip = XCompany.@Zip,
+					.Phone = XCompany.@Phone,
+					.Misc = XCompany.@Misc,
+					.Name = XCompany.@Name
 				}
-				Company.Contacts.Add(Contact)
+				Companies.Add(Company)
 
-
-				For Each XNote In XCompany.<Note>
-					Dim Note As New Note With {
-						.Title = XNote.@Title,
-						.Date = XNote.@Date,
-						.Text = XNote.@Text
+				For Each XContact In XCompany.<Contact>
+					Dim Contact As New Contact With {
+						.Name = XContact.@Name,
+						.Phone = XContact.@Phone,
+						.Email = XContact.@Email,
+						.Position = XContact.@Position
 					}
-					Contact.Notes.Add(Note)
+					Company.Contacts.Add(Contact)
+
+
+					For Each XNote In XCompany.<Note>
+						Dim Note As New Note With {
+							.Title = XNote.@Title,
+							.Date = XNote.@Date,
+							.Text = XNote.@Text
+						}
+						Contact.Notes.Add(Note)
+					Next
+				Next
+
+				For Each XQuote In XCompany.<Quotes>.<Quote>
+					Dim Quote As New Quote With {.Date = XQuote.@Date, .Name = XQuote.@Name}
+					Company.Quotes.Add(Quote)
+
+					For Each XLine In XQuote.<Detail>
+						Dim Line As New QuoteLine With {.Display = XLine.@Display, .DESC = XLine.@DESC, .UNIT = XLine.@UNIT, .COST = Val(XLine.@COST)}
+
+						If Boolean.TryParse(XLine.@Centered, Line.IsCentered) Then
+							Me.ToString()
+						End If
+
+						Quote.Lines.Add(Line)
+					Next
 				Next
 			Next
 
-			For Each XQuote In XCompany.<Quotes>.<Quote>
-				Dim Quote As New Quote With {.Date = XQuote.@Date, .Name = XQuote.@Name}
-				Company.Quotes.Add(Quote)
-
-				For Each XLine In XQuote.<Detail>
-					Dim Line As New QuoteLine With {.Display = XLine.@Display, .DESC = XLine.@DESC, .UNIT = XLine.@UNIT, .COST = Val(XLine.@COST), .IsCentered = XLine.@IsCentered}
-					Quote.Lines.Add(Line)
-				Next
-			Next
-
-			db.Companies.Add(Company)
+			db.Companies.AddRange(Companies)
 			db.SaveChanges()
-		Next
+
+			Dim T2 = db.Companies.Count
+
+			MsgBox("Done")
+			My.Application.Shutdown()
+		Catch ex As Exception
+			MsgBox(ex.ToString)
+		End Try
 
 
-		End
+	End Sub
+
+	Private Sub btnRemoveCompany_Click(sender As Object, e As RoutedEventArgs) Handles btnRemoveCompany.Click
+		If MsgBox($"Are you sure you want to remove the company {txtCompanyName.Text}?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+			Dim Company As Company = cbxCompanies.SelectedItem
+			cbxCompanies.Items.Remove(Company)
+			db.Companies.Remove(Company)
+			cbxCompanies.Items.Refresh()
+		End If
 	End Sub
 End Class
