@@ -106,6 +106,8 @@ Class MainWindow
 	Private Sub btnQuoteAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteAdd.Click
 		Dim Quote As New Quote With {.Name = "New Quote", .Date = Now}
 		CType(cbxCompanies.SelectedItem, Company).Quotes.Add(Quote)
+		Quote.Lines.Add(New QuoteLine With {.Display = 0, .DESC = "NO MINIMUM ORDER", .IsCentered = True})
+		Quote.Lines.Add(New QuoteLine With {.Display = 0, .DESC = "NO DELIVERY CHARGE", .IsCentered = True})
 
 		lbxQuotes.SelectedItem = Quote
 		lbxQuotes.Items.Refresh()
@@ -410,7 +412,7 @@ Class MainWindow
 			'End If
 
 		Catch ex As Exception
-			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.Yes Then
+			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
 				e.Cancel = True
 			End If
 		End Try
