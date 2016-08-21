@@ -124,14 +124,19 @@ Class MainWindow
 	End Sub
 
 	Private Sub btnQuoteDetailAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAdd.Click
+		cbxQuoteLineDescription.Focus() 'Hack for ensuring that all controls have there data saved
+		txtQuoteLineCost.Focus()        'Hack for ensuring that all controls have there data saved
+
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 
 		Dim Display = If(Quote.Lines.Any, Quote.Lines.Max(Function(x) x.Display), 0) + 1
-		Dim QuoteLine As New QuoteLine With {.DESC = "Text", .Quote = Quote, .Display = Display}
+		Dim QuoteLine As New QuoteLine With {.DESC = "", .Quote = Quote, .Display = Display, .COST = Nothing}
 		Quote.Lines.Add(QuoteLine)
 
 		dgQuoteDetails.SelectedItem = QuoteLine
 		dgQuoteDetails.Items.Refresh()
+
+		cbxQuoteLineDescription.Focus()
 	End Sub
 
 
@@ -573,6 +578,14 @@ Class MainWindow
 			cbxCompanies.Items.Remove(Company)
 			db.Companies.Remove(Company)
 			cbxCompanies.Items.Refresh()
+		End If
+	End Sub
+
+	Private Sub txtQuoteLineUnit_KeyDown(sender As Object, e As KeyEventArgs) Handles txtQuoteLineUnit.KeyDown
+		'This is a hack because I need a way to account for the 0 that is always there in the Cost by default
+		If e.Key = Key.Tab Then
+			txtQuoteLineCost.Focus()
+			txtQuoteLineCost.SelectAll()
 		End If
 	End Sub
 End Class
