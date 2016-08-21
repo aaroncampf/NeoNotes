@@ -68,7 +68,7 @@
 								<DataGrid.Columns>
 									<!--<DataGridComboBoxColumn x:Name="colQuoteDetailDescription" ClipboardContentBinding="{x:Null}" SelectedValueBinding="{x:Null}" SelectedItemBinding="{x:Null}" TextBinding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>-->
 									<DataGridTextColumn Binding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>
-									<DataGridTextColumn Binding="{Binding Path=UNIT}" ClipboardContentBinding="{x:Null}" Header="Unit" Width="75" IsReadOnly="True"/>
+									<DataGridTextColumn Binding="{Binding Path=UNIT}" ClipboardContentBinding="{x:Null}" Header="Unit" Width="100" IsReadOnly="True"/>
 									<DataGridTextColumn Binding="{Binding Path=COST}" ClipboardContentBinding="{x:Null}" Header="Cost" Width="75" IsReadOnly="True"/>
 								</DataGrid.Columns>
 							</DataGrid>
