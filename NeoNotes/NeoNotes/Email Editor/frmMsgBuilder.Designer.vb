@@ -57,7 +57,7 @@ Partial Class frmMsgBuilder
 		'
 		Me.SplitContainer1.Panel2.Controls.Add(Me.ElementHost1)
 		Me.SplitContainer1.Panel2.Controls.Add(Me.Label2)
-		Me.SplitContainer1.Size = New System.Drawing.Size(718, 471)
+		Me.SplitContainer1.Size = New System.Drawing.Size(590, 471)
 		Me.SplitContainer1.SplitterDistance = 112
 		Me.SplitContainer1.TabIndex = 1
 		'
@@ -67,7 +67,7 @@ Partial Class frmMsgBuilder
 		Me.txtSubject.Location = New System.Drawing.Point(0, 13)
 		Me.txtSubject.Multiline = True
 		Me.txtSubject.Name = "txtSubject"
-		Me.txtSubject.Size = New System.Drawing.Size(718, 99)
+		Me.txtSubject.Size = New System.Drawing.Size(590, 99)
 		Me.txtSubject.TabIndex = 0
 		'
 		'Label1
@@ -85,7 +85,7 @@ Partial Class frmMsgBuilder
 		Me.ElementHost1.Dock = System.Windows.Forms.DockStyle.Fill
 		Me.ElementHost1.Location = New System.Drawing.Point(0, 13)
 		Me.ElementHost1.Name = "ElementHost1"
-		Me.ElementHost1.Size = New System.Drawing.Size(718, 342)
+		Me.ElementHost1.Size = New System.Drawing.Size(590, 342)
 		Me.ElementHost1.TabIndex = 0
 		Me.ElementHost1.Text = "ElementHost1"
 		Me.ElementHost1.Child = Nothing
@@ -115,8 +115,8 @@ Partial Class frmMsgBuilder
 		'
 		Me.SplitContainer2.Panel2.Controls.Add(Me.btnOk)
 		Me.SplitContainer2.Panel2.Controls.Add(Me.btnCancel)
-		Me.SplitContainer2.Size = New System.Drawing.Size(1087, 471)
-		Me.SplitContainer2.SplitterDistance = 718
+		Me.SplitContainer2.Size = New System.Drawing.Size(996, 471)
+		Me.SplitContainer2.SplitterDistance = 590
 		Me.SplitContainer2.TabIndex = 2
 		'
 		'btnOk
@@ -141,7 +141,7 @@ Partial Class frmMsgBuilder
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-		Me.ClientSize = New System.Drawing.Size(1087, 471)
+		Me.ClientSize = New System.Drawing.Size(996, 471)
 		Me.ControlBox = False
 		Me.Controls.Add(Me.SplitContainer2)
 		Me.Name = "frmMsgBuilder"
