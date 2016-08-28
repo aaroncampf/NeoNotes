@@ -235,3 +235,4 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 DropBox_Token.txt
+NeoNotes/NeoNotes/Resources/Dropbox_AccessToken.txt

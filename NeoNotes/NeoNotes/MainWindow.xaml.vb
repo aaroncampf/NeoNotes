@@ -2,6 +2,8 @@
 Imports AppLimit.CloudComputing.SharpBox
 Imports M = System.Net.Mail
 
+
+'TODO: Remove SharpBox Nuget Package Soon!!
 Class MainWindow
 	Dim db As New NeoNotesContainer
 
@@ -400,21 +402,26 @@ Class MainWindow
 			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
 
 			'The example totally works!!!
-			Dim dropBoxStorage As New CloudStorage()
-			Dim dropBoxConfig = CloudStorage.GetCloudConfigurationEasy(nSupportedCloudConfigurations.DropBox)
-			Dim accessToken As ICloudStorageAccessToken
-
-			'load a valid security token from file
-			Dim byt As Byte() = Text.Encoding.UTF8.GetBytes(My.Resources.DropBox_Token)
-			accessToken = dropBoxStorage.DeserializeSecurityTokenFromBase64(Convert.ToBase64String(byt))
-
-			'open the connection
-			Dim storageToken = dropBoxStorage.Open(dropBoxConfig, accessToken)
+			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
+			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
+			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File).Result.ToString()
 
 
-			'If MsgBox("This is only a test so we will not upload the notes to the phone") <> MsgBoxResult.Ok Then
-			dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & XML.@Name)
-			'End If
+			'Dim dropBoxStorage As New CloudStorage()
+			'Dim dropBoxConfig = CloudStorage.GetCloudConfigurationEasy(nSupportedCloudConfigurations.DropBox)
+			'Dim accessToken As ICloudStorageAccessToken
+
+			''load a valid security token from file
+			'Dim byt As Byte() = Text.Encoding.UTF8.GetBytes(My.Resources.DropBox_Token)
+			'accessToken = dropBoxStorage.DeserializeSecurityTokenFromBase64(Convert.ToBase64String(byt))
+
+			''open the connection
+			'dropBoxStorage.Open(dropBoxConfig, accessToken)
+
+
+			''If MsgBox("This is only a test so we will not upload the notes to the phone") <> MsgBoxResult.Ok Then
+			'dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & XML.@Name)
+			''End If
 
 		Catch ex As Exception
 			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
@@ -422,6 +429,11 @@ Class MainWindow
 			End If
 		End Try
 	End Sub
+
+
+
+
+
 
 	Private Sub btnCompany_Add_Click(sender As Object, e As RoutedEventArgs) Handles btnCompany_Add.Click
 		Dim Company As New Company With {.Name = "New Name"}
