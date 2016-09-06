@@ -1,9 +1,6 @@
 ﻿Imports Aaron.Reports
-Imports AppLimit.CloudComputing.SharpBox
 Imports M = System.Net.Mail
 
-
-'TODO: Remove SharpBox Nuget Package Soon!!
 Class MainWindow
 	Dim db As New NeoNotesContainer
 
@@ -351,8 +348,15 @@ Class MainWindow
 		Try
 			Me.db.SaveChanges()
 
-			'Dim Settings = New DatabaseContainer().Settings.First
+		Catch ex As Exception
+			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
+				e.Cancel = True
+				Exit Sub
+			End If
+		End Try
+		'Dim Settings = New DatabaseContainer().Settings.First
 
+		Try
 
 			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
 
@@ -402,10 +406,11 @@ Class MainWindow
 			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
 
 			'The example totally works!!!
+
 			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
 			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
-			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File).Result.ToString()
 
+			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
 
 			'Dim dropBoxStorage As New CloudStorage()
 			'Dim dropBoxConfig = CloudStorage.GetCloudConfigurationEasy(nSupportedCloudConfigurations.DropBox)
@@ -424,9 +429,7 @@ Class MainWindow
 			''End If
 
 		Catch ex As Exception
-			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
-				e.Cancel = True
-			End If
+			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error Uploading Notes")
 		End Try
 	End Sub
 
