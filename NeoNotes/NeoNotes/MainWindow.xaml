@@ -10,7 +10,7 @@
 		mc:Ignorable="d"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		xmlns:s="clr-namespace:System;assembly=mscorlib" 
-		Title="MainWindow" Height="689.985" Width="1069.581" WindowState="Maximized">
+		Title="MainWindow" Height="671.985" Width="1069.581" WindowState="Maximized">
 
 	<Window.Resources>
 		<local:IsNothingConverter x:Key="IsNothingConverter"/>
@@ -119,13 +119,12 @@
 				<ListBox x:Name="lbxContacts" HorizontalAlignment="Left" Height="197" Margin="83,295,0,0" VerticalAlignment="Top" Width="166" ItemsSource="{Binding SelectedItem.Contacts, ElementName=cbxCompanies}" DisplayMemberPath="Name" />
 				<Label x:Name="label1" Content="Contacts" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="68"/>
 				<Button x:Name="btnAdd" Content="Add" HorizontalAlignment="Left" Margin="83,497,0,0" VerticalAlignment="Top" Width="166"/>
-				<Button x:Name="btnCompanyPrintContacts" Content="Print Contacts" Margin="83,524,10,0" VerticalAlignment="Top"/>
+				<Button x:Name="btnCompanyPrintCompany" Content="Print Company" Margin="83,524,10,0" VerticalAlignment="Top"/>
 				<TextBox x:Name="txtCompanyZip" HorizontalAlignment="Left" Height="23" Margin="83,97,0,0" TextWrapping="Wrap" Text="{Binding SelectedItem.Zip, ElementName=cbxCompanies}" VerticalAlignment="Top" Width="166" TabIndex="4"/>
 				<Label x:Name="label_Copy7" Content="Zip" HorizontalAlignment="Left" Margin="7,93,0,0" VerticalAlignment="Top" Width="46"/>
 				<Button x:Name="btnRemoveCompany" Content="Remove" Height="19" VerticalAlignment="Bottom"/>
 			</Grid>
 		</GroupBox>
 		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
-		<Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="930,31,0,0" VerticalAlignment="Top" Width="75"/>
 	</Grid>
 </Window>

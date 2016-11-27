@@ -195,24 +195,35 @@ Class MainWindow
 		dgQuoteDetails.Items.Refresh()
 	End Sub
 
-	Private Sub btnCompanyPrintContacts_Click(sender As Object, e As RoutedEventArgs) Handles btnCompanyPrintContacts.Click
+	Private Sub btnCompanyPrintCompany_Click(sender As Object, e As RoutedEventArgs) Handles btnCompanyPrintCompany.Click
 		Dim Company As Company = cbxCompanies.SelectedItem
+		Dim Report As New Basic(Company.Name)
 
-		Dim ContactReport As New Basic()
-		Dim Info As New Sections.Table("Contacts For " & Company.Name)
-		Info.Header.TextAlignment = TextAlignment.Center
+		Dim CompanyData As New Sections.Table("Details")
+		CompanyData.Table.Columns.Add(New TableColumn)
+		CompanyData.Table.Columns.Add(New TableColumn)
 
-		Info.Table.Columns.Add(New TableColumn With {.Tag = "Name"})
-		Info.Table.Columns.Add(New TableColumn With {.Tag = "Position"})
-		Info.Table.Columns.Add(New TableColumn With {.Tag = "Phone"})
-		Info.Table.Columns.Add(New TableColumn With {.Tag = "Email"})
+		CompanyData.Table.AddRow(0, TextAlignment.Left, "Name", Company.Name)
+		CompanyData.Table.AddRow(0, TextAlignment.Left, "Address", Company.Address)
+		CompanyData.Table.AddRow(0, TextAlignment.Left, "City", Company.City)
+		CompanyData.Table.AddRow(0, TextAlignment.Left, "Zip", Company.Zip)
+		CompanyData.Table.AddRow(0, TextAlignment.Left, "Phone", Company.Phone)
+		Report.Sections.Add(CompanyData)
+
+		Dim Contacts As New Sections.Table("Contacts")
+		Contacts.Header.TextAlignment = TextAlignment.Center
+
+		Contacts.Table.Columns.Add(New TableColumn With {.Tag = "Name"})
+		Contacts.Table.Columns.Add(New TableColumn With {.Tag = "Position"})
+		Contacts.Table.Columns.Add(New TableColumn With {.Tag = "Phone"})
+		Contacts.Table.Columns.Add(New TableColumn With {.Tag = "Email"})
 
 		For Each Item In Company.Contacts.OrderBy(Function(x) x.Name)
-			Info.Table.AddRow(0, TextAlignment.Left, Item.Name, Item.Position, Item.Phone, Item.Email)
+			Contacts.Table.AddRow(0, TextAlignment.Left, Item.Name, Item.Position, Item.Phone, Item.Email)
 		Next
 
-		ContactReport.Sections.Add(Info)
-		ContactReport.Show()
+		Report.Sections.Add(Contacts)
+		Report.Show()
 	End Sub
 
 	Private Sub btnContactEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnContactEmail.Click
@@ -433,11 +444,6 @@ Class MainWindow
 		End Try
 	End Sub
 
-
-
-
-
-
 	Private Sub btnCompany_Add_Click(sender As Object, e As RoutedEventArgs) Handles btnCompany_Add.Click
 		Dim Company As New Company With {.Name = "New Name"}
 		db.Companies.Add(Company)
@@ -502,91 +508,6 @@ Class MainWindow
 		NotePrintout.Show()
 	End Sub
 
-	Private Sub button_Click(sender As Object, e As RoutedEventArgs) Handles button.Click
-		Exit Sub
-
-		Try
-			db.Dispose()
-			db = New NeoNotesContainer
-			db.Database.Delete()
-			db.Database.Create()
-
-			'If MsgBox("Rebuild Everything?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes AndAlso InputBox("Enter Launch Code") = "543" Then
-			'	db.Database.Delete()
-			'	db.Database.Create()
-			'	'db.Companies.AddRange(Companies)
-			'	'db.SaveChanges()
-			'Else
-			'	MsgBox("Wrong")
-			'	Exit Sub
-			'End If
-
-
-			Dim Data = XElement.Load("C:\Aaron\Notes.xml")
-
-			Dim Companies As New List(Of Company)
-
-			For Each XCompany In Data.<Company>
-				Dim Company As New Company With {
-					.Address = XCompany.@Address,
-					.City = XCompany.@City,
-					.Zip = XCompany.@Zip,
-					.Phone = XCompany.@Phone,
-					.Misc = XCompany.@Misc,
-					.Name = XCompany.@Name
-				}
-				Companies.Add(Company)
-
-				For Each XContact In XCompany.<Contact>
-					Dim Contact As New Contact With {
-						.Name = XContact.@Name,
-						.Phone = XContact.@Phone,
-						.Email = XContact.@Email,
-						.Position = XContact.@Position
-					}
-					Company.Contacts.Add(Contact)
-
-
-					For Each XNote In XCompany.<Note>
-						Dim Note As New Note With {
-							.Title = XNote.@Title,
-							.Date = XNote.@Date,
-							.Text = XNote.@Text
-						}
-						Contact.Notes.Add(Note)
-					Next
-				Next
-
-				For Each XQuote In XCompany.<Quotes>.<Quote>
-					Dim Quote As New Quote With {.Date = XQuote.@Date, .Name = XQuote.@Name}
-					Company.Quotes.Add(Quote)
-
-					For Each XLine In XQuote.<Detail>
-						Dim Line As New QuoteLine With {.Display = XLine.@Display, .DESC = XLine.@DESC, .UNIT = XLine.@UNIT, .COST = Val(XLine.@COST)}
-
-						If Boolean.TryParse(XLine.@Centered, Line.IsCentered) Then
-							Me.ToString()
-						End If
-
-						Quote.Lines.Add(Line)
-					Next
-				Next
-			Next
-
-			db.Companies.AddRange(Companies)
-			db.SaveChanges()
-
-			Dim T2 = db.Companies.Count
-
-			MsgBox("Done")
-			My.Application.Shutdown()
-		Catch ex As Exception
-			MsgBox(ex.ToString)
-		End Try
-
-
-	End Sub
-
 	Private Sub btnRemoveCompany_Click(sender As Object, e As RoutedEventArgs) Handles btnRemoveCompany.Click
 		If MsgBox($"Are you sure you want to remove the company {txtCompanyName.Text}?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
 			Dim Company As Company = cbxCompanies.SelectedItem
@@ -603,4 +524,5 @@ Class MainWindow
 			txtQuoteLineCost.SelectAll()
 		End If
 	End Sub
+
 End Class
