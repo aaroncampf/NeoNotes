@@ -30,15 +30,15 @@ Partial Class frmMsgBuilder
 		Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
 		Me.btnOk = New System.Windows.Forms.Button()
 		Me.btnCancel = New System.Windows.Forms.Button()
-		CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-		Me.SplitContainer1.Panel1.SuspendLayout()
-		Me.SplitContainer1.Panel2.SuspendLayout()
-		Me.SplitContainer1.SuspendLayout()
-		CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
-		Me.SplitContainer2.Panel1.SuspendLayout()
-		Me.SplitContainer2.Panel2.SuspendLayout()
-		Me.SplitContainer2.SuspendLayout()
-		Me.SuspendLayout()
+		CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).BeginInit
+		Me.SplitContainer1.Panel1.SuspendLayout
+		Me.SplitContainer1.Panel2.SuspendLayout
+		Me.SplitContainer1.SuspendLayout
+		CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).BeginInit
+		Me.SplitContainer2.Panel1.SuspendLayout
+		Me.SplitContainer2.Panel2.SuspendLayout
+		Me.SplitContainer2.SuspendLayout
+		Me.SuspendLayout
 		'
 		'SplitContainer1
 		'
@@ -65,14 +65,14 @@ Partial Class frmMsgBuilder
 		'
 		Me.txtSubject.Dock = System.Windows.Forms.DockStyle.Fill
 		Me.txtSubject.Location = New System.Drawing.Point(0, 13)
-		Me.txtSubject.Multiline = True
+		Me.txtSubject.Multiline = true
 		Me.txtSubject.Name = "txtSubject"
 		Me.txtSubject.Size = New System.Drawing.Size(590, 99)
 		Me.txtSubject.TabIndex = 0
 		'
 		'Label1
 		'
-		Me.Label1.AutoSize = True
+		Me.Label1.AutoSize = true
 		Me.Label1.Dock = System.Windows.Forms.DockStyle.Top
 		Me.Label1.Location = New System.Drawing.Point(0, 0)
 		Me.Label1.Name = "Label1"
@@ -92,7 +92,7 @@ Partial Class frmMsgBuilder
 		'
 		'Label2
 		'
-		Me.Label2.AutoSize = True
+		Me.Label2.AutoSize = true
 		Me.Label2.Dock = System.Windows.Forms.DockStyle.Top
 		Me.Label2.Location = New System.Drawing.Point(0, 0)
 		Me.Label2.Name = "Label2"
@@ -126,7 +126,7 @@ Partial Class frmMsgBuilder
 		Me.btnOk.Size = New System.Drawing.Size(75, 23)
 		Me.btnOk.TabIndex = 6
 		Me.btnOk.Text = "Ok"
-		Me.btnOk.UseVisualStyleBackColor = True
+		Me.btnOk.UseVisualStyleBackColor = true
 		'
 		'btnCancel
 		'
@@ -135,30 +135,30 @@ Partial Class frmMsgBuilder
 		Me.btnCancel.Size = New System.Drawing.Size(75, 23)
 		Me.btnCancel.TabIndex = 5
 		Me.btnCancel.Text = "Cancel"
-		Me.btnCancel.UseVisualStyleBackColor = True
+		Me.btnCancel.UseVisualStyleBackColor = true
 		'
 		'frmMsgBuilder
 		'
-		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+		Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
 		Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
 		Me.ClientSize = New System.Drawing.Size(996, 471)
-		Me.ControlBox = False
+		Me.ControlBox = false
 		Me.Controls.Add(Me.SplitContainer2)
 		Me.Name = "frmMsgBuilder"
 		Me.Text = "Message Writer"
-		Me.SplitContainer1.Panel1.ResumeLayout(False)
-		Me.SplitContainer1.Panel1.PerformLayout()
-		Me.SplitContainer1.Panel2.ResumeLayout(False)
-		Me.SplitContainer1.Panel2.PerformLayout()
-		CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-		Me.SplitContainer1.ResumeLayout(False)
-		Me.SplitContainer2.Panel1.ResumeLayout(False)
-		Me.SplitContainer2.Panel2.ResumeLayout(False)
-		CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
-		Me.SplitContainer2.ResumeLayout(False)
-		Me.ResumeLayout(False)
+		Me.SplitContainer1.Panel1.ResumeLayout(false)
+		Me.SplitContainer1.Panel1.PerformLayout
+		Me.SplitContainer1.Panel2.ResumeLayout(false)
+		Me.SplitContainer1.Panel2.PerformLayout
+		CType(Me.SplitContainer1,System.ComponentModel.ISupportInitialize).EndInit
+		Me.SplitContainer1.ResumeLayout(false)
+		Me.SplitContainer2.Panel1.ResumeLayout(false)
+		Me.SplitContainer2.Panel2.ResumeLayout(false)
+		CType(Me.SplitContainer2,System.ComponentModel.ISupportInitialize).EndInit
+		Me.SplitContainer2.ResumeLayout(false)
+		Me.ResumeLayout(false)
 
-	End Sub
+End Sub
 	Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
     Friend WithEvents ElementHost1 As System.Windows.Forms.Integration.ElementHost

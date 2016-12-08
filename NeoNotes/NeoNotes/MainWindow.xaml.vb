@@ -525,4 +525,33 @@ Class MainWindow
 		End If
 	End Sub
 
+	Private Sub btnQuoteEmail1_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail1.Click
+		Dim Contact As Contact = lbxContacts.SelectedItem
+		If Contact.Email Is Nothing Then
+			MsgBox("Contact has no email")
+			Exit Sub
+		End If
+
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		If Quote Is Nothing Then
+			MsgBox("No Quote has been selected")
+			Exit Sub
+		End If
+
+		Dim Settings = db.Settings.First
+		If String.IsNullOrWhiteSpace(Settings.Gmail) Or String.IsNullOrWhiteSpace(Settings.GmailPassword) Then
+			MsgBox("Please Setup the GMail Email And Password Settings")
+		Else
+			If My.User.Name.Contains("Aaron Campf") Then
+				If MsgBox("Are you Sure you want to send then Email to: " & Contact.Email, MsgBoxStyle.YesNo) = MsgBoxResult.No Then Exit Sub
+			End If
+
+			Dim Results = frmCreateEmail.Open(Contact)
+
+			If Not Results.Canceled Then
+				Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout.AsPDF}}
+				SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, Results.Subject, Results.Body, Results.Contacts.Select(Function(x) x.Email).ToArray, Attachments)
+			End If
+		End If
+	End Sub
 End Class

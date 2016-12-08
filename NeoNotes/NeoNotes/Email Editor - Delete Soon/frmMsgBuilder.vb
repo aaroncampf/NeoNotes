@@ -5,9 +5,9 @@
 ''' <features></features>
 ''' <stepthrough></stepthrough>
 Public Class frmMsgBuilder
-    'Dim Attachments As New List(Of Mod_Interfaces.IXML)
+	'Dim Attachments As New List(Of Mod_Interfaces.IXML)
 
-    <DebuggerStepThrough()>
+	<DebuggerStepThrough()>
 	Private Sub New()
 		InitializeComponent()
 	End Sub
@@ -19,16 +19,16 @@ Public Class frmMsgBuilder
 	End Function
 
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="GetHTML"></param>
-    ''' <param name="Multiline_Subject"></param>
-    ''' <param name="Title"></param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    ''' <stepthrough></stepthrough>
-    Shared Shadows Function ShowDialog(GetHTML As Boolean, Multiline_Subject As Boolean, Optional Title As String = "Message Writer") _
+	''' <summary>
+	''' 
+	''' </summary>
+	''' <param name="GetHTML"></param>
+	''' <param name="Multiline_Subject"></param>
+	''' <param name="Title"></param>
+	''' <returns></returns>
+	''' <remarks></remarks>
+	''' <stepthrough></stepthrough>
+	Shared Shadows Function ShowDialog(GetHTML As Boolean, Multiline_Subject As Boolean, Optional Title As String = "Message Writer") _
 																			 As Tuple(Of Forms.DialogResult, Tuple(Of String, String))
 		Dim Form As New frmMsgBuilder With {.Text = Title}, RTBE1 = New RichTextBoxEditor
 		Form.txtSubject.Multiline = Multiline_Subject
