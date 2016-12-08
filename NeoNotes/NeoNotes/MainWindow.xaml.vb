@@ -73,6 +73,7 @@ Class MainWindow
 	Private Sub btnAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnAdd.Click
 		Dim Contact As New Contact With {.Name = "New Contact"}
 		CType(cbxCompanies.SelectedItem, Company).Contacts.Add(Contact)
+		Contact.Company = cbxCompanies.SelectedItem
 
 		lbxContacts.SelectedItem = Contact
 		lbxContacts.Items.Refresh()
