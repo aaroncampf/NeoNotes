@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="frmCreateEmail" Height="547.458" Width="612.712">
 	<Grid>
-		<TextBox x:Name="txtBody" Margin="10,252,10,10" TextWrapping="Wrap" SpellCheck.IsEnabled="True" TabIndex="2"/>
+		<TextBox x:Name="txtBody" Margin="10,252,10,10" TextWrapping="Wrap" SpellCheck.IsEnabled="True" TabIndex="2" AcceptsReturn="True" AcceptsTab="True"/>
 		<ListBox x:Name="lbxEmails" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="171" Margin="10,32,0,0" DisplayMemberPath="Name"/>
 		<ComboBox x:Name="cbxContacts" HorizontalAlignment="Left" Margin="10,172,0,0" VerticalAlignment="Top" Width="206" DisplayMemberPath="Name" IsTabStop="False"/>
 		<Label x:Name="label" Content="To:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
