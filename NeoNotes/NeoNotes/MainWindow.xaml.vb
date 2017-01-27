@@ -385,9 +385,9 @@ Class MainWindow
 				<Customers>
 					<%= From Company In Companies
 						Select
-							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Address=<%= Company.Address %> City=<%= Company.City %> Misc=<%= Company.Misc %>>
+							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
 								<%= From Contact In Company.Contacts
-									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Company.Phone %> Position=<%= Contact.Position %>>
+									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
 											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %>/> %>
 										   </Contact>
 								%>
