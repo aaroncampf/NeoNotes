@@ -43,6 +43,8 @@ Class MainWindow
 		cbxQuoteLineDescription.ItemsSource = Items
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
+
+
 		For Each Item In db.Companies.OrderBy(Function(x) x.Name)
 			cbxCompanies.Items.Add(Item)
 		Next
@@ -359,28 +361,22 @@ Class MainWindow
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
 		Try
 			Me.db.SaveChanges()
-
 		Catch ex As Exception
 			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
 				e.Cancel = True
 				Exit Sub
 			End If
 		End Try
-		'Dim Settings = New DatabaseContainer().Settings.First
 
 		Try
-
 			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
 
-
-
-
-			'Dim MyNotes = XElement.Load(N.frmNotes.File) '.Save(SaveFile1.SelectedPath & "\Notes_To_Droid.txt")
-
 			Dim Watch = Stopwatch.StartNew()
-
 			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+			Watch.Stop()
 
+
+			Dim Watch1 = Stopwatch.StartNew()
 			Dim MyNotes =
 				<Customers>
 					<%= From Company In Companies
@@ -388,13 +384,13 @@ Class MainWindow
 							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
 								<%= From Contact In Company.Contacts
 									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
-											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %>/> %>
+											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
 										   </Contact>
 								%>
 
 								<Quotes>
 									<%= From Quote In Company.Quotes
-										Select <Quote ID=<%= Quote.ID %> Date=<%= Quote.Date %> Name=<%= Quote.Name %>>
+										Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
 												   <%= From Line In Quote.Lines
 													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
 											   </Quote>
@@ -404,41 +400,18 @@ Class MainWindow
 					%>
 				</Customers>
 
-			Watch.Stop()
-
-			'Do not use [.ForEach()] for this or[Visual Studio] Will Crash
-			For Each Node In MyNotes...<Quote>
-				Node.@Date = If(Node.@Date = "", Date.MinValue.ToShortDateString, CDate(Node.@Date).ToShortDateString)
-			Next
-
-			For Each Node In MyNotes...<Note>
-				Node.@Date = If(Node.@Date = "", Date.MinValue.ToShortDateString, CDate(Node.@Date).ToShortDateString)
-			Next
+			Watch1.Stop()
 
 			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
 
-			'The example totally works!!!
+			Dim Watch2 = Stopwatch.StartNew()
 
 			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
 			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
 
 			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
 
-			'Dim dropBoxStorage As New CloudStorage()
-			'Dim dropBoxConfig = CloudStorage.GetCloudConfigurationEasy(nSupportedCloudConfigurations.DropBox)
-			'Dim accessToken As ICloudStorageAccessToken
-
-			''load a valid security token from file
-			'Dim byt As Byte() = Text.Encoding.UTF8.GetBytes(My.Resources.DropBox_Token)
-			'accessToken = dropBoxStorage.DeserializeSecurityTokenFromBase64(Convert.ToBase64String(byt))
-
-			''open the connection
-			'dropBoxStorage.Open(dropBoxConfig, accessToken)
-
-
-			''If MsgBox("This is only a test so we will not upload the notes to the phone") <> MsgBoxResult.Ok Then
-			'dropBoxStorage.UploadFile(IO.Path.GetTempPath & "\Notes.xml", "/Users/" & XML.@Name)
-			''End If
+			Watch2.Stop()
 
 		Catch ex As Exception
 			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error Uploading Notes")
@@ -483,7 +456,7 @@ Class MainWindow
 	Private Sub btnPrintNotes_Click(sender As Object, e As RoutedEventArgs) Handles btnPrintNotes.Click
 		Dim Contact As Contact = lbxContacts.SelectedItem
 
-		Dim NotePrintout As New Basic($"Notes For {Contact.Name}")
+		Dim NotePrintout As New Basic($"Notes For {Contact.Company.Name} - {Contact.Name}")
 		'Dim Info As New Sections.Table(
 		'	New TableColumn With {.Tag = "Company"},
 		'	New TableColumn With {.Tag = "Contact"},
