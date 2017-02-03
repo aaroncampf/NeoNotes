@@ -44,7 +44,6 @@ Class MainWindow
 
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
 
-
 		For Each Item In db.Companies.OrderBy(Function(x) x.Name)
 			cbxCompanies.Items.Add(Item)
 		Next
