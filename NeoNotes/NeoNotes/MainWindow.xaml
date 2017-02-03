@@ -63,7 +63,20 @@
 			<TabItem Header="Quotes" HorizontalAlignment="Right" Width="54" Height="22" Margin="0,-2,-2,0" VerticalAlignment="Bottom">
 				<Grid Background="#FFE5E5E5" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
 					<Label x:Name="label8" Content="Quotes" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-					<ListBox x:Name="lbxQuotes" HorizontalAlignment="Left" Margin="10,36,0,31" Width="248" ItemsSource="{Binding SelectedItem.Quotes, ElementName=cbxCompanies}" DisplayMemberPath="Name"/>
+					<ListBox x:Name="lbxQuotes" HorizontalAlignment="Left" Margin="10,36,0,31" Width="248" ItemsSource="{Binding SelectedItem.Quotes, ElementName=cbxCompanies}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock>
+									<TextBlock.Text>
+										<MultiBinding StringFormat="{}{0} {1:d}">
+											<Binding Path="Name" />
+											<Binding Path="Date" />
+										</MultiBinding>
+									</TextBlock.Text>
+								</TextBlock>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
 					<Button x:Name="btnQuoteAdd" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,2" Width="248" Height="20" VerticalAlignment="Bottom"/>
 					<GroupBox x:Name="groupBox1" Header="Details" HorizontalAlignment="Left" Margin="262,36,0,10" Width="519" IsEnabled="{Binding SelectedItem, ElementName=lbxQuotes, Converter={StaticResource IsNothingConverter}}">
 						<Grid>
@@ -97,6 +110,14 @@
 								<MenuItem x:Name="btnQuotePrint" Header="Print" /> |
 								<MenuItem x:Name="btnQuoteRemove" Header="Delete"/> |
 							</Menu>
+							<Label Content="Created:" HorizontalAlignment="Left" Margin="342,26,0,0" VerticalAlignment="Top"/>
+							<TextBox x:Name="txtDate" Height="23" Margin="396,26,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
+								<TextBox.Text>
+									<MultiBinding StringFormat="{}{0:d}">
+										<Binding ElementName="lbxQuotes" Path="SelectedItem.Date" />
+									</MultiBinding>
+								</TextBox.Text>
+							</TextBox>
 							<TextBox x:Name="txtQuoteTitle" Height="23" Margin="37,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top"  Text="{Binding SelectedItem.Name, ElementName=lbxQuotes}"/>
 							<Label x:Name="label5" Content="Title" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top"/>
 						</Grid>
