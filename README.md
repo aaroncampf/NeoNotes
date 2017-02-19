@@ -1,6 +1,8 @@
 # NeoNotes
 
 A basic CRM application created for use at AJP Northwest by Aaron Campf.
+The goal of this application is to create a very lightweight CRM application that can export data to other applications. Maintainability and minimism are the primary focus of this application to ensure maximumn productivity with minimal overhead for entering data.
+
 
 ## Disclaimer
 In return for porting my original Winforms application into WPF and for the initial redesign I was allowed to use the project as an example.
