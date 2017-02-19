@@ -237,10 +237,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Email Editor - Delete Soon\Controls\RichTextBoxEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -295,24 +291,6 @@
     <Compile Include="Email Editor - New\frmCreateEmail.xaml.vb">
       <DependentUpon>frmCreateEmail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Email Editor - Delete Soon\Controls\ExRichTextBox.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Email Editor - Delete Soon\Controls\MessageDisplay.Designer.vb">
-      <DependentUpon>MessageDisplay.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Email Editor - Delete Soon\Controls\MessageDisplay.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Email Editor - Delete Soon\Controls\RichTextBoxEditor.xaml.vb">
-      <DependentUpon>RichTextBoxEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Email Editor - Delete Soon\frmMsgBuilder.Designer.vb">
-      <DependentUpon>frmMsgBuilder.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Email Editor - Delete Soon\frmMsgBuilder.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="IsNothingConverter.vb" />
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -360,12 +338,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Email Editor - Delete Soon\Controls\MessageDisplay.resx">
-      <DependentUpon>MessageDisplay.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Email Editor - Delete Soon\frmMsgBuilder.resx">
-      <DependentUpon>frmMsgBuilder.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
