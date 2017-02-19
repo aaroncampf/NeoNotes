@@ -4,17 +4,6 @@ Imports M = System.Net.Mail
 Class MainWindow
 	Dim db As New NeoNotesContainer
 
-	'	Private ReadOnly Property AppFolder As String
-	'		Get
-	'#If DEBUG Then
-	'			Return My.Application.Info.DirectoryPath
-	'#Else
-	'			Return AppDomain.CurrentDomain.GetData("DataDirectory")
-	'#End If
-	'		End Get
-	'	End Property
-
-
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
 		'Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications
 		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
@@ -230,39 +219,6 @@ Class MainWindow
 
 	Private Sub btnContactEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnContactEmail.Click
 		Process.Start($"https://mail.google.com/mail/?view=cm&fs=1&tf=1&to={CType(lbxContacts.SelectedItem, Contact).Email}")
-	End Sub
-
-	Private Sub btnQuoteEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail.Click
-		Dim Contact As Contact = lbxContacts.SelectedItem
-		If Contact.Email Is Nothing Then
-			MsgBox("Contact has no email")
-			Exit Sub
-		End If
-
-		Dim Quote As Quote = lbxQuotes.SelectedItem
-		If Quote Is Nothing Then
-			MsgBox("No Quote has been selected")
-			Exit Sub
-		End If
-
-		Dim Settings = db.Settings.First
-		If String.IsNullOrWhiteSpace(Settings.Gmail) Or String.IsNullOrWhiteSpace(Settings.GmailPassword) Then
-			MsgBox("Please Setup the GMail Email And Password Settings")
-		Else
-			If My.User.Name.Contains("Aaron Campf") Then
-				If MsgBox("Are you Sure you want to send then Email to: " & Contact.Email, MsgBoxStyle.YesNo) = MsgBoxResult.No Then Exit Sub
-			End If
-
-			Dim GetBody = frmMsgBuilder.ShowDialog(True, False, "Send Email to " & Contact.Name)
-			If GetBody IsNot Nothing AndAlso GetBody.Item1 = Forms.DialogResult.OK Then
-				Dim Body As XElement
-				Body = XElement.Parse(GetBody.Item2.Item2).<BODY>(0)
-				Body.Name = XName.Get("P")
-
-				Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout.AsPDF}}
-				SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, GetBody.Item2.Item1, Body, {Contact.Email}, Attachments)
-			End If
-		End If
 	End Sub
 
 	Private Function Create_Quote_Printout() As Basic
