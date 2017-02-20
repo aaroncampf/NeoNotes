@@ -8,10 +8,11 @@ In return for porting my original Winforms application into WPF and for the init
 Please note that there are a few issues using it when you do not have the correct setup intended for AJP Northwest
 
 ## Software Details
-* Built in Windows Presentation oundation (WPF)
+* Built in Windows Presentation Foundation (WPF) and XAML
 * Reports are generated using Simple-WPF-Reports
-* DropboxApi used for Dropbox intergration
-* 
+* Dropbox.Api used for Dropbox intergration
+* Entity Framework for data storage
+* Fody and ProperyChanged.Fody to add in INotifyPropertyChanged automatically
 
 
 ## Data Structure
