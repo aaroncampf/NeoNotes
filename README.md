@@ -3,10 +3,16 @@
 A basic CRM application created for use at AJP Northwest by Aaron Campf.
 The goal of this application is to create a very lightweight CRM application that can export data to other applications. Maintainability and minimize are the primary focus of this application to ensure maximum productivity with minimal overhead for entering data.
 
-
 ## Disclaimer
 In return for porting my original Winforms application into WPF and for the initial redesign I was allowed to use the project as an example.
 Please note that there are a few issues using it when you do not have the correct setup intended for AJP Northwest
+
+## Software Details
+* Built in Windows Presentation oundation (WPF)
+* Reports are generated using Simple-WPF-Reports
+* DropboxApi used for Dropbox intergration
+* 
+
 
 ## Data Structure
 Comany -> Contact -> Note
