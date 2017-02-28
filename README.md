@@ -15,9 +15,9 @@ Please note that there are a few issues using it when you do not have the correc
 * Programming Language: VB.Net
 * User Interface: Windows Presentation Foundation (WPF) and XAML
 * Report Generation: Simple-WPF-Reports
-* Dropbox.Api used for Dropbox intergration
+* Dropbox.Api used for Dropbox integration
 * Entity Framework for data storage
-* Fody and ProperyChanged.Fody to add in INotifyPropertyChanged automatically
+* Fody and PropertyChanged.Fody to add in INotifyPropertyChanged automatically
 
 
 ## Data Structure
@@ -47,6 +47,6 @@ Company -> Quote
 * Centering textbox (think secion headers)
 * Re-ordering items
 
-## Dropbox Intergration
-* Upload data as XML to dropbox for use in Android applications
+## Dropbox Integration
+* Upload data as XML to Dropbox for use in Android applications
 * Will not work when downloaded due to missing keys
