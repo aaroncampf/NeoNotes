@@ -82,8 +82,10 @@ Class MainWindow
 
 	Private Sub cbxSearchContacts_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxSearchContacts.SelectionChanged
 		Dim Contact As Contact = cbxSearchContacts.SelectedItem
-		cbxCompanies.SelectedItem = Contact.Company
-		lbxContacts.SelectedItem = Contact
+		If cbxSearchContacts.SelectedItem IsNot Nothing Then
+			cbxCompanies.SelectedItem = Contact.Company
+			lbxContacts.SelectedItem = Contact
+		End If
 	End Sub
 
 	Private Sub btnContactRemove_Click(sender As Object, e As RoutedEventArgs) Handles btnContactRemove.Click
@@ -398,7 +400,6 @@ Class MainWindow
 			MsgBox("Select a Contact")
 			Exit Sub
 		End If
-
 
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		If Quote.Lines.Any Then
