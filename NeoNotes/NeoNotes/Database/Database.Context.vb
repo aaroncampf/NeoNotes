@@ -27,7 +27,7 @@ Partial Public Class NeoNotesContainer
 
 
 	Protected Overrides Sub OnModelCreating(modelBuilder As DbModelBuilder)
-		Throw New UnintentionalCodeFirstException()
+		'Throw New UnintentionalCodeFirstException()
 	End Sub
 
 	Public Overridable Property Companies() As DbSet(Of Company)
