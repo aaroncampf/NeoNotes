@@ -1,0 +1,26 @@
+﻿<Window x:Class="frmEditSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NeoNotes"
+        mc:Ignorable="d"
+        Title="Edit Settings" Height="323.796" Width="354.391" Loaded="Window_Loaded">
+	<Grid Name="gridMain" d:DataContext="{d:DesignInstance Type=local:Setting}">
+		<Button x:Name="btnSave" Content="Save" Margin="10,263,10,0" VerticalAlignment="Top"/>
+		<Label Content="Name" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top"/>
+		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=Name}"/>
+		<Label Content="Address" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=Address}"/>
+		<Label Content="Email" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top"/>
+		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=Email}"/>
+		<Label Content="Gmail" HorizontalAlignment="Left" Margin="10,92,0,0" VerticalAlignment="Top"/>
+		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,96,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=Gmail}"/>
+		<Label Content="Gmail Password" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top"/>
+		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=GmailPassword}"/>
+		<Label Content="Phone" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top"/>
+		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=Phone}"/>
+
+
+	</Grid>
+</Window>

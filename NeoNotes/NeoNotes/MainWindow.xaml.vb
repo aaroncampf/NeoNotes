@@ -5,32 +5,14 @@ Class MainWindow
 	Dim db As New NeoNotesContainer
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
-		'Dim AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) & "\OneDrive\AJP Applications
 		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
 		If Not IO.Directory.Exists(DataDirectory) Then IO.Directory.CreateDirectory(DataDirectory)
 
-		If IO.File.Exists(DataDirectory + "\NeoInfo.xml") Then
-			Dim XML As XElement = XElement.Load(DataDirectory + "\NeoInfo.xml")
-			db.Settings.RemoveRange(db.Settings)
-			db.Settings.Add(New Setting With {
-					 .ID = 1,
-					 .Name = XML.@Name,
-					 .Address = XML.@Address,
-					 .Email = XML.@Email,
-					 .Gmail = XML.@GMail,
-					 .GmailPassword = XML.@GMailPassword,
-					 .Phone = XML.@Phone
-			})
-			db.SaveChanges()
-		Else
-			MsgBox("Settings file not found")
+		If Not db.Settings.Any Then
+			MsgBox("Please configure your settings with the settings button")
 		End If
 
-
-		Dim Items = AJP.Get_Item_Names()
-		'colQuoteDetailDescription.ItemsSource = Items
-		cbxQuoteLineDescription.ItemsSource = Items
-
+		cbxQuoteLineDescription.ItemsSource = Get_Item_Names()
 		Application.Current.MainWindow.WindowState = WindowState.Maximized
 
 		For Each Item In db.Companies.OrderBy(Function(x) x.Name)
@@ -297,9 +279,16 @@ Class MainWindow
 
 			Mail.IsBodyHtml = True
 			Mail.DeliveryNotificationOptions = M.DeliveryNotificationOptions.OnFailure
+
+
 			AddHandler SmtpServer.SendCompleted,
-				Sub()
-					MsgBox("Email Sent")
+				Sub(sender As Object, e As ComponentModel.AsyncCompletedEventArgs)
+					If e.Error Is Nothing Then
+						MsgBox("Email Sent")
+					Else
+						MsgBox(e.Error.Message, MsgBoxStyle.Critical & vbOK, "Quote Email Failed")
+					End If
+
 					SmtpServer.Dispose()
 				End Sub
 
@@ -314,6 +303,7 @@ Class MainWindow
 			End Select
 		End Try
 	End Sub
+
 
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
 		Try
@@ -483,5 +473,30 @@ Class MainWindow
 				SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, Results.Subject, Results.Body, Results.Contacts.Select(Function(x) x.Email).ToArray, Attachments)
 			End If
 		End If
+	End Sub
+
+	Public Shared Function Get_Item_Names() As String()
+		Dim LocalFilePath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoNotes.txt"
+		If My.Computer.Network.IsAvailable AndAlso My.Settings.LastUpdated < Now.AddDays(-7) OrElse Not IO.File.Exists(LocalFilePath) Then
+			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
+			Dim File = Dbox.Files.DownloadAsync("/Storage/NeoNotes.txt").Result.GetContentAsByteArrayAsync().Result
+
+
+			If IO.File.Exists(LocalFilePath) Then
+				IO.File.Delete(LocalFilePath)
+			End If
+
+			IO.File.WriteAllBytes(LocalFilePath, File)
+
+			My.Settings.LastUpdated = Now
+			My.Settings.Save() '<--- Do I need this?
+		End If
+
+		Return IO.File.ReadAllLines(LocalFilePath)
+	End Function
+
+	Private Sub btnSettings_Click(sender As Object, e As RoutedEventArgs) Handles btnSettings.Click
+		Dim Form As New frmEditSettings
+		Form.ShowDialog()
 	End Sub
 End Class
