@@ -307,6 +307,7 @@ Class MainWindow
 
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
 		Try
+			cbxCompanies.Focus()
 			Me.db.SaveChanges()
 		Catch ex As Exception
 			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
