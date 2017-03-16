@@ -304,7 +304,6 @@ Class MainWindow
 		End Try
 	End Sub
 
-
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
 		Try
 			cbxCompanies.Focus()
@@ -499,5 +498,88 @@ Class MainWindow
 	Private Sub btnSettings_Click(sender As Object, e As RoutedEventArgs) Handles btnSettings.Click
 		Dim Form As New frmEditSettings
 		Form.ShowDialog()
+	End Sub
+
+	Private Sub btnCloserFasterTest_Click(sender As Object, e As RoutedEventArgs) Handles btnCloserFasterTest.Click
+
+		Dim Timer1 = Stopwatch.StartNew()
+		Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
+
+		Dim Watch = Stopwatch.StartNew()
+		Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+
+		Dim Companies1 = db.Companies.ToArray()
+		Dim Contacts1 = db.Contacts.ToArray()
+		Dim Notes1 = db.Notes.ToArray()
+		Dim Quotes1 = db.Quotes.ToArray()
+		Dim QuoteLines1 = db.QuoteLines.ToArray()
+		Watch.Stop()
+
+
+		Dim Watch1 = Stopwatch.StartNew()
+		Dim MyNotes =
+				<Customers>
+					<%= From Company In Companies
+						Select
+							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
+								<%= From Contact In Company.Contacts
+									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
+											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
+										   </Contact>
+								%>
+
+								<Quotes>
+									<%= From Quote In Company.Quotes
+										Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
+												   <%= From Line In Quote.Lines
+													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
+											   </Quote>
+									%>
+								</Quotes>
+							</Company>
+					%>
+				</Customers>
+
+		Timer1.Stop()
+		MsgBox($"Timer1: {Timer1.Elapsed.TotalSeconds}")
+
+		Dim Timer2 = Stopwatch.StartNew()
+
+		Dim DataToString = Function(Record As Object)
+							   Using stream As New IO.MemoryStream(),
+							   reader As New IO.StreamReader(stream),
+							   writer As New IO.StreamWriter(stream),
+							   csv As New CsvHelper.CsvWriter(writer)
+
+								   csv.WriteRecords(Record)
+								   writer.Flush()
+								   stream.Position = 0
+
+								   Return reader.ReadToEnd()
+							   End Using
+						   End Function
+
+		Dim XML_CSV =
+			<Database>
+				<Companies>
+					<%= DataToString(Companies1) %>
+				</Companies>
+				<Contacts>
+					<%= DataToString(Contacts1) %>
+				</Contacts>
+				<Notes>
+					<%= DataToString(Notes1) %>
+				</Notes>
+				<Quotes>
+					<%= DataToString(Quotes1) %>
+				</Quotes>
+				<QuoteLines>
+					<%= DataToString(QuoteLines1) %>
+				</QuoteLines>
+			</Database>
+
+
+		Timer2.Stop()
+		MsgBox($"Timer1: {Timer1.Elapsed.TotalSeconds} || Timer2: {Timer2.Elapsed.TotalSeconds}")
 	End Sub
 End Class
