@@ -305,6 +305,8 @@ Class MainWindow
 	End Sub
 
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
+		If Not db.ChangeTracker.HasChanges Then Return
+
 		Try
 			cbxCompanies.Focus()
 			Me.db.SaveChanges()
@@ -578,8 +580,32 @@ Class MainWindow
 				</QuoteLines>
 			</Database>
 
-
-		Timer2.Stop()
 		MsgBox($"Timer1: {Timer1.Elapsed.TotalSeconds} || Timer2: {Timer2.Elapsed.TotalSeconds}")
+		MsgBox($"MyNotes: {MyNotes.ToString().Length:n} || XML_CSV: {XML_CSV.ToString().Length:n}")
+
+
+
+		Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
+
+		Dim Timer3 = Stopwatch.StartNew()
+		MyNotes.Save(IO.Path.GetTempPath & "\111.xml")
+		Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\111.xml")
+
+		Dbox.Files.UploadAsync("/Storage/111.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
+		Timer3.Stop()
+
+
+
+		Dim Timer4 = Stopwatch.StartNew()
+
+		XML_CSV.Save(IO.Path.GetTempPath & "\222.xml")
+
+
+		Dim File1 As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\222.xml")
+
+		Dbox.Files.UploadAsync("/Storage/222.xml", body:=File1, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
+		Timer4.Stop()
+		MsgBox($"Timer3: {Timer3.Elapsed.TotalSeconds} || Timer4: {Timer4.Elapsed.TotalSeconds}")
+
 	End Sub
 End Class
