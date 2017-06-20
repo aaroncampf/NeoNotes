@@ -205,15 +205,11 @@ Class MainWindow
 		Process.Start($"https://mail.google.com/mail/?view=cm&fs=1&tf=1&to={CType(lbxContacts.SelectedItem, Contact).Email}")
 	End Sub
 
-	Private Function Create_Quote_Printout() As Basic
-		Dim Company As Company = cbxCompanies.SelectedItem
-		Dim Contact As Contact = lbxContacts.SelectedItem
+	Private Function Create_Quote_Printout(Contact As Contact) As Basic
+		'Dim Company As Company = cbxCompanies.SelectedItem
+		'Dim Contact As Contact = lbxContacts.SelectedItem
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		Dim Settings = db.Settings.First
-
-
-
-
 
 		Dim Items As New Sections.Table(New TableColumn With {.Tag = "UNIT", .Width = New GridLength(150)},
 										New TableColumn With {.Tag = "Description"},
@@ -236,19 +232,20 @@ Class MainWindow
 		Next
 
 		Dim CustomXAML As String = My.Resources.Hand_Made_Quote.Replace("<!--{0}-->", Items.Table.RowGroups(0).ToXML.ToString)
-		If Company Is Nothing Then CustomXAML = CustomXAML.Replace("To:", "")
+		'If Company Is Nothing Then CustomXAML = CustomXAML.Replace("To:", "")
 
 		Dim XAML = CustomXAML.Replace("xmlns:xrd=""clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports""",
 									  "xmlns:xrd=""clr-namespace:Aaron.Xaml;assembly=Aaron.Xaml""")
 
 		Dim Test_Report As New Basic()
 		Test_Report.CustomXAML = XAML
+
 		Test_Report.DocumentValues = New Dictionary(Of String, Object) From {
-			{"Company", Company.Name},
-			{"Address", Company.Address},
+			{"Company", Quote.Company.Name},
+			{"Address", Quote.Company.Address},
 			{"Contact", Contact.Name},
-			{"CityZip", Company.City & " " & Company.Zip},
-			{"Phone", Company.Phone},
+			{"CityZip", Quote.Company.City & " " & Quote.Company.Zip},
+			{"Phone", Quote.Company.Phone},
 			{"Quote_Title", Quote.Name},
 			{"User_Cell", Settings.Phone},
 			{"User_Address", Settings.Address},
@@ -259,27 +256,29 @@ Class MainWindow
 		Return Test_Report
 	End Function
 
-	Private Sub SendMail(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As IEnumerable(Of String), Attachments As Dictionary(Of String, String))
+	Private Sub SendMail(DisplayName As String, Email As String, Password As String, Subject As String, Body As String, SendTo As String, Attachments As Dictionary(Of String, String))
 		Dim Mail As New M.MailMessage()
 
 		Dim SmtpServer As New M.SmtpClient("smtp.gmail.com", 587) With {
 				.EnableSsl = True, .UseDefaultCredentials = False, .Credentials = New Net.NetworkCredential(Email, Password)}
 
 		'From Text.Encoding.UTF8 --> Text.Encoding.Default --> Text.Encoding.UTF8
-		Mail = New M.MailMessage() With {.Subject = Subject, .Body = Body, .From = New M.MailAddress(Email, DisplayName, Text.Encoding.UTF8)}
 
 		Try
-			For Each Item In SendTo
-				Mail.To.Add(Item)
-			Next
+			Mail = New M.MailMessage() With {.Subject = Subject, .Body = Body, .From = New M.MailAddress(Email, DisplayName, Text.Encoding.UTF8)}
+		Catch ex As Exception
+			MsgBox(ex.Message, MsgBoxStyle.Critical & MsgBoxStyle.OkOnly, $"Email for {DisplayName} Failed")
+			Exit Sub
+		End Try
 
+		Try
+			Mail.To.Add(SendTo)
 			For Each Item In Attachments
 				Mail.Attachments.Add(New M.Attachment(Item.Value) With {.Name = Item.Key})
 			Next
 
 			Mail.IsBodyHtml = True
 			Mail.DeliveryNotificationOptions = M.DeliveryNotificationOptions.OnFailure
-
 
 			AddHandler SmtpServer.SendCompleted,
 				Sub(sender As Object, e As ComponentModel.AsyncCompletedEventArgs)
@@ -395,7 +394,7 @@ Class MainWindow
 
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		If Quote.Lines.Any Then
-			Create_Quote_Printout().Show()
+			Create_Quote_Printout(lbxContacts.SelectedItem).Show()
 		Else
 			MsgBox("You cannot print an empty quote")
 		End If
@@ -447,7 +446,9 @@ Class MainWindow
 		End If
 	End Sub
 
+	<Obsolete("This will be removed when you delete the now obsolete [Email Quote] button")>
 	Private Sub btnQuoteEmail1_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail1.Click
+		'Note: You will be removing this button when you retrain users to use the new one
 		Dim Contact As Contact = lbxContacts.SelectedItem
 		If Contact.Email Is Nothing Then
 			MsgBox("Contact has no email")
@@ -469,10 +470,32 @@ Class MainWindow
 			End If
 
 			Dim Results = frmCreateEmail.Open(Contact)
-
 			If Not Results.Canceled Then
-				Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout.AsPDF}}
-				SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, Results.Subject, Results.Body, Results.Contacts.Select(Function(x) x.Email).ToArray, Attachments)
+				For Each Contact In Results.Contacts
+					Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout(Contact).AsPDF}}
+					SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, Results.Subject, Results.Body, Contact.Email, Attachments)
+				Next
+			End If
+		End If
+	End Sub
+
+	Private Sub btnQuoteEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail.Click
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		If Quote Is Nothing Then
+			MsgBox("No Quote has been selected")
+			Exit Sub
+		End If
+
+		Dim Settings = db.Settings.First
+		If String.IsNullOrWhiteSpace(Settings.Gmail) Or String.IsNullOrWhiteSpace(Settings.GmailPassword) Then
+			MsgBox("Please Setup the GMail Email And Password Settings")
+		Else
+			Dim Results = frmCreateEmail.Open(DirectCast(cbxCompanies.SelectedItem, Company))
+			If Not Results.Canceled Then
+				For Each Contact In Results.Contacts
+					Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout(Contact).AsPDF}}
+					SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, Results.Subject, Results.Body, Contact.Email, Attachments)
+				Next
 			End If
 		End If
 	End Sub
@@ -608,4 +631,6 @@ Class MainWindow
 		MsgBox($"Timer3: {Timer3.Elapsed.TotalSeconds} || Timer4: {Timer4.Elapsed.TotalSeconds}")
 
 	End Sub
+
+
 End Class

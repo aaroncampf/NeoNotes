@@ -55,7 +55,9 @@
 					<Button x:Name="btnPrintNotes" Content="Print Notes" Margin="76,227,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="190"/>
 
 
-					<Button x:Name="btnQuoteEmail1" Content="Email Quote" HorizontalAlignment="Left" Margin="76,177,0,0" VerticalAlignment="Top" Width="190"/>
+					<Button x:Name="btnQuoteEmail1" Content="Email Quote" HorizontalAlignment="Left" Margin="76,298,0,0" VerticalAlignment="Top" Width="190"/>
+					<Label HorizontalAlignment="Left" Margin="32,177,0,0" VerticalAlignment="Top"/>
+					<Label Content="Replaced with [Email] button in quote tab" HorizontalAlignment="Left" Margin="76,272,0,0" VerticalAlignment="Top"/>
 
 				</Grid>
 			</TabItem>
@@ -106,6 +108,7 @@
 							<!--<Button x:Name="btnQuotePrint" Content="Print" Margin="0,540,10,0" VerticalAlignment="Top" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNothingConverter}, ElementName=lbxQuotes}"/>-->
 							<Menu x:Name="menu" Height="23" VerticalAlignment="Top">
 								<MenuItem x:Name="btnQuoteDetailAdd" Header="Add Item" Height="23"/> |
+								<MenuItem x:Name="btnQuoteEmail" Header="Email" /> |
 								<MenuItem x:Name="btnQuotePrint" Header="Print" /> |
 								<MenuItem x:Name="btnQuoteRemove" Header="Delete"/> |
 							</Menu>

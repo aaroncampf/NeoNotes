@@ -24,11 +24,35 @@
 	''' </summary>
 	''' <param name="DefaultContact">This contact will be added to the TO list</param>
 	''' <returns></returns>
+	<Obsolete("This will be removed when you delete the now obsolete [Email Quote] button")>
 	Public Shared Function Open(DefaultContact As Contact) As frmCreateEmail_Results
 		Dim Form As New frmCreateEmail 'With {.Company = DefaultContact.Company}
 		Form.lbxEmails.Items.Add(DefaultContact)
 
 		For Each Item In DefaultContact.Company.Contacts
+			Form.cbxContacts.Items.Add(Item)
+		Next
+
+		Form.ShowDialog()
+
+		Dim Results As New frmCreateEmail_Results
+		Results.Body = Form.txtBody.Text
+		Results.Subject = Form.txtSubject.Text
+		Results.Canceled = Form.Canceled
+		Results.Contacts.AddRange(Form.lbxEmails.Items.Cast(Of Contact)) '.Where(Function(x) x IsNot Nothing))
+
+		Return Results
+	End Function
+
+	''' <summary>
+	''' Opens the form and returns the user input
+	''' </summary>
+	''' <param name="Company">The company who's contacts your emailing</param>
+	''' <returns></returns>
+	Public Shared Function Open(Company As Company) As frmCreateEmail_Results
+		Dim Form As New frmCreateEmail 'With {.Company = DefaultContact.Company}
+
+		For Each Item In Company.Contacts
 			Form.cbxContacts.Items.Add(Item)
 		Next
 

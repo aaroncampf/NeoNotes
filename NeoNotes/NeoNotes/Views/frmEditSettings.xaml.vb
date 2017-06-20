@@ -9,6 +9,7 @@
 	End Sub
 
 	Private Sub btnSave_Click(sender As Object, e As RoutedEventArgs) Handles btnSave.Click
+		'TODO: Check to see if this works 100% correctly, I think caching causes this not to update until restart
 		If Not db.Settings.Any Then
 			db.Settings.Add(SettingsRecord)
 		End If
