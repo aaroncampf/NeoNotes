@@ -206,7 +206,7 @@ Class MainWindow
 	End Sub
 
 	Private Function Create_Quote_Printout(Contact As Contact) As Basic
-		'Dim Company As Company = cbxCompanies.SelectedItem
+		Dim Company As Company = cbxCompanies.SelectedItem
 		'Dim Contact As Contact = lbxContacts.SelectedItem
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		Dim Settings = db.Settings.First
@@ -241,11 +241,11 @@ Class MainWindow
 		Test_Report.CustomXAML = XAML
 
 		Test_Report.DocumentValues = New Dictionary(Of String, Object) From {
-			{"Company", Quote.Company.Name},
-			{"Address", Quote.Company.Address},
+			{"Company", Company.Name},
+			{"Address", Company.Address},
 			{"Contact", Contact.Name},
-			{"CityZip", Quote.Company.City & " " & Quote.Company.Zip},
-			{"Phone", Quote.Company.Phone},
+			{"CityZip", Company.City & " " & Company.Zip},
+			{"Phone", Company.Phone},
 			{"Quote_Title", Quote.Name},
 			{"User_Cell", Settings.Phone},
 			{"User_Address", Settings.Address},
@@ -273,6 +273,13 @@ Class MainWindow
 
 		Try
 			Mail.To.Add(SendTo)
+		Catch ex As Exception
+			MsgBox(ex.Message, MsgBoxStyle.Critical & MsgBoxStyle.OkOnly, $"SendTo email was invalid")
+			Exit Sub
+		End Try
+
+		Try
+
 			For Each Item In Attachments
 				Mail.Attachments.Add(New M.Attachment(Item.Value) With {.Name = Item.Key})
 			Next
@@ -526,110 +533,7 @@ Class MainWindow
 	End Sub
 
 	Private Sub btnCloserFasterTest_Click(sender As Object, e As RoutedEventArgs) Handles btnCloserFasterTest.Click
-
-		Dim Timer1 = Stopwatch.StartNew()
-		Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
-
-		Dim Watch = Stopwatch.StartNew()
-		Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
-
-		Dim Companies1 = db.Companies.ToArray()
-		Dim Contacts1 = db.Contacts.ToArray()
-		Dim Notes1 = db.Notes.ToArray()
-		Dim Quotes1 = db.Quotes.ToArray()
-		Dim QuoteLines1 = db.QuoteLines.ToArray()
-		Watch.Stop()
-
-
-		Dim Watch1 = Stopwatch.StartNew()
-		Dim MyNotes =
-				<Customers>
-					<%= From Company In Companies
-						Select
-							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
-								<%= From Contact In Company.Contacts
-									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
-											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
-										   </Contact>
-								%>
-
-								<Quotes>
-									<%= From Quote In Company.Quotes
-										Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
-												   <%= From Line In Quote.Lines
-													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
-											   </Quote>
-									%>
-								</Quotes>
-							</Company>
-					%>
-				</Customers>
-
-		Timer1.Stop()
-		MsgBox($"Timer1: {Timer1.Elapsed.TotalSeconds}")
-
-		Dim Timer2 = Stopwatch.StartNew()
-
-		Dim DataToString = Function(Record As Object)
-							   Using stream As New IO.MemoryStream(),
-							   reader As New IO.StreamReader(stream),
-							   writer As New IO.StreamWriter(stream),
-							   csv As New CsvHelper.CsvWriter(writer)
-
-								   csv.WriteRecords(Record)
-								   writer.Flush()
-								   stream.Position = 0
-
-								   Return reader.ReadToEnd()
-							   End Using
-						   End Function
-
-		Dim XML_CSV =
-			<Database>
-				<Companies>
-					<%= DataToString(Companies1) %>
-				</Companies>
-				<Contacts>
-					<%= DataToString(Contacts1) %>
-				</Contacts>
-				<Notes>
-					<%= DataToString(Notes1) %>
-				</Notes>
-				<Quotes>
-					<%= DataToString(Quotes1) %>
-				</Quotes>
-				<QuoteLines>
-					<%= DataToString(QuoteLines1) %>
-				</QuoteLines>
-			</Database>
-
-		MsgBox($"Timer1: {Timer1.Elapsed.TotalSeconds} || Timer2: {Timer2.Elapsed.TotalSeconds}")
-		MsgBox($"MyNotes: {MyNotes.ToString().Length:n} || XML_CSV: {XML_CSV.ToString().Length:n}")
-
-
-
-		Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-
-		Dim Timer3 = Stopwatch.StartNew()
-		MyNotes.Save(IO.Path.GetTempPath & "\111.xml")
-		Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\111.xml")
-
-		Dbox.Files.UploadAsync("/Storage/111.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
-		Timer3.Stop()
-
-
-
-		Dim Timer4 = Stopwatch.StartNew()
-
-		XML_CSV.Save(IO.Path.GetTempPath & "\222.xml")
-
-
-		Dim File1 As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\222.xml")
-
-		Dbox.Files.UploadAsync("/Storage/222.xml", body:=File1, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
-		Timer4.Stop()
-		MsgBox($"Timer3: {Timer3.Elapsed.TotalSeconds} || Timer4: {Timer4.Elapsed.TotalSeconds}")
-
+		Throw New Exception("Testing a crash")
 	End Sub
 
 

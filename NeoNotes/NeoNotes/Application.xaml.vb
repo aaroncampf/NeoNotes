@@ -1,6 +1,9 @@
 ﻿Class Application
 	Private Sub Application_DispatcherUnhandledException(sender As Object, e As Windows.Threading.DispatcherUnhandledExceptionEventArgs)
-		MsgBox(e.Exception.ToString)
+		MsgBox(e.Exception.ToString, MsgBoxStyle.Critical & MsgBoxStyle.OkOnly)
+		If MsgBox("Click [Yes] to continue the application and [No] to Crash", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
+			e.Handled = True
+		End If
 	End Sub
 
 	' Application-level events, such as Startup, Exit, and DispatcherUnhandledException
