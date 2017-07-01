@@ -369,7 +369,7 @@ Class MainWindow
 			Watch2.Stop()
 
 		Catch ex As Exception
-			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error Uploading Notes")
+			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
 		End Try
 	End Sub
 
