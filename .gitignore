@@ -236,3 +236,4 @@ _Pvt_Extensions
 .fake/
 DropBox_Token.txt
 NeoNotes/NeoNotes/Resources/Dropbox_AccessToken.txt
+NeoNotes/NeoNotes/Classes/HardCodedSecrets.vb
