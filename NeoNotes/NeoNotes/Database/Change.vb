@@ -10,14 +10,10 @@
 Imports System
 Imports System.Collections.Generic
 
-Partial Public Class QuoteLine
-    Public Property ID As Integer
-    Public Property Display As Nullable(Of Integer)
-    Public Property UNIT As String
-    Public Property COST As Nullable(Of Decimal)
-    Public Property DESC As String
-    Public Property IsCentered As Nullable(Of Boolean)
-
-    Public Overridable Property Quote As Quote
+Partial Public Class Change
+    Public Property Id As Integer
+    Public Property IsUpdate As String
+    Public Property [Class] As String
+    Public Property JSON As String
 
 End Class

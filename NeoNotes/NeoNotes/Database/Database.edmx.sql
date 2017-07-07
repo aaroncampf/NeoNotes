@@ -2,13 +2,13 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 04/27/2016 18:03:22
+-- Date Created: 07/06/2017 19:46:30
 -- Generated from EDMX file: C:\Users\aaron\Documents\GitHub\NeoNotes\NeoNotes\NeoNotes\Database\Database.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-USE [Database];
+USE [NeoNotes];
 GO
 IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
 GO
@@ -61,6 +61,9 @@ GO
 IF OBJECT_ID(N'[dbo].[Settings]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Settings];
 GO
+IF OBJECT_ID(N'[dbo].[Changes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Changes];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -93,7 +96,7 @@ GO
 CREATE TABLE [dbo].[Quotes] (
     [ID] int IDENTITY(1,1) NOT NULL,
     [Date] datetime  NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(max)  NULL,
     [Company_ID] int  NOT NULL
 );
 GO
@@ -102,7 +105,7 @@ GO
 CREATE TABLE [dbo].[Notes] (
     [ID] int IDENTITY(1,1) NOT NULL,
     [Date] datetime  NOT NULL,
-    [Title] nvarchar(max)  NOT NULL,
+    [Title] nvarchar(max)  NULL,
     [Text] nvarchar(max)  NULL,
     [Contact_ID] int  NOT NULL
 );
@@ -111,11 +114,11 @@ GO
 -- Creating table 'QuoteLines'
 CREATE TABLE [dbo].[QuoteLines] (
     [ID] int IDENTITY(1,1) NOT NULL,
-    [Display] int  NOT NULL,
-    [UNIT] nvarchar(max)  NOT NULL,
-    [COST] decimal(18,0)  NOT NULL,
-    [DESC] nvarchar(max)  NOT NULL,
-    [IsCentered] bit  NOT NULL,
+    [Display] int  NULL,
+    [UNIT] nvarchar(max)  NULL,
+    [COST] decimal(18,0)  NULL,
+    [DESC] nvarchar(max)  NULL,
+    [IsCentered] bit  NULL,
     [Quote_ID] int  NOT NULL
 );
 GO
@@ -147,7 +150,17 @@ CREATE TABLE [dbo].[Settings] (
     [GmailPassword] nvarchar(max)  NOT NULL,
     [Email] nvarchar(max)  NOT NULL,
     [Address] nvarchar(max)  NOT NULL,
-    [Phone] nvarchar(max)  NOT NULL
+    [Phone] nvarchar(max)  NOT NULL,
+    [API_ID] int  NOT NULL
+);
+GO
+
+-- Creating table 'Changes'
+CREATE TABLE [dbo].[Changes] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [IsUpdate] nvarchar(max)  NOT NULL,
+    [Class] nvarchar(max)  NOT NULL,
+    [JSON] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -201,6 +214,12 @@ GO
 ALTER TABLE [dbo].[Settings]
 ADD CONSTRAINT [PK_Settings]
     PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'Changes'
+ALTER TABLE [dbo].[Changes]
+ADD CONSTRAINT [PK_Changes]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- --------------------------------------------------

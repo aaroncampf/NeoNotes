@@ -240,6 +240,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\HardCodedSecrets.vb" />
+    <Compile Include="Database\Change.vb">
+      <DependentUpon>Database.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\Company.vb">
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>

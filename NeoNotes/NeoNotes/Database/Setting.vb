@@ -18,5 +18,6 @@ Partial Public Class Setting
     Public Property Email As String
     Public Property Address As String
     Public Property Phone As String
+    Public Property API_ID As Integer
 
 End Class

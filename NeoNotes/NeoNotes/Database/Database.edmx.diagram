@@ -18,6 +18,7 @@
         <EntityTypeShape EntityType="NeoNotes.QuoteSectionDetail" Width="1.5" PointX="10" PointY="1" />
         <AssociationConnector Association="NeoNotes.QuoteSectionQuoteSectionDetail" />
         <EntityTypeShape EntityType="NeoNotes.Setting" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="NeoNotes.Change" Width="1.5" PointX="3.875" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
