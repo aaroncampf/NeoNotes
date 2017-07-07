@@ -3,7 +3,6 @@ Imports M = System.Net.Mail
 
 Class MainWindow
 	Dim db As New NeoNotesContainer
-	WithEvents dispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 1, 0)}
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
 		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
@@ -25,8 +24,6 @@ Class MainWindow
 		Next
 
 		dgQuoteDetails.Items.SortDescriptions.Add(New ComponentModel.SortDescription With {.PropertyName = "Display", .Direction = ComponentModel.ListSortDirection.Ascending})
-
-		dispatcherTimer.Start()
 	End Sub
 
 	Private Sub btnPrintCompanies_Click(sender As Object, e As RoutedEventArgs) Handles btnPrintCompanies.Click
@@ -49,10 +46,6 @@ Class MainWindow
 		Dim Contact As New Contact With {.Name = "New Contact"}
 		CType(cbxCompanies.SelectedItem, Company).Contacts.Add(Contact)
 		Contact.Company = cbxCompanies.SelectedItem
-
-		If cbxCompanies.SelectedItem Is Nothing Then
-			Me.ToString()
-		End If
 
 		lbxContacts.SelectedItem = Contact
 		lbxContacts.Items.Refresh()
@@ -541,205 +534,78 @@ Class MainWindow
 
 	Private Sub btnCloserFasterTest_Click(sender As Object, e As RoutedEventArgs) Handles btnCloserFasterTest.Click
 		Const UserID = 1
-		Dim http As New EasyHttp.Http.HttpClient()
-
-		db.Notes.RemoveRange(db.Contacts.Where(Function(x) x.Company Is Nothing).SelectMany(Function(x) x.Notes))
-		db.Contacts.RemoveRange(db.Contacts.Where(Function(x) x.Company Is Nothing))
-
-		db.QuoteLines.RemoveRange(db.Quotes.Where(Function(x) x.Company Is Nothing).SelectMany(Function(x) x.Lines))
-		db.Quotes.RemoveRange(db.Quotes.Where(Function(x) x.Company Is Nothing))
-
-
-		db.SaveChanges()
 
 		For Each Company In db.Companies
-			Dim Data = New With {
-				.LocalID = Company.ID,
-				.Name = Company.Name,
-				.Address = Company.Address,
-				.City = Company.City,
-				.Phone = Company.Phone,
-				.Zip = Company.Zip,
-				.Misc = Company.Misc
-			}
+			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Company/Save?UserID={UserID}", HttpVerb.POST)
+			Test.PostData = $"{{
+							  'LocalID': '{Company.ID}',
+							  'Name': '{Company.Name}',
+							  'Address': '{Company.Address}',
+							  'City': '{Company.City},
+							  'Phone': '{Company.Phone}',
+							  'Zip': '{Company.Zip}',
+							  'Misc': '{Company.Misc}',
+							}}"
 
-			Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Company/Save?UserID={UserID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-			Test.ToString()
+			Test.MakeRequest()
 		Next
 
 		For Each Contact In db.Contacts
-			Dim Data As New With {
-				.LocalID = Contact.ID,
-				.UserID = UserID,
-				.Name = Contact.Name,
-				.Phone = Contact.Phone,
-				.Email = Contact.Email,
-				.Position = Contact.Position
-			}
+			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Contacts/Save?CompanyID={Contact.Company.ID}&UserID={UserID}", HttpVerb.POST)
+			Test.PostData = $"{{
+								'LocalID': {Contact.ID},
+								'UserID': {UserID},
+								'Name': '{Contact.Name}'
+								'Phone': '{Contact.Phone}',
+								'Email': '{Contact.Email}',
+								'Position': '{Contact.Position}'
+							}}"
 
-			Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Contacts/Save?CompanyID={Contact.Company.ID}&UserID={UserID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-			Test.ToString()
+			Test.MakeRequest()
 		Next
 
 		For Each Note In db.Notes
-			Dim Data As New With {
-				.LocalID = Note.ID,
-				.UserID = UserID,
-				.Date = Note.Date,
-				.Title = Note.Title,
-				.Text = Note.Text
-			}
+			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Save?UserID={UserID}&ContactID={Note.Contact.ID}", HttpVerb.POST)
+			Test.PostData = $"{{
+								'LocalID': {Note.ID},
+								'UserID': {UserID},
+								'Date': '{Note.Date}',
+								'Title': '{Note.Title}',
+								'Text': '{Note.Text}',
+							}}"
 
-			Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Save?UserID={UserID}&ContactID={Note.Contact.ID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-			Test.ToString()
+			Test.MakeRequest()
 		Next
 
 		For Each Quote In db.Quotes
-			Dim Data As New With {
-				.LocalID = Quote.ID,
-				.UserID = UserID,
-				.Date = Quote.Date,
-				.Name = Quote.Name
-			}
+			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Quotes/Save?UserID={UserID}&CompanyID={Quote.Company.ID}", HttpVerb.POST)
+			Test.PostData = $"{{
+								'LocalID': {Quote.ID},
+								'UserID': {UserID},
+								'Date': '{Quote.Date}',
+								'Name': '{Quote.Name}'
+							}}"
 
-			Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Quotes/Save?UserID={UserID}&CompanyID={Quote.Company.ID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-			Test.ToString()
+			Test.MakeRequest()
 		Next
 
 		For Each QuoteLine In db.QuoteLines
-			Dim Data As New With {
-				.LocalID = QuoteLine.ID,
-				.UserID = UserID,
-				.Display = QuoteLine.Display,
-				.UNIT = QuoteLine.UNIT,
-				.COST = QuoteLine.ID,
-				.DESC = QuoteLine.ID,
-				.IsCentered = QuoteLine.ID
-			}
+			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/QuoteLines/Save?UserID={UserID}&QuoteID={QuoteLine.Quote.ID}", HttpVerb.POST)
+			Test.PostData = $"{{
+								'LocalID': {QuoteLine.ID},
+								'UserID': {UserID},
+								'Display': {QuoteLine.ID},
+								'UNIT': 'sample String 5',
+								'COST': 6.0,
+								'DESC': 'sample String 7',
+								'IsCentered': true
+							}}"
 
-			Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/QuoteLines/Save?UserID={UserID}&QuoteID={QuoteLine.Quote.ID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-			Test.ToString()
-		Next
-	End Sub
-
-
-	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
-		If db.ChangeTracker.Entries.Any(Function(x) x.State <> System.Data.Entity.EntityState.Added Or x.State = System.Data.Entity.EntityState.Modified Or System.Data.Entity.EntityState.Deleted) Then Exit Sub
-
-		Const UserID = 1
-		Dim http As New EasyHttp.Http.HttpClient()
-
-		db.Notes.RemoveRange(db.Contacts.Where(Function(x) x.Company Is Nothing).SelectMany(Function(x) x.Notes))
-		db.Contacts.RemoveRange(db.Contacts.Where(Function(x) x.Company Is Nothing))
-
-		db.QuoteLines.RemoveRange(db.Quotes.Where(Function(x) x.Company Is Nothing).SelectMany(Function(x) x.Lines))
-		db.Quotes.RemoveRange(db.Quotes.Where(Function(x) x.Company Is Nothing))
-
-		Dim Changes = db.ChangeTracker.Entries().Where(Function(x) x.State = System.Data.Entity.EntityState.Added Or x.State = System.Data.Entity.EntityState.Modified).ToList
-		Dim Deleted = db.ChangeTracker.Entries().Where(Function(x) x.State = System.Data.Entity.EntityState.Deleted).ToList
-
-		db.SaveChanges()
-
-		Dim GetRealType = Function(Item As Object) As Type
-							  If Not Item.GetType.BaseType = Nothing AndAlso Item.GetType.Namespace = "System.Data.Entity.DynamicProxies" Then
-								  Return Item.GetType.BaseType
-							  Else
-								  Return Item.GetType
-							  End If
-						  End Function
-		For Each Item In Changes
-			Select Case GetRealType(Item.Entity)
-				Case GetType(Company)
-					Dim Company As Company = Item.Entity
-					Dim Data = New With {
-							.LocalID = Company.ID,
-							.Name = Company.Name,
-							.Address = Company.Address,
-							.City = Company.City,
-							.Phone = Company.Phone,
-							.Zip = Company.Zip,
-							.Misc = Company.Misc
-						}
-
-					Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Company/Save?UserID={UserID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-					Test.ToString()
-				Case GetType(Contact)
-					Dim Contact As Contact = Item.Entity
-					Dim Data As New With {
-						.LocalID = Contact.ID,
-						.UserID = UserID,
-						.Name = Contact.Name,
-						.Phone = Contact.Phone,
-						.Email = Contact.Email,
-						.Position = Contact.Position
-					}
-
-					Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Contacts/Save?CompanyID={Contact.Company.ID}&UserID={UserID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-					Test.ToString()
-				Case GetType(Quote)
-					Dim Quote As Quote = Item.Entity
-					Dim Data As New With {
-						.LocalID = Quote.ID,
-						.UserID = UserID,
-						.Date = Quote.Date,
-						.Name = Quote.Name
-					}
-
-					Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Quotes/Save?UserID={UserID}&CompanyID={Quote.Company.ID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-					Test.ToString()
-				Case GetType(Note)
-					Dim Note As Note = Item.Entity
-					Dim Data As New With {
-							.LocalID = Note.ID,
-							.UserID = UserID,
-							.Date = Note.Date,
-							.Title = Note.Title,
-							.Text = Note.Text
-						}
-
-					Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Save?UserID={UserID}&ContactID={Note.Contact.ID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-					Test.ToString()
-				Case GetType(QuoteLine)
-					Dim QuoteLine As QuoteLine = Item.Entity
-					Dim Data As New With {
-						.LocalID = QuoteLine.ID,
-						.UserID = UserID,
-						.Display = QuoteLine.Display,
-						.UNIT = QuoteLine.UNIT,
-						.COST = QuoteLine.ID,
-						.DESC = QuoteLine.ID,
-						.IsCentered = QuoteLine.ID
-					}
-
-					Dim Test = http.Post($"{HardCodedSecrets.RestAPI_URL}/QuoteLines/Save?UserID={UserID}&QuoteID={QuoteLine.Quote.ID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
-					Test.ToString()
-			End Select
+			Test.MakeRequest()
 		Next
 
-		For Each Item In Deleted
-			Select Case GetRealType(Item.Entity)
-				Case GetType(Company)
-					Dim Company As Company = Item.Entity
-					Dim Test = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Company/Delete?UserID={UserID}&CompanyID={Company.ID}")
-					Test.ToString()
-				Case GetType(Contact)
-					Dim Contact As Contact = Item.Entity
-					Dim Test = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Contacts/Delete?ContactID={Contact.ID}&UserID={UserID}")
-					Test.ToString()
-				Case GetType(Quote)
-					Dim Quote As Quote = Item.Entity
-					Dim Test = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Quotes/Delete?UserID={UserID}&QuoteID={Quote.ID}")
-					Test.ToString()
-				Case GetType(Note)
-					Dim Note As Note = Item.Entity
-					Dim Test = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Delete?UserID={UserID}&NoteID={Note.ID}")
-					Test.ToString()
-				Case GetType(QuoteLine)
-					Dim QuoteLine As QuoteLine = Item.Entity
-					Dim Test = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Delete?UserID={UserID}&QuoteLineID={QuoteLine.ID}")
-					Test.ToString()
-			End Select
-		Next
+
+
 	End Sub
 
 
