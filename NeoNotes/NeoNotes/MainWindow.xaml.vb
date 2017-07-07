@@ -536,7 +536,7 @@ Class MainWindow
 		Const UserID = 1
 
 		For Each Company In db.Companies
-			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Company/Save?UserID={UserID}", HttpVerb.POST)
+			Dim Test As New RestClient("http://ajpnorthwest-restapi.azurewebsites.net/api/Company/Save?UserID={UserID}", HttpVerb.POST)
 			Test.PostData = $"{{
 							  'LocalID': '{Company.ID}',
 							  'Name': '{Company.Name}',
@@ -551,7 +551,7 @@ Class MainWindow
 		Next
 
 		For Each Contact In db.Contacts
-			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Contacts/Save?CompanyID={Contact.Company.ID}&UserID={UserID}", HttpVerb.POST)
+			Dim Test As New RestClient($"http://localhost:60704/api/Contacts/Save?CompanyID={Contact.Company.ID}&UserID={UserID}", HttpVerb.POST)
 			Test.PostData = $"{{
 								'LocalID': {Contact.ID},
 								'UserID': {UserID},
@@ -565,7 +565,7 @@ Class MainWindow
 		Next
 
 		For Each Note In db.Notes
-			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Save?UserID={UserID}&ContactID={Note.Contact.ID}", HttpVerb.POST)
+			Dim Test As New RestClient($"api/Notes/Save?UserID={UserID}&ContactID={Note.Contact.ID}", HttpVerb.POST)
 			Test.PostData = $"{{
 								'LocalID': {Note.ID},
 								'UserID': {UserID},
@@ -578,7 +578,7 @@ Class MainWindow
 		Next
 
 		For Each Quote In db.Quotes
-			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/api/Quotes/Save?UserID={UserID}&CompanyID={Quote.Company.ID}", HttpVerb.POST)
+			Dim Test As New RestClient($"api/Quotes/Save?UserID={UserID}&CompanyID={Quote.Company.ID}", HttpVerb.POST)
 			Test.PostData = $"{{
 								'LocalID': {Quote.ID},
 								'UserID': {UserID},
@@ -590,7 +590,7 @@ Class MainWindow
 		Next
 
 		For Each QuoteLine In db.QuoteLines
-			Dim Test As New RestClient($"{HardCodedSecrets.RestAPI_URL}/QuoteLines/Save?UserID={UserID}&QuoteID={QuoteLine.Quote.ID}", HttpVerb.POST)
+			Dim Test As New RestClient($"api/QuoteLines/Save?UserID={UserID}&QuoteID={QuoteLine.Quote.ID}", HttpVerb.POST)
 			Test.PostData = $"{{
 								'LocalID': {QuoteLine.ID},
 								'UserID': {UserID},
