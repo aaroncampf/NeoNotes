@@ -3,10 +3,12 @@ Imports M = System.Net.Mail
 
 Class MainWindow
 	Dim db As New NeoNotesContainer
+	WithEvents dispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 0, 30)}
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
 		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
 		If Not IO.Directory.Exists(DataDirectory) Then IO.Directory.CreateDirectory(DataDirectory)
+		dispatcherTimer.Start()
 
 		If Not db.Settings.Any Then
 			MsgBox("Please configure your settings with the settings button")
@@ -311,66 +313,69 @@ Class MainWindow
 	End Sub
 
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
-		If Not db.ChangeTracker.HasChanges Then Return
+		cbxCompanies.Focus()
+		UploadData()
 
-		Try
-			cbxCompanies.Focus()
-			Me.db.SaveChanges()
-		Catch ex As Exception
-			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
-				e.Cancel = True
-				Exit Sub
-			End If
-		End Try
+		'If Not db.ChangeTracker.HasChanges Then Return
 
-		Try
-			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
+		'Try
+		'	cbxCompanies.Focus()
+		'	Me.db.SaveChanges()
+		'Catch ex As Exception
+		'	If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
+		'		e.Cancel = True
+		'		Exit Sub
+		'	End If
+		'End Try
 
-			Dim Watch = Stopwatch.StartNew()
-			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
-			Watch.Stop()
+		'Try
+		'	Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
+
+		'	Dim Watch = Stopwatch.StartNew()
+		'	Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+		'	Watch.Stop()
 
 
-			Dim Watch1 = Stopwatch.StartNew()
-			Dim MyNotes =
-				<Customers>
-					<%= From Company In Companies
-						Select
-							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
-								<%= From Contact In Company.Contacts
-									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
-											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
-										   </Contact>
-								%>
+		'	Dim Watch1 = Stopwatch.StartNew()
+		'	Dim MyNotes =
+		'		<Customers>
+		'			<%= From Company In Companies
+		'				Select
+		'					<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
+		'						<%= From Contact In Company.Contacts
+		'							Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
+		'									   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
+		'								   </Contact>
+		'						%>
 
-								<Quotes>
-									<%= From Quote In Company.Quotes
-										Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
-												   <%= From Line In Quote.Lines
-													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
-											   </Quote>
-									%>
-								</Quotes>
-							</Company>
-					%>
-				</Customers>
+		'						<Quotes>
+		'							<%= From Quote In Company.Quotes
+		'								Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
+		'										   <%= From Line In Quote.Lines
+		'											   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
+		'									   </Quote>
+		'							%>
+		'						</Quotes>
+		'					</Company>
+		'			%>
+		'		</Customers>
 
-			Watch1.Stop()
+		'	Watch1.Stop()
 
-			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
+		'	MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
 
-			Dim Watch2 = Stopwatch.StartNew()
+		'	Dim Watch2 = Stopwatch.StartNew()
 
-			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
+		'	Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
+		'	Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
 
-			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
+		'	Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
 
-			Watch2.Stop()
+		'	Watch2.Stop()
 
-		Catch ex As Exception
-			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
-		End Try
+		'Catch ex As Exception
+		'	MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
+		'End Try
 	End Sub
 
 	Private Sub btnCompany_Add_Click(sender As Object, e As RoutedEventArgs) Handles btnCompany_Add.Click
@@ -534,6 +539,67 @@ Class MainWindow
 
 	Private Sub btnCloserFasterTest_Click(sender As Object, e As RoutedEventArgs) Handles btnCloserFasterTest.Click
 		Throw New Exception("Testing a crash")
+	End Sub
+
+
+	Private Sub UploadData()
+		If Not db.ChangeTracker.HasChanges Then Return
+
+		Try
+			Me.db.SaveChanges()
+		Catch ex As Exception
+			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
+				Exit Sub
+			End If
+		End Try
+
+		Try
+			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
+
+			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+
+			Dim MyNotes =
+				<Customers>
+					<%= From Company In Companies
+						Select
+							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
+								<%= From Contact In Company.Contacts
+									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
+											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
+										   </Contact>
+								%>
+
+								<Quotes>
+									<%= From Quote In Company.Quotes
+										Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
+												   <%= From Line In Quote.Lines
+													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
+											   </Quote>
+									%>
+								</Quotes>
+							</Company>
+					%>
+				</Customers>
+
+			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
+
+			Dim Watch2 = Stopwatch.StartNew()
+
+			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
+			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
+
+			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
+
+			Watch2.Stop()
+
+		Catch ex As Exception
+			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
+		End Try
+	End Sub
+
+	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
+		Dim UploadTask As Task = New Task(Sub() UploadData())
+		UploadTask.Start()
 	End Sub
 
 
