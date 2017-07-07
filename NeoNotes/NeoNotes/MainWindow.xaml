@@ -153,6 +153,6 @@
 		</GroupBox>
 		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
 		<Button x:Name="btnSettings" Content="Settings" Margin="977,10,10,0" VerticalAlignment="Top"/>
-		<Button x:Name="btnCloserFasterTest" Content="Test RestAPI" HorizontalAlignment="Left" Margin="852,17,0,0" VerticalAlignment="Top" Width="109" Height="34"/>
+		<Button x:Name="btnCloserFasterTest" Content="Test Crashing" HorizontalAlignment="Left" Margin="852,17,0,0" VerticalAlignment="Top" Width="109" Height="34"/>
 	</Grid>
 </Window>

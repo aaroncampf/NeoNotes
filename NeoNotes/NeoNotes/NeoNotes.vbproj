@@ -233,7 +233,6 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\RestClient.vb" />
     <Compile Include="Database\Company.vb">
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>
