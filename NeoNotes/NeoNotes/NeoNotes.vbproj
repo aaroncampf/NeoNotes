@@ -16,7 +16,7 @@
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>C:\Users\aaron\Dropbox\Work\AJP Shared\Installations\NeoNotes\</PublishUrl>
+    <PublishUrl>C:\Users\aaron\Dropbox\Work\AJP Shared\Installations\------DO NOT PUBLISH UNTIL DB CHANGES NeoNotes\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -240,7 +240,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\HardCodedSecrets.vb" />
-    <Compile Include="Database\Change.vb" />
     <Compile Include="Database\Company.vb" />
     <Compile Include="Database\Contact.vb" />
     <Compile Include="Database\Database.Context.vb" />

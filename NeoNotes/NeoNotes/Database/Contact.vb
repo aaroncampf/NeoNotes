@@ -9,15 +9,28 @@
 
 Imports System
 Imports System.Collections.Generic
+Imports System.ComponentModel
 
 Partial Public Class Contact
-    Public Property ID As Integer
-    Public Property Name As String
-    Public Property Phone As String
-    Public Property Email As String
-    Public Property Position As String
+	Implements System.ComponentModel.INotifyPropertyChanged
 
-    Public Overridable Property Notes As ICollection(Of Note) = New HashSet(Of Note)
-    Public Overridable Property Company As Company
+	Public Property ID As Integer
+	Public Property Name As String
+	Public Property Phone As String
+	Public Property Email As String
+	Public Property Position As String
 
+	Public Overridable Property Notes As ICollection(Of Note) = New HashSet(Of Note)
+	Public Overridable Property Company As Company
+
+	Public Property LastUpdated As Date = DateTime.Now.AddYears(-1)
+	Public Property LastChanged As Date = DateTime.Now.AddYears(-1)
+
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+	Private Sub Company_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles Me.PropertyChanged
+		If e.PropertyName <> NameOf(LastUpdated) And e.PropertyName <> NameOf(LastChanged) Then
+			LastChanged = Now
+		End If
+	End Sub
 End Class

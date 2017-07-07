@@ -9,11 +9,24 @@
 
 Imports System
 Imports System.Collections.Generic
+Imports System.ComponentModel
 
 Partial Public Class QuoteSection
-    Public Property ID As Integer
-    Public Property Name As String
+	Implements System.ComponentModel.INotifyPropertyChanged
 
-    Public Overridable Property QuoteSectionDetails As ICollection(Of QuoteSectionDetail) = New HashSet(Of QuoteSectionDetail)
+	Public Property ID As Integer
+	Public Property Name As String
 
+	Public Overridable Property QuoteSectionDetails As ICollection(Of QuoteSectionDetail) = New HashSet(Of QuoteSectionDetail)
+
+	Public Property LastUpdated As Date = DateTime.Now.AddYears(-1)
+	Public Property LastChanged As Date = DateTime.Now.AddYears(-1)
+
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+	Private Sub Company_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles Me.PropertyChanged
+		If e.PropertyName <> NameOf(LastUpdated) And e.PropertyName <> NameOf(LastChanged) Then
+			LastChanged = Now
+		End If
+	End Sub
 End Class

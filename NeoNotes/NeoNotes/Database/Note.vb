@@ -9,13 +9,27 @@
 
 Imports System
 Imports System.Collections.Generic
+Imports System.ComponentModel
 
 Partial Public Class Note
-    Public Property ID As Integer
-    Public Property [Date] As Date
-    Public Property Title As String
-    Public Property Text As String
+	Implements System.ComponentModel.INotifyPropertyChanged
 
-    Public Overridable Property Contact As Contact
+	Public Property ID As Integer
+	Public Property [Date] As Date
+	Public Property Title As String
+	Public Property Text As String
+
+	Public Overridable Property Contact As Contact
+
+	Public Property LastUpdated As Date = DateTime.Now.AddYears(-1)
+	Public Property LastChanged As Date = DateTime.Now.AddYears(-1)
+
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+	Private Sub Company_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles Me.PropertyChanged
+		If e.PropertyName <> NameOf(LastUpdated) And e.PropertyName <> NameOf(LastChanged) Then
+			LastChanged = Now
+		End If
+	End Sub
 
 End Class

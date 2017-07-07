@@ -9,13 +9,26 @@
 
 Imports System
 Imports System.Collections.Generic
+Imports System.ComponentModel
 
 Partial Public Class Quote
-    Public Property ID As Integer
-    Public Property [Date] As Date
-    Public Property Name As String
+	Implements System.ComponentModel.INotifyPropertyChanged
 
-    Public Overridable Property Company As Company
-    Public Overridable Property Lines As ICollection(Of QuoteLine) = New HashSet(Of QuoteLine)
+	Public Property ID As Integer
+	Public Property [Date] As Date
+	Public Property Name As String
 
+	Public Overridable Property Company As Company
+	Public Overridable Property Lines As ICollection(Of QuoteLine) = New HashSet(Of QuoteLine)
+
+	Public Property LastUpdated As Date = DateTime.Now.AddYears(-1)
+	Public Property LastChanged As Date = DateTime.Now.AddYears(-1)
+
+	Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+	Private Sub Company_PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Handles Me.PropertyChanged
+		If e.PropertyName <> NameOf(LastUpdated) And e.PropertyName <> NameOf(LastChanged) Then
+			LastChanged = Now
+		End If
+	End Sub
 End Class

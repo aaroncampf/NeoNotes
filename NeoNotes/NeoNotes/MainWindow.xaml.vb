@@ -553,6 +553,7 @@ Class MainWindow
 
 		db.SaveChanges()
 
+
 		For Each Company In db.Companies
 			Dim Data = New With {
 				.LocalID = Company.ID,
@@ -622,7 +623,6 @@ Class MainWindow
 			Test.ToString()
 		Next
 	End Sub
-
 
 	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
 		If Not db.Settings.Any Then
@@ -836,4 +836,217 @@ Class MainWindow
 
 		db.SaveChanges()
 	End Sub
+
+	'Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
+	'	If Not db.Settings.Any Then
+	'		MsgBox("You cannot save data until you assign the API_ID Setting")
+	'		Exit Sub
+	'	End If
+
+	'	If Not db.Changes.Any AndAlso Not db.ChangeTracker.Entries.Any(Function(x) {Data.Entity.EntityState.Added, Data.Entity.EntityState.Modified, Data.Entity.EntityState.Deleted}.Contains(x.State)) Then
+	'		Exit Sub
+	'	End If
+
+	'	Dim UserID = db.Settings.First.API_ID
+	'	Dim http As New EasyHttp.Http.HttpClient()
+
+	'	db.Notes.RemoveRange(db.Contacts.Where(Function(x) x.Company Is Nothing).SelectMany(Function(x) x.Notes))
+	'	db.Contacts.RemoveRange(db.Contacts.Where(Function(x) x.Company Is Nothing))
+
+	'	db.QuoteLines.RemoveRange(db.Quotes.Where(Function(x) x.Company Is Nothing).SelectMany(Function(x) x.Lines))
+	'	db.Quotes.RemoveRange(db.Quotes.Where(Function(x) x.Company Is Nothing))
+
+	'	Dim Changes = db.ChangeTracker.Entries().Where(Function(x) x.State = System.Data.Entity.EntityState.Added Or x.State = System.Data.Entity.EntityState.Modified).ToList
+	'	Dim Deleted = db.ChangeTracker.Entries().Where(Function(x) x.State = System.Data.Entity.EntityState.Deleted).ToList
+
+	'	db.SaveChanges()
+
+	'	Dim GetRealType = Function(Item As Object) As Type
+	'						  If Not Item.GetType.BaseType = Nothing AndAlso Item.GetType.Namespace = "System.Data.Entity.DynamicProxies" Then
+	'							  Return Item.GetType.BaseType
+	'						  Else
+	'							  Return Item.GetType
+	'						  End If
+	'					  End Function
+
+
+	'	Dim FullChanges = db.ChangeTracker.Entries.Where(Function(x) x.State <> Data.Entity.EntityState.Added Or x.State = Data.Entity.EntityState.Modified Or Data.Entity.EntityState.Deleted).ToArray
+
+	'	For Each Item In FullChanges
+	'		Dim JSON As String = Nothing
+
+	'		Select Case GetRealType(Item.Entity)
+	'			Case GetType(Company)
+	'				Dim Company As Company = Item.Entity
+	'				JSON = $"{{
+	'						  'LocalID': {Company.ID},
+	'						  'Name': '{Company.Name}',
+	'						  'Address': '{Company.Address}',
+	'						  'City': '{Company.City}',
+	'						  'Phone': '{Company.Phone}',
+	'						  'Zip': '{Company.Zip}',
+	'						  'Misc': '{Company.Misc}',
+	'						}}"
+	'			Case GetType(Contact)
+	'				Dim Contact As Contact = Item.Entity
+	'				JSON = $"{{
+	'							'CompanyID': {Contact.Company.ID},
+	'							'LocalID': {Contact.ID},
+	'							'UserID': {UserID},
+	'							'Name': '{Contact.Name}',
+	'							'Phone': '{Contact.Phone}',
+	'							'Email': '{Contact.Email}',
+	'							'Position': '{Contact.Position}'
+	'						}}"
+	'			Case GetType(Quote)
+	'				Dim Quote As Quote = Item.Entity
+	'				JSON = $"{{
+	'							'CompanyID': {Quote.Company.ID},
+	'							'LocalID': {Quote.ID},
+	'							'UserID': {UserID},
+	'							'Date': '{Quote.Date}',
+	'							'Name': '{Quote.Name}'
+	'						}}"
+	'			Case GetType(Note)
+	'				Dim Note As Note = Item.Entity
+	'				JSON = $"{{
+	'							'ContactID': {Note.Contact.ID},
+	'							'LocalID': {Note.ID},
+	'							'UserID': {UserID},
+	'							'Date': '{Note.Date}',
+	'							'Title': '{Note.Title}',
+	'							'Text': '{Note.Text}',
+	'						}}"
+	'			Case GetType(QuoteLine)
+	'				Dim QuoteLine As QuoteLine = Item.Entity
+	'				JSON = $"{{
+	'							'QuoteID': {QuoteLine.Quote.ID},
+	'							'LocalID': {QuoteLine.ID},
+	'							'UserID': {UserID},
+	'							'Display': {QuoteLine.Display},
+	'							'UNIT': '{QuoteLine.UNIT}',
+	'							'COST': {QuoteLine.COST},
+	'							'DESC': '{QuoteLine.DESC}',
+	'							'IsCentered': {QuoteLine.IsCentered}
+	'						}}"
+	'			Case Else
+	'				Continue For
+	'		End Select
+
+	'		Dim Record As New Change
+	'		Record.JSON = JSON
+	'		Record.Class = GetRealType(Item.Entity).Name
+	'		Record.IsUpdate = Item.State <> System.Data.Entity.EntityState.Deleted
+
+	'		db.Changes.Add(Record)
+	'	Next
+
+	'	db.SaveChanges()
+
+	'	If Not My.Computer.Network.IsAvailable Then
+	'		Exit Sub
+	'	End If
+
+	'	For Each Item In db.Changes.ToList
+	'		Dim Extracted_JSON As Newtonsoft.Json.Linq.JObject
+
+	'		Try
+	'			'Data = Newtonsoft.Json.JsonConvert.DeserializeObject(Item.JSON)
+	'			Extracted_JSON = Newtonsoft.Json.Linq.JObject.Parse(Item.JSON)
+	'		Catch ex As Exception
+	'			db.Changes.Remove(Item)
+	'			Continue For
+	'		End Try
+
+	'		Dim HTTP_Result As EasyHttp.Http.HttpResponse
+
+	'		Select Case Item.Class
+	'			Case GetType(Company).Name
+	'				Dim Data As New With {
+	'					.LocalID = Extracted_JSON("LocalID").ToString,
+	'					.Name = Extracted_JSON("Name").ToString,
+	'					.Address = Extracted_JSON("Address").ToString,
+	'					.City = Extracted_JSON("City").ToString,
+	'					.Phone = Extracted_JSON("Phone").ToString,
+	'					.Zip = Extracted_JSON("Zip").ToString,
+	'					.Misc = Extracted_JSON("Misc").ToString
+	'				}
+
+	'				If Item.IsUpdate Then
+	'					HTTP_Result = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Company/Save?UserID={UserID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
+	'				Else
+	'					HTTP_Result = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Company/Delete?UserID={UserID}&CompanyID={Data.LocalID}")
+	'				End If
+	'			Case GetType(Contact).Name
+	'				Dim Data As New With {
+	'					.CompanyID = Extracted_JSON("CompanyID").ToString,
+	'					.LocalID = Extracted_JSON("LocalID").ToString,
+	'					.UserID = UserID,
+	'					.Name = Extracted_JSON("Name").ToString,
+	'					.Phone = Extracted_JSON("Phone").ToString,
+	'					.Email = Extracted_JSON("Email").ToString,
+	'					.Position = Extracted_JSON("Position").ToString
+	'				}
+
+	'				If Item.IsUpdate Then
+	'					HTTP_Result = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Contacts/Save?CompanyID={Data.CompanyID}&UserID={UserID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
+	'				Else
+	'					HTTP_Result = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Contacts/Delete?ContactID={Data.LocalID}&UserID={UserID}")
+	'				End If
+	'			Case GetType(Quote).Name
+	'				Dim Data As New With {
+	'					.CompanyID = Extracted_JSON("CompanyID").ToString,
+	'					.LocalID = Extracted_JSON("LocalID").ToString,
+	'					.UserID = UserID,
+	'					.Date = Extracted_JSON("Date").ToString,
+	'					.Name = Extracted_JSON("Name").ToString
+	'				}
+
+	'				If Item.IsUpdate Then
+	'					HTTP_Result = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Quotes/Save?UserID={UserID}&CompanyID={Data.CompanyID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
+	'				Else
+	'					HTTP_Result = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Quotes/Delete?UserID={UserID}&QuoteID={Data.LocalID}")
+	'				End If
+	'			Case GetType(Note).Name
+	'				Dim Data As New With {
+	'						.ContactID = Extracted_JSON("ContactID").ToString,
+	'						.LocalID = Extracted_JSON("LocalID").ToString,
+	'						.UserID = UserID,
+	'						.Date = Extracted_JSON("Date").ToString,
+	'						.Title = Extracted_JSON("Title").ToString,
+	'						.Text = Extracted_JSON("Text").ToString
+	'				}
+
+	'				If Item.IsUpdate Then
+	'					HTTP_Result = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Save?UserID={UserID}&ContactID={Data.ContactID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
+	'				Else
+	'					HTTP_Result = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Delete?UserID={UserID}&NoteID={Data.LocalID}")
+	'				End If
+	'			Case GetType(QuoteLine).Name
+	'				Dim Data As New With {
+	'					.QuoteID = Extracted_JSON("QuoteID").ToString,
+	'					.LocalID = Extracted_JSON("LocalID").ToString,
+	'					.UserID = UserID,
+	'					.Display = Extracted_JSON("Display").ToString,
+	'					.UNIT = Extracted_JSON("UNIT").ToString,
+	'					.COST = Extracted_JSON("COST").ToString,
+	'					.DESC = Extracted_JSON("DESC").ToString,
+	'					.IsCentered = Extracted_JSON("IsCentered").ToString
+	'				}
+
+	'				If Item.IsUpdate Then
+	'					HTTP_Result = http.Post($"{HardCodedSecrets.RestAPI_URL}/QuoteLines/Save?UserID={UserID}&QuoteID={Data.QuoteID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)
+	'				Else
+	'					HTTP_Result = http.Delete($"{HardCodedSecrets.RestAPI_URL}/api/Notes/Delete?UserID={UserID}&QuoteLineID={Data.LocalID}")
+	'				End If
+
+	'		End Select
+
+	'		'TODO: Add in HTTP_Result error handling checks
+
+	'		db.Changes.Remove(Item)
+	'	Next
+
+	'	db.SaveChanges()
+	'End Sub
 End Class
