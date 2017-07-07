@@ -12,11 +12,11 @@ Imports System.Collections.Generic
 
 Partial Public Class QuoteLine
     Public Property ID As Integer
-    Public Property Display As Nullable(Of Integer)
+    Public Property Display As Integer
     Public Property UNIT As String
-    Public Property COST As Nullable(Of Decimal)
+    Public Property COST As Decimal
     Public Property DESC As String
-    Public Property IsCentered As Nullable(Of Boolean)
+    Public Property IsCentered As Boolean
 
     Public Overridable Property Quote As Quote
 

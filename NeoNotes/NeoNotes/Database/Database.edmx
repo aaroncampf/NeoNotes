@@ -4,34 +4,33 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="NeoNotes.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityContainer Name="NeoNotesStoreContainer">
-    <EntitySet Name="Companies" EntityType="NeoNotes.Store.Companies" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Contacts" EntityType="NeoNotes.Store.Contacts" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Quotes" EntityType="NeoNotes.Store.Quotes" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Notes" EntityType="NeoNotes.Store.Notes" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="QuoteLines" EntityType="NeoNotes.Store.QuoteLines" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="QuoteSections" EntityType="NeoNotes.Store.QuoteSections" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="QuoteSectionDetails" EntityType="NeoNotes.Store.QuoteSectionDetails" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Settings" EntityType="NeoNotes.Store.Settings" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Changes" EntityType="NeoNotes.Store.Changes" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="ContactNote" Association="NeoNotes.Store.ContactNote">
+    <Schema Namespace="Database.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DatabaseStoreContainer">
+    <EntitySet Name="Companies" EntityType="Database.Store.Companies" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Contacts" EntityType="Database.Store.Contacts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Quotes" EntityType="Database.Store.Quotes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Notes" EntityType="Database.Store.Notes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="QuoteLines" EntityType="Database.Store.QuoteLines" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="QuoteSections" EntityType="Database.Store.QuoteSections" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="QuoteSectionDetails" EntityType="Database.Store.QuoteSectionDetails" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Settings" EntityType="Database.Store.Settings" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ContactNote" Association="Database.Store.ContactNote">
       <End Role="Contact" EntitySet="Contacts" />
       <End Role="Note" EntitySet="Notes" />
     </AssociationSet>
-    <AssociationSet Name="CustomerContact" Association="NeoNotes.Store.CustomerContact">
+    <AssociationSet Name="CustomerContact" Association="Database.Store.CustomerContact">
       <End Role="Customer" EntitySet="Companies" />
       <End Role="Contact" EntitySet="Contacts" />
     </AssociationSet>
-    <AssociationSet Name="CustomerQuote" Association="NeoNotes.Store.CustomerQuote">
+    <AssociationSet Name="CustomerQuote" Association="Database.Store.CustomerQuote">
       <End Role="Customer" EntitySet="Companies" />
       <End Role="Quote" EntitySet="Quotes" />
     </AssociationSet>
-    <AssociationSet Name="QuoteQuoteLine" Association="NeoNotes.Store.QuoteQuoteLine">
+    <AssociationSet Name="QuoteQuoteLine" Association="Database.Store.QuoteQuoteLine">
       <End Role="Quote" EntitySet="Quotes" />
       <End Role="QuoteLine" EntitySet="QuoteLines" />
     </AssociationSet>
-    <AssociationSet Name="QuoteSectionQuoteSectionDetail" Association="NeoNotes.Store.QuoteSectionQuoteSectionDetail">
+    <AssociationSet Name="QuoteSectionQuoteSectionDetail" Association="Database.Store.QuoteSectionQuoteSectionDetail">
       <End Role="QuoteSection" EntitySet="QuoteSections" />
       <End Role="QuoteSectionDetail" EntitySet="QuoteSectionDetails" />
     </AssociationSet>
@@ -65,7 +64,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Company_ID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Notes">
@@ -74,7 +73,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="datetime" Nullable="false" />
-    <Property Name="Title" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Text" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Contact_ID" Type="int" Nullable="false" />
   </EntityType>
@@ -83,11 +82,11 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Display" Type="int" Nullable="true" />
-    <Property Name="UNIT" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="COST" Type="decimal" Nullable="true" />
-    <Property Name="DESC" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="IsCentered" Type="bit" Nullable="true" />
+    <Property Name="Display" Type="int" Nullable="false" />
+    <Property Name="UNIT" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="COST" Type="decimal" Nullable="false" />
+    <Property Name="DESC" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsCentered" Type="bit" Nullable="false" />
     <Property Name="Quote_ID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="QuoteSections">
@@ -120,20 +119,10 @@
     <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Phone" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="API_ID" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Changes">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="IsUpdate" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Class" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="JSON" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <Association Name="ContactNote">
-    <End Role="Contact" Type="NeoNotes.Store.Contacts" Multiplicity="1" />
-    <End Role="Note" Type="NeoNotes.Store.Notes" Multiplicity="*" />
+    <End Role="Contact" Type="Database.Store.Contacts" Multiplicity="1" />
+    <End Role="Note" Type="Database.Store.Notes" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Contact">
         <PropertyRef Name="ID" />
@@ -144,8 +133,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="CustomerContact">
-    <End Role="Customer" Type="NeoNotes.Store.Companies" Multiplicity="1" />
-    <End Role="Contact" Type="NeoNotes.Store.Contacts" Multiplicity="*" />
+    <End Role="Customer" Type="Database.Store.Companies" Multiplicity="1" />
+    <End Role="Contact" Type="Database.Store.Contacts" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Customer">
         <PropertyRef Name="ID" />
@@ -156,8 +145,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="CustomerQuote">
-    <End Role="Customer" Type="NeoNotes.Store.Companies" Multiplicity="1" />
-    <End Role="Quote" Type="NeoNotes.Store.Quotes" Multiplicity="*" />
+    <End Role="Customer" Type="Database.Store.Companies" Multiplicity="1" />
+    <End Role="Quote" Type="Database.Store.Quotes" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Customer">
         <PropertyRef Name="ID" />
@@ -168,8 +157,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="QuoteQuoteLine">
-    <End Role="Quote" Type="NeoNotes.Store.Quotes" Multiplicity="1" />
-    <End Role="QuoteLine" Type="NeoNotes.Store.QuoteLines" Multiplicity="*" />
+    <End Role="Quote" Type="Database.Store.Quotes" Multiplicity="1" />
+    <End Role="QuoteLine" Type="Database.Store.QuoteLines" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Quote">
         <PropertyRef Name="ID" />
@@ -180,8 +169,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="QuoteSectionQuoteSectionDetail">
-    <End Role="QuoteSection" Type="NeoNotes.Store.QuoteSections" Multiplicity="1" />
-    <End Role="QuoteSectionDetail" Type="NeoNotes.Store.QuoteSectionDetails" Multiplicity="*" />
+    <End Role="QuoteSection" Type="Database.Store.QuoteSections" Multiplicity="1" />
+    <End Role="QuoteSectionDetail" Type="Database.Store.QuoteSectionDetails" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="QuoteSection">
         <PropertyRef Name="ID" />
@@ -224,7 +213,6 @@
             <End Role="QuoteSectionDetail" EntitySet="QuoteSectionDetails" />
           </AssociationSet>
           <EntitySet Name="Settings" EntityType="NeoNotes.Setting" />
-          <EntitySet Name="Changes" EntityType="NeoNotes.Change" />
         </EntityContainer>
         <EntityType Name="Company">
           <Key>
@@ -260,7 +248,7 @@
           <NavigationProperty Name="Company" Relationship="NeoNotes.CustomerQuote" FromRole="Quote" ToRole="Customer" />
           <NavigationProperty Name="Lines" Relationship="NeoNotes.QuoteQuoteLine" FromRole="Quote" ToRole="QuoteLine" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="true" />
+          <Property Name="Name" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Note">
           <Key>
@@ -269,7 +257,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Contact" Relationship="NeoNotes.ContactNote" FromRole="Note" ToRole="Contact" />
           <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Title" Type="String" Nullable="true" />
+          <Property Name="Title" Type="String" Nullable="false" />
           <Property Name="Text" Type="String" Nullable="true" />
         </EntityType>
         <Association Name="ContactNote">
@@ -290,11 +278,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Quote" Relationship="NeoNotes.QuoteQuoteLine" FromRole="QuoteLine" ToRole="Quote" />
-          <Property Name="Display" Type="Int32" Nullable="true" />
-          <Property Name="UNIT" Type="String" Nullable="true" />
-          <Property Name="COST" Type="Decimal" Nullable="true" />
-          <Property Name="DESC" Type="String" Nullable="true" />
-          <Property Name="IsCentered" Type="Boolean" Nullable="true" />
+          <Property Name="Display" Type="Int32" Nullable="false" />
+          <Property Name="UNIT" Type="String" Nullable="false" />
+          <Property Name="COST" Type="Decimal" Nullable="false" />
+          <Property Name="DESC" Type="String" Nullable="false" />
+          <Property Name="IsCentered" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="QuoteQuoteLine">
           <End Type="NeoNotes.Quote" Role="Quote" Multiplicity="1" />
@@ -335,23 +323,13 @@
           <Property Name="Email" Type="String" Nullable="false" />
           <Property Name="Address" Type="String" Nullable="false" />
           <Property Name="Phone" Type="String" Nullable="false" />
-          <Property Name="API_ID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Change">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IsUpdate" Type="String" Nullable="false" />
-          <Property Name="Class" Type="String" Nullable="false" />
-          <Property Name="JSON" Type="String" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="NeoNotesStoreContainer" CdmEntityContainer="NeoNotesContainer">
+  <EntityContainerMapping StorageEntityContainer="DatabaseStoreContainer" CdmEntityContainer="NeoNotesContainer">
     <EntitySetMapping Name="Companies">
       <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.Company)">
         <MappingFragment StoreEntitySet="Companies">
@@ -437,17 +415,6 @@
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Address" ColumnName="Address" />
           <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="API_ID" ColumnName="API_ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Changes">
-      <EntityTypeMapping TypeName="IsTypeOf(NeoNotes.Change)">
-        <MappingFragment StoreEntitySet="Changes">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="IsUpdate" ColumnName="IsUpdate" />
-          <ScalarProperty Name="Class" ColumnName="Class" />
-          <ScalarProperty Name="JSON" ColumnName="JSON" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
