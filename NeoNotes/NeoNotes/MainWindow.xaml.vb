@@ -734,8 +734,6 @@ Class MainWindow
 			Exit Sub
 		End If
 
-		Dim sdfhjk = db.Changes.Count
-
 		For Each Item In db.Changes.ToList
 			Dim Extracted_JSON As Newtonsoft.Json.Linq.JObject
 
@@ -760,9 +758,6 @@ Class MainWindow
 						.Zip = Extracted_JSON("Zip").ToString,
 						.Misc = Extracted_JSON("Misc").ToString
 					}
-
-
-					Dim sed = Data.Name
 
 					If Item.IsUpdate Then
 						HTTP_Result = http.Post($"{HardCodedSecrets.RestAPI_URL}/api/Company/Save?UserID={UserID}", Data, EasyHttp.Http.HttpContentTypes.ApplicationJson)

@@ -20,6 +20,8 @@
 		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=GmailPassword}"/>
 		<Label Content="Phone" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top"/>
 		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=Phone}"/>
+		<Label Content="API ID" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top"/>
+		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,174,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=API_ID}"/>
 
 
 	</Grid>
