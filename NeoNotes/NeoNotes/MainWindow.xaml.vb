@@ -3,7 +3,7 @@ Imports M = System.Net.Mail
 
 Class MainWindow
 	Dim db As New NeoNotesContainer
-	WithEvents dispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 0, 15)}
+	WithEvents dispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 0, 30)}
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
 		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
@@ -314,7 +314,7 @@ Class MainWindow
 
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
 		cbxCompanies.Focus()
-		UploadData()
+		UploadData(True)
 	End Sub
 
 	Private Sub btnCompany_Add_Click(sender As Object, e As RoutedEventArgs) Handles btnCompany_Add.Click
@@ -480,9 +480,14 @@ Class MainWindow
 		Throw New Exception("Testing a crash")
 	End Sub
 
-
-	Private Sub UploadData()
-		If Not db.ChangeTracker.HasChanges Then Return
+	''' <summary>
+	''' 
+	''' </summary>
+	''' <param name="Disreguard_InUse">Try To Remove This Check</param>
+	Private Sub UploadData(Disreguard_InUse As Boolean)
+		Static IsInUse As Boolean
+		If Not db.ChangeTracker.HasChanges Or (IsInUse And Not Disreguard_InUse) Then Return
+		IsInUse = True
 
 		Try
 			Me.db.SaveChanges()
@@ -494,7 +499,6 @@ Class MainWindow
 
 		Try
 			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
-
 			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
 
 			Dim MyNotes =
@@ -522,24 +526,19 @@ Class MainWindow
 
 			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
 
-			Dim Watch2 = Stopwatch.StartNew()
-
 			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
 			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
-
 			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
-
-			Watch2.Stop()
-
 		Catch ex As Exception
 			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
 		End Try
+
+		IsInUse = False
 	End Sub
 
 	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
-		Dim UploadTask As Task = New Task(Sub() UploadData())
+		Dim UploadTask As Task = New Task(Sub() UploadData(False))
 		UploadTask.Start()
 	End Sub
-
 
 End Class
