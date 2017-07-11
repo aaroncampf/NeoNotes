@@ -3,7 +3,8 @@ Imports M = System.Net.Mail
 
 Class MainWindow
 	Dim db As New NeoNotesContainer
-	WithEvents dispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 0, 30)}
+	Dim UploadData_Lock As New Object
+	WithEvents dispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 1, 15)}
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
 		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
@@ -485,23 +486,26 @@ Class MainWindow
 	''' </summary>
 	''' <param name="Disreguard_InUse">Try To Remove This Check</param>
 	Private Sub UploadData(Disreguard_InUse As Boolean)
-		Static IsInUse As Boolean
-		If Not db.ChangeTracker.HasChanges Or (IsInUse And Not Disreguard_InUse) Then Return
-		IsInUse = True
+		SyncLock UploadData_Lock
+			Static IsInUse As Boolean
+			If Not db.ChangeTracker.HasChanges Or (IsInUse And Not Disreguard_InUse) Then Return
+			IsInUse = True
 
-		Try
-			Me.db.SaveChanges()
-		Catch ex As Exception
-			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
-				Exit Sub
-			End If
-		End Try
 
-		Try
-			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
-			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+			Try
+				Me.db.SaveChanges()
+			Catch ex As Exception
+				If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
+					IsInUse = False
+					Exit Sub
+				End If
+			End Try
 
-			Dim MyNotes =
+			Try
+				Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
+				Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+
+				Dim MyNotes =
 				<Customers>
 					<%= From Company In Companies
 						Select
@@ -524,19 +528,21 @@ Class MainWindow
 					%>
 				</Customers>
 
-			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
+				MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
 
-			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
-			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
-		Catch ex As Exception
-			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
-		End Try
+				Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
+				Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
+				Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
+			Catch ex As Exception
+				MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
+			End Try
 
-		IsInUse = False
+			IsInUse = False
+		End SyncLock
 	End Sub
 
 	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
+
 		Dim UploadTask As Task = New Task(Sub() UploadData(False))
 		UploadTask.Start()
 	End Sub
