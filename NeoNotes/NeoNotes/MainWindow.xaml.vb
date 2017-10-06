@@ -502,7 +502,13 @@ Class MainWindow
 			End Try
 
 			Try
+				If Not IO.File.Exists(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml") Then
+					MsgBox($"Please Create the settings file: {AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml"}")
+				End If
+
 				Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
+
+
 				Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
 
 				Dim MyNotes =
