@@ -398,39 +398,6 @@ Class MainWindow
 		End If
 	End Sub
 
-	<Obsolete("This will be removed when you delete the now obsolete [Email Quote] button")>
-	Private Sub btnQuoteEmail1_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail1.Click
-		'Note: You will be removing this button when you retrain users to use the new one
-		Dim Contact As Contact = lbxContacts.SelectedItem
-		If Contact.Email Is Nothing Then
-			MsgBox("Contact has no email")
-			Exit Sub
-		End If
-
-		Dim Quote As Quote = lbxQuotes.SelectedItem
-		If Quote Is Nothing Then
-			MsgBox("No Quote has been selected")
-			Exit Sub
-		End If
-
-		Dim Settings = db.Settings.First
-		If String.IsNullOrWhiteSpace(Settings.Gmail) Or String.IsNullOrWhiteSpace(Settings.GmailPassword) Then
-			MsgBox("Please Setup the GMail Email And Password Settings")
-		Else
-			If My.User.Name.Contains("Aaron Campf") Then
-				If MsgBox("Are you Sure you want to send then Email to: " & Contact.Email, MsgBoxStyle.YesNo) = MsgBoxResult.No Then Exit Sub
-			End If
-
-			Dim Results = frmCreateEmail.Open(Contact)
-			If Not Results.Canceled Then
-				For Each Contact In Results.Contacts
-					Dim Attachments As New Dictionary(Of String, String) From {{"Quote.pdf", Create_Quote_Printout(Contact).AsPDF}}
-					SendMail(Settings.Name, Settings.Gmail, Settings.GmailPassword, Results.Subject, Results.Body, Contact.Email, Attachments)
-				Next
-			End If
-		End If
-	End Sub
-
 	Private Sub btnQuoteEmail_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteEmail.Click
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		If Quote Is Nothing Then
@@ -477,15 +444,16 @@ Class MainWindow
 		Form.ShowDialog()
 	End Sub
 
-	Private Sub btnCloserFasterTest_Click(sender As Object, e As RoutedEventArgs) Handles btnCloserFasterTest.Click
-		Throw New Exception("Testing a crash")
-	End Sub
-
 	''' <summary>
 	''' 
 	''' </summary>
 	''' <param name="Disreguard_InUse">Try To Remove This Check</param>
 	Private Sub UploadData(Disreguard_InUse As Boolean)
+		If Not My.Computer.Network.IsAvailable Then
+			MsgBox("Unable to update phone app due to lack of internet")
+			Exit Sub
+		End If
+
 		SyncLock UploadData_Lock
 			Static IsInUse As Boolean
 			If Not db.ChangeTracker.HasChanges Or (IsInUse And Not Disreguard_InUse) Then Return
@@ -548,7 +516,6 @@ Class MainWindow
 	End Sub
 
 	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
-
 		Dim UploadTask As Task = New Task(Sub() UploadData(False))
 		UploadTask.Start()
 	End Sub
