@@ -210,6 +210,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\frmInventory.xaml.vb">
+      <DependentUpon>frmInventory.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\frmCreateEmail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -226,6 +229,7 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\INVMAS_Small.vb" />
     <Compile Include="Database\Company.vb">
       <DependentUpon>Database.tt</DependentUpon>
     </Compile>
@@ -282,6 +286,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </None>
+    <Page Include="Views\frmInventory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />

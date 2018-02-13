@@ -9,8 +9,7 @@
 		x:Class="MainWindow"
 		mc:Ignorable="d"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-		xmlns:s="clr-namespace:System;assembly=mscorlib" 
-		Title="MainWindow" Height="671.985" Width="1069.581" WindowState="Maximized">
+	Title="MainWindow" Height="671.985" Width="1069.581" WindowState="Maximized">
 
 	<Window.Resources>
 		<local:IsNothingConverter x:Key="IsNothingConverter"/>
@@ -149,5 +148,6 @@
 		</GroupBox>
 		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
 		<Button x:Name="btnSettings" Content="Settings" Margin="977,10,10,0" VerticalAlignment="Top"/>
+		<Button x:Name="btnTest" Content="Test" HorizontalAlignment="Left" Margin="852,17,0,0" VerticalAlignment="Top" Width="75"/>
 	</Grid>
 </Window>
