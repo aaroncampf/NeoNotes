@@ -59,7 +59,7 @@
 			<TabItem Header="Quotes" HorizontalAlignment="Right" Width="54" Height="22" Margin="0,-2,-2,0" VerticalAlignment="Bottom">
 				<Grid Background="#FFE5E5E5" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
 					<Label x:Name="label8" Content="Quotes" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-					<ListBox x:Name="lbxQuotes" HorizontalAlignment="Left" Margin="10,36,0,31" Width="248" ItemsSource="{Binding SelectedItem.Quotes, ElementName=cbxCompanies}">
+					<ListBox x:Name="lbxQuotes" HorizontalAlignment="Left" Margin="10,36,0,34" Width="248" ItemsSource="{Binding SelectedItem.Quotes, ElementName=cbxCompanies}">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock>
@@ -73,7 +73,7 @@
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
-					<Button x:Name="btnQuoteAdd" Content="Add" HorizontalAlignment="Left" Margin="10,0,0,2" Width="248" Height="20" VerticalAlignment="Bottom"/>
+					<Button x:Name="btnQuoteAdd" Content="Add" HorizontalAlignment="Left" Margin="9,0,0,9" Width="248" Height="20" VerticalAlignment="Bottom"/>
 					<GroupBox x:Name="groupBox1" Header="Details" HorizontalAlignment="Left" Margin="262,36,0,10" Width="519" IsEnabled="{Binding SelectedItem, ElementName=lbxQuotes, Converter={StaticResource IsNothingConverter}}">
 						<Grid>
 							<DataGrid x:Name="dgQuoteDetails" d:DataContext="{d:DesignInstance Type=NeoNotes:QuoteLine}" ItemsSource="{Binding SelectedItem.Lines, ElementName=lbxQuotes}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,79,0,141">
@@ -103,6 +103,7 @@
 							<!--<Button x:Name="btnQuotePrint" Content="Print" Margin="0,540,10,0" VerticalAlignment="Top" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNothingConverter}, ElementName=lbxQuotes}"/>-->
 							<Menu x:Name="menu" Height="23" VerticalAlignment="Top">
 								<MenuItem x:Name="btnQuoteDetailAdd" Header="Add Item" Height="23"/> |
+								<MenuItem x:Name="btnQuoteDetailAddFrinPriceList" Header="Add Item From Price List" Height="23"/> |
 								<MenuItem x:Name="btnQuoteEmail" Header="Email" /> |
 								<MenuItem x:Name="btnQuotePrint" Header="Print" /> |
 								<MenuItem x:Name="btnQuoteRemove" Header="Delete"/> |
@@ -148,6 +149,5 @@
 		</GroupBox>
 		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
 		<Button x:Name="btnSettings" Content="Settings" Margin="977,10,10,0" VerticalAlignment="Top"/>
-		<Button x:Name="btnTest" Content="Test" HorizontalAlignment="Left" Margin="852,17,0,0" VerticalAlignment="Top" Width="75"/>
 	</Grid>
 </Window>

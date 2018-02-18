@@ -520,27 +520,22 @@ Class MainWindow
 		UploadTask.Start()
 	End Sub
 
-	Private Sub btnTest_Click(sender As Object, e As RoutedEventArgs) Handles btnTest.Click
-		'Dim LocalFilePath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoNotes2.txt"
-		'If My.Computer.Network.IsAvailable AndAlso My.Settings.LastUpdated < Now.AddDays(-7) OrElse Not IO.File.Exists(LocalFilePath) Then
-		'	Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-		'	Dim File = Dbox.Files.DownloadAsync("/Storage/NeoNotes2.txt").Result.GetContentAsByteArrayAsync().Result
+	Private Sub btnQuoteDetailAddFrinPriceList_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAddFrinPriceList.Click
+		Dim Products = frmInventory.GetProducts()
 
-		'	If IO.File.Exists(LocalFilePath) Then
-		'		IO.File.Delete(LocalFilePath)
-		'	End If
 
-		'	IO.File.WriteAllBytes(LocalFilePath, File)
+		cbxQuoteLineDescription.Focus() 'Hack for ensuring that all controls have there data saved
+		txtQuoteLineCost.Focus()        'Hack for ensuring that all controls have there data saved
 
-		'	My.Settings.LastUpdated = Now
-		'	My.Settings.Save() '<--- Do I need this?
-		'End If
+		Dim Quote As Quote = lbxQuotes.SelectedItem
+		For Each Item In Products
+			Dim Display = If(Quote.Lines.Any, Quote.Lines.Max(Function(x) x.Display), 0) + 1
+			Dim QuoteLine As New QuoteLine With {.DESC = Item.DESCRIP, .Quote = Quote, .Display = Display, .COST = Item.LOADEDCOST, .UNIT = Item.RTDESC1}
 
-		'Dim Text = String.Join(vbCrLf, IO.File.ReadAllLines(LocalFilePath))
-		'Dim StringReader As New IO.StringReader(Text)
-		'Dim Reader As New CsvHelper.CsvReader(StringReader)
-		'Dim REcords = Reader.GetRecords(Of INVMAS_Small).ToArray
-		Dim Form As New frmInventory
-		Form.ShowDialog()
+			Quote.Lines.Add(QuoteLine)
+			dgQuoteDetails.SelectedItem = QuoteLine
+		Next
+
+		dgQuoteDetails.Items.Refresh()
 	End Sub
 End Class

@@ -1,6 +1,13 @@
 ﻿Public Class frmInventory
 	Dim Data As INVMAS_Small()
 
+	Public Shared Function GetProducts() As List(Of INVMAS_Small)
+		Dim Form As New frmInventory
+		Form.ShowDialog()
+		Return Form.lbxSelectedItems.Items.OfType(Of INVMAS_Small).ToList
+	End Function
+
+
 	Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 		Dim LocalFilePath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoNotes2.txt"
 		If My.Computer.Network.IsAvailable AndAlso My.Settings.LastUpdated < Now.AddDays(-7) OrElse Not IO.File.Exists(LocalFilePath) Then
@@ -21,8 +28,6 @@
 		Dim StringReader As New IO.StringReader(Text)
 		Dim Reader As New CsvHelper.CsvReader(StringReader)
 		Data = Reader.GetRecords(Of INVMAS_Small).ToArray
-
-		dgINVMAS_Small.ItemsSource = Data
 		cbxCatg.ItemsSource = Data.Select(Function(x) x.CATG).Distinct
 	End Sub
 
@@ -43,6 +48,8 @@
 		Else
 			lbxSelectedItems.Items.Remove(lbxSelectedItems.SelectedItem)
 		End If
+
+		lbxSelectedItems.Items.Refresh() 'Not Sure if I need this
 	End Sub
 
 	Private Sub dgINVMAS_Small_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles dgINVMAS_Small.SelectionChanged
