@@ -20,6 +20,10 @@
 		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,124,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=GmailPassword}"/>
 		<Label Content="Phone" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top"/>
 		<TextBox HorizontalAlignment="Left" Height="23" Margin="104,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="{Binding Path=Phone}"/>
+		<Label Content="Special Tools" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top"/>
+		<ComboBox x:Name="cbxSpecialTools" HorizontalAlignment="Left" Margin="104,209,0,0" VerticalAlignment="Top" Width="190">
+			<ComboBoxItem x:Name="cbiDataDirectory" Content="Open Data Directory"/>
+		</ComboBox>
 
 
 	</Grid>

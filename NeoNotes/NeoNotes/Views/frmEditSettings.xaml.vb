@@ -17,4 +17,14 @@
 		db.SaveChanges()
 		Me.Close()
 	End Sub
+
+	Private Sub cbxSpecialTools_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxSpecialTools.SelectionChanged
+		If cbxSpecialTools.SelectedItem Is Nothing Then Exit Sub
+		Select Case CType(cbxSpecialTools.SelectedItem, ComboBoxItem).Name
+			Case cbiDataDirectory.Name
+				Process.Start(AppDomain.CurrentDomain.GetData("DataDirectory"))
+		End Select
+
+		cbxSpecialTools.SelectedItem = Nothing
+	End Sub
 End Class

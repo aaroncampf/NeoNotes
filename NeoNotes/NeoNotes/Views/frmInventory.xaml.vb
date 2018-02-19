@@ -10,7 +10,7 @@
 
 	Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 		Dim LocalFilePath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoNotes2.txt"
-		If My.Computer.Network.IsAvailable AndAlso My.Settings.LastUpdated < Now.AddDays(-7) OrElse Not IO.File.Exists(LocalFilePath) Then
+		If My.Computer.Network.IsAvailable AndAlso My.Settings.LastUpdated_Inventory < Now.AddDays(-7) OrElse Not IO.File.Exists(LocalFilePath) Then
 			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
 			Dim File = Dbox.Files.DownloadAsync("/Storage/NeoNotes2.txt").Result.GetContentAsByteArrayAsync().Result
 
