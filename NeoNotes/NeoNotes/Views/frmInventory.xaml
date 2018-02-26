@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NeoNotes"
 		xmlns:NeoNotes="clr-namespace:NeoNotes" 
         mc:Ignorable="d"
-        Title="frmInventory" Height="442.776" Width="639.943" Loaded="Window_Loaded">
+        Title="frmInventory" Height="559.428" Width="919.657" Loaded="Window_Loaded">
 	<Grid>
 		<DataGrid x:Name="dgINVMAS_Small" d:DataContext="{d:DesignInstance Type=NeoNotes:INVMAS_Small}" Margin="10,193,10,10">
 			<!--<DataGrid.Columns>
@@ -21,7 +21,7 @@
 		<ComboBox x:Name="cbxGroup" HorizontalAlignment="Left" Margin="135,36,0,0" VerticalAlignment="Top" Width="120"/>
 		<Label Content="Category" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
 		<Label Content="Group" HorizontalAlignment="Left" Margin="135,10,0,0" VerticalAlignment="Top"/>
-		<ListBox x:Name="lbxSelectedItems" HorizontalAlignment="Left" Height="100" Margin="347,36,0,0" VerticalAlignment="Top" Width="275" d:DataContext="{d:DesignInstance Type=NeoNotes:INVMAS_Small}">
+		<ListBox x:Name="lbxSelectedItems" HorizontalAlignment="Left" Height="127" Margin="624,41,0,0" VerticalAlignment="Top" Width="278" d:DataContext="{d:DesignInstance Type=NeoNotes:INVMAS_Small}">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock Text="{Binding DESCRIP}" />
@@ -29,7 +29,7 @@
 			</ListBox.ItemTemplate>
 		</ListBox>
 
-		<Label Content="SelectedItems" HorizontalAlignment="Left" Margin="347,10,0,0" VerticalAlignment="Top"/>
-		<Button x:Name="btnRemove" Content="Remove" HorizontalAlignment="Left" Margin="347,141,0,0" VerticalAlignment="Top" Width="275"/>
+		<Label Content="SelectedItems" HorizontalAlignment="Left" Margin="624,15,0,0" VerticalAlignment="Top"/>
+		<Button x:Name="btnRemove" Content="Remove" HorizontalAlignment="Left" Margin="627,173,0,0" VerticalAlignment="Top" Width="275"/>
 	</Grid>
 </Window>

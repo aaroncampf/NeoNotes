@@ -5,5 +5,5 @@
 	Public Property GROUP As String
 	Public Property GROUP_DESCRIP As String
 	Public Property RTDESC1 As String
-	Public Property LOADEDCOST As Single
+	Public Property SELL_CALC5 As Single
 End Class

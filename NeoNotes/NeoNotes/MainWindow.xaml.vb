@@ -530,7 +530,7 @@ Class MainWindow
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		For Each Item In Products
 			Dim Display = If(Quote.Lines.Any, Quote.Lines.Max(Function(x) x.Display), 0) + 1
-			Dim QuoteLine As New QuoteLine With {.DESC = Item.DESCRIP, .Quote = Quote, .Display = Display, .COST = Item.LOADEDCOST, .UNIT = Item.RTDESC1}
+			Dim QuoteLine As New QuoteLine With {.DESC = Item.DESCRIP, .Quote = Quote, .Display = Display, .COST = Item.SELL_CALC5, .UNIT = Item.RTDESC1}
 
 			Quote.Lines.Add(QuoteLine)
 			dgQuoteDetails.SelectedItem = QuoteLine
