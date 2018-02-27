@@ -472,6 +472,7 @@ Class MainWindow
 			Try
 				If Not IO.File.Exists(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml") Then
 					MsgBox($"Please Create the settings file: {AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml"}")
+					Exit Sub
 				End If
 
 				Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
