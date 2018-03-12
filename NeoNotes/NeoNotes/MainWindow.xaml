@@ -88,15 +88,15 @@
 							<GroupBox x:Name="groupBox2" Header="" IsEnabled="{Binding SelectedItem, ElementName=dgQuoteDetails, Converter={StaticResource IsNothingConverter}}" Height="141" VerticalAlignment="Bottom">
 								<Grid>
 									<Label x:Name="label9" Content="Description" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-									<ComboBox x:Name="cbxQuoteLineDescription" HorizontalAlignment="Left" Margin="85,14,0,0" VerticalAlignment="Top" Width="198" IsEditable="True" Text="{Binding SelectedItem.DESC, ElementName=dgQuoteDetails}"/>
+									<ComboBox x:Name="cbxQuoteLineDescription" HorizontalAlignment="Left" Margin="85,14,0,0" VerticalAlignment="Top" Width="198" IsEditable="True" Text="{Binding SelectedItem.DESC, ElementName=dgQuoteDetails, UpdateSourceTrigger=PropertyChanged}"/>
 									<Label x:Name="label10" Content="Unit" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-									<TextBox x:Name="txtQuoteLineUnit" HorizontalAlignment="Left" Height="23" Margin="85,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198" Text="{Binding SelectedItem.UNIT, ElementName=dgQuoteDetails}"/>
+									<TextBox x:Name="txtQuoteLineUnit" HorizontalAlignment="Left" Height="23" Margin="85,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198" Text="{Binding SelectedItem.UNIT, ElementName=dgQuoteDetails, UpdateSourceTrigger=PropertyChanged}"/>
 									<Label x:Name="label11" Content="Cost" HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top"/>
-									<TextBox x:Name="txtQuoteLineCost" HorizontalAlignment="Left" Height="23" Margin="85,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198" Text="{Binding SelectedItem.COST, ElementName=dgQuoteDetails}"/>
+									<TextBox x:Name="txtQuoteLineCost" HorizontalAlignment="Left" Height="23" Margin="85,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198" Text="{Binding SelectedItem.COST, ElementName=dgQuoteDetails, UpdateSourceTrigger=PropertyChanged}"/>
 									<Button x:Name="btnQuoteLineUp" Content="Up" HorizontalAlignment="Left" Margin="288,47,0,0" VerticalAlignment="Top" Width="75" Click="btnQuoteLineUp_Click" IsTabStop="False"/>
 									<Button x:Name="btnQuoteLineDown" Content="Down" HorizontalAlignment="Left" Margin="288,75,0,0" VerticalAlignment="Top" Width="75" Click="btnQuoteLineDown_Click" IsTabStop="False"/>
 									<Button x:Name="btnRemoveQuoteLine" Content="Remove" HorizontalAlignment="Left" Margin="420,0,0,0" VerticalAlignment="Top" Width="75"/>
-									<CheckBox x:Name="checkBox" Content="Centered" HorizontalAlignment="Left" Margin="85,104,0,0" VerticalAlignment="Top" IsChecked="{Binding SelectedItem.IsCentered, ElementName=dgQuoteDetails}"/>
+									<CheckBox x:Name="checkBox" Content="Centered" HorizontalAlignment="Left" Margin="85,104,0,0" VerticalAlignment="Top" IsChecked="{Binding SelectedItem.IsCentered, ElementName=dgQuoteDetails, UpdateSourceTrigger=PropertyChanged}"/>
 								</Grid>
 							</GroupBox>
 							<!--<Button x:Name="btnQuoteRemove" Content="Remove" HorizontalAlignment="Left" Margin="0,573,0,0" VerticalAlignment="Top" Width="497" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNothingConverter}, ElementName=lbxQuotes}"/>-->
