@@ -225,7 +225,7 @@ Class MainWindow
 		For Each Detail In Quote.Lines.OrderBy(Function(x) Val(x.Display))
 			If Val(Detail.COST) > 0.0 Then
 				Dim FormattedCurrency As String = FormatCurrency(Val(Detail.COST))
-				FormattedCurrency = "$" & Space(9 - FormattedCurrency.Length) & FormattedCurrency.Replace("$", "")
+				FormattedCurrency = "$" & Space(Math.Abs(7 - FormattedCurrency.Length)) & FormattedCurrency.Replace("$", "")
 
 				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormattedCurrency)
 			Else

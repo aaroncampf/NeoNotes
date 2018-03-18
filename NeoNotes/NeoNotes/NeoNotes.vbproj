@@ -28,8 +28,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://localhost/NeoNotes/</UpdateUrl>
     <PublisherName>AJP Northwest</PublisherName>
-    <ApplicationRevision>10</ApplicationRevision>
-    <ApplicationVersion>1.8.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.9.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
