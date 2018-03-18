@@ -218,11 +218,16 @@ Class MainWindow
 										New TableColumn With {.Tag = "Description"},
 										New TableColumn With {.Tag = "COST", .Width = New GridLength(100)})
 
+		Items.Table.FontFamily = New FontFamily("Courier New")
+
 		Items.Table.CellSpacing = 0 '<-- I don't think this is having any affect due to the CustomXAML
 
 		For Each Detail In Quote.Lines.OrderBy(Function(x) Val(x.Display))
 			If Val(Detail.COST) > 0.0 Then
-				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormatCurrency(Val(Detail.COST), 2))
+				Dim FormattedCurrency As String = FormatCurrency(Val(Detail.COST))
+				FormattedCurrency = "$" & Space(9 - FormattedCurrency.Length) & FormattedCurrency.Replace("$", "")
+
+				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormattedCurrency)
 			Else
 				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, "")
 			End If
@@ -234,26 +239,28 @@ Class MainWindow
 			End If
 		Next
 
+		Items.Table.RowGroups(0).FontFamily = New FontFamily("Courier New")
+
 		Dim CustomXAML As String = My.Resources.Hand_Made_Quote.Replace("<!--{0}-->", Items.Table.RowGroups(0).ToXML.ToString)
 		'If Company Is Nothing Then CustomXAML = CustomXAML.Replace("To:", "")
 
 		Dim XAML = CustomXAML.Replace("xmlns:xrd=""clr-namespace:CodeReason.Reports.Document;assembly=CodeReason.Reports""",
 									  "xmlns:xrd=""clr-namespace:Aaron.Xaml;assembly=Aaron.Xaml""")
 
-		Dim Test_Report As New Basic()
-		Test_Report.CustomXAML = XAML
-
-		Test_Report.DocumentValues = New Dictionary(Of String, Object) From {
-			{"Company", Company.Name},
-			{"Address", Company.Address},
-			{"Contact", Contact.Name},
-			{"CityZip", Company.City & " " & Company.Zip},
-			{"Phone", Company.Phone},
-			{"Quote_Title", Quote.Name},
-			{"User_Cell", Settings.Phone},
-			{"User_Address", Settings.Address},
-			{"Salesperson", Settings.Name},
-			{"Email", Settings.Email}
+		Dim Test_Report As New Basic With {
+			.CustomXAML = XAML,
+			.DocumentValues = New Dictionary(Of String, Object) From {
+				{"Company", Company.Name},
+				{"Address", Company.Address},
+				{"Contact", Contact.Name},
+				{"CityZip", Company.City & " " & Company.Zip},
+				{"Phone", Company.Phone},
+				{"Quote_Title", Quote.Name},
+				{"User_Cell", Settings.Phone},
+				{"User_Address", Settings.Address},
+				{"Salesperson", Settings.Name},
+				{"Email", Settings.Email}
+			}
 		}
 
 		Return Test_Report
