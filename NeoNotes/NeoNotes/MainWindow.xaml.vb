@@ -224,12 +224,12 @@ Class MainWindow
 
 		For Each Detail In Quote.Lines.OrderBy(Function(x) Val(x.Display))
 			If Val(Detail.COST) > 0.0 Then
-				'Dim FormattedCurrency As String = FormatCurrency(Val(Detail.COST))
-				'FormattedCurrency = "$" & Space(Math.Abs(7 - FormattedCurrency.Length)) & FormattedCurrency.Replace("$", "")
-				'Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormattedCurrency)
-
 				Dim FormattedCurrency As String = FormatCurrency(Val(Detail.COST))
+				FormattedCurrency = "$" & Space(Math.Abs(7 - FormattedCurrency.Length)) & FormattedCurrency.Replace("$", "")
 				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormattedCurrency)
+
+				'Dim FormattedCurrency As String = FormatCurrency(Val(Detail.COST))
+				'Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, FormattedCurrency)
 			Else
 				Items.Table.AddRow(0, TextAlignment.Center, Detail.UNIT, Detail.DESC, "")
 			End If
@@ -241,7 +241,11 @@ Class MainWindow
 			End If
 		Next
 
-		'Items.Table.RowGroups(0).FontFamily = New FontFamily("Courier New")
+		Items.Table.RowGroups(0).FontFamily = New FontFamily("Courier New")
+		'Items.Table.RowGroups(0).FontWeight = FontWeights.Bold
+		'Items.Table.RowGroups(0).FontSize += 2
+
+
 
 		Dim CustomXAML As String = My.Resources.Hand_Made_Quote.Replace("<!--{0}-->", Items.Table.RowGroups(0).ToXML.ToString)
 		'If Company Is Nothing Then CustomXAML = CustomXAML.Replace("To:", "")

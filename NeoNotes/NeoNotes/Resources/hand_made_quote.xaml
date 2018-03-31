@@ -17,7 +17,7 @@
 		</Style>
 		<!--  Style for data rows.  -->
 		<Style x:Key="dataRowStyle" TargetType="{x:Type TableRowGroup}">
-			<Setter Property="FontSize" Value="12" />
+			<Setter Property="FontSize" Value="14" />
 		</Style>
 		<!--  Style for data cells.  -->
 		<Style TargetType="{x:Type TableCell}">
@@ -37,13 +37,13 @@
 			<!--  <Setter Property="Padding" Value="10.5,0,0,0" />  -->
 			<Setter Property="FontFamily" Value="Century Gothic" />
 			<Setter Property="LineHeight" Value="0.0034" />
-			<Setter Property="FontSize" Value="12" />
+			<Setter Property="FontSize" Value="14" />
 		</Style>
 
 		<Style x:Key="Section" TargetType="{x:Type Section}">
 			<!--  <Setter Property="Padding" Value="40,10,40,10" />  -->
 			<Setter Property="LineHeight" Value="0.0034" />
-			<Setter Property="FontSize" Value="12" />
+			<Setter Property="FontSize" Value="14" />
 		</Style>
 
 	</FlowDocument.Resources>
@@ -117,7 +117,7 @@
 							<Bold>To:</Bold>
 							<xrd:InlineDocumentValue PropertyName="Company" />
 						</Paragraph>
-						<Paragraph Style="{StaticResource Paragraph}" Padding="20,0,0,0">
+						<Paragraph Style="{StaticResource Paragraph}" Padding="24,0,0,0">
 							<xrd:InlineDocumentValue PropertyName="Contact" />
 						</Paragraph>
 						<Paragraph Style="{StaticResource Paragraph}" Padding="20,0,0,0">
@@ -197,7 +197,7 @@
 		</Table>
 	</Section>
 
-	<xrd:SectionReportFooter Padding="14.5,0,14.5,10" FontSize="12" PageFooterHeight="2">
+	<xrd:SectionReportFooter Padding="14.5,0,14.5,10" FontSize="14" PageFooterHeight="2">
 		<Table>
 			<TableRowGroup>
 				<TableRow>
