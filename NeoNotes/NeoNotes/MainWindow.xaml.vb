@@ -327,7 +327,7 @@ Class MainWindow
 
 	Private Sub window_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles window.Closing
 		cbxCompanies.Focus()
-		UploadData(True)
+		'UploadData(True)
 	End Sub
 
 	Private Sub btnCompany_Add_Click(sender As Object, e As RoutedEventArgs) Handles btnCompany_Add.Click
@@ -528,10 +528,10 @@ Class MainWindow
 		End SyncLock
 	End Sub
 
-	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
-		Dim UploadTask As Task = New Task(Sub() UploadData(False))
-		UploadTask.Start()
-	End Sub
+	'Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
+	'	Dim UploadTask As Task = New Task(Sub() UploadData(False))
+	'	UploadTask.Start()
+	'End Sub
 
 	Private Sub btnQuoteDetailAddFrinPriceList_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAddFrinPriceList.Click
 		Dim Products = frmInventory.GetProducts()
@@ -550,5 +550,9 @@ Class MainWindow
 		Next
 
 		dgQuoteDetails.Items.Refresh()
+	End Sub
+
+	Private Sub btnUpload_Click(sender As Object, e As RoutedEventArgs) Handles btnUpload.Click
+		UploadData(True)
 	End Sub
 End Class
