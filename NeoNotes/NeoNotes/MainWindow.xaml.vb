@@ -2,14 +2,14 @@
 Imports M = System.Net.Mail
 
 Class MainWindow
-	Dim db As New NeoNotesContainer
-	Dim UploadData_Lock As New Object
-	WithEvents dispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 1, 15)}
+	ReadOnly db As New Database
+	ReadOnly UploadData_Lock As New Object
+	WithEvents DispatcherTimer As New Threading.DispatcherTimer() With {.Interval = New TimeSpan(0, 1, 15)}
 
 	Private Sub window_Loaded(sender As Object, e As RoutedEventArgs) Handles window.Loaded
 		Dim DataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory")
 		If Not IO.Directory.Exists(DataDirectory) Then IO.Directory.CreateDirectory(DataDirectory)
-		dispatcherTimer.Start()
+		DispatcherTimer.Start()
 
 		If Not db.Settings.Any Then
 			MsgBox("Please configure your settings with the settings button")
@@ -83,8 +83,8 @@ Class MainWindow
 	Private Sub btnQuoteAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteAdd.Click
 		Dim Quote As New Quote With {.Name = "New Quote", .Date = Now}
 		CType(cbxCompanies.SelectedItem, Company).Quotes.Add(Quote)
-		Quote.Lines.Add(New QuoteLine With {.Display = 0, .DESC = "NO MINIMUM ORDER", .IsCentered = True})
-		Quote.Lines.Add(New QuoteLine With {.Display = 0, .DESC = "NO DELIVERY CHARGE", .IsCentered = True})
+		Quote.QuoteLines.Add(New QuoteLine With {.Display = 0, .DESC = "NO MINIMUM ORDER", .IsCentered = True})
+		Quote.QuoteLines.Add(New QuoteLine With {.Display = 0, .DESC = "NO DELIVERY CHARGE", .IsCentered = True})
 
 		lbxQuotes.SelectedItem = Quote
 		lbxQuotes.Items.Refresh()
@@ -106,9 +106,9 @@ Class MainWindow
 
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 
-		Dim Display = If(Quote.Lines.Any, Quote.Lines.Max(Function(x) x.Display), 0) + 1
+		Dim Display = If(Quote.QuoteLines.Any, Quote.QuoteLines.Max(Function(x) x.Display), 0) + 1
 		Dim QuoteLine As New QuoteLine With {.DESC = "", .Quote = Quote, .Display = Display, .COST = Nothing}
-		Quote.Lines.Add(QuoteLine)
+		Quote.QuoteLines.Add(QuoteLine)
 
 		dgQuoteDetails.SelectedItem = QuoteLine
 		dgQuoteDetails.Items.Refresh()
@@ -119,7 +119,7 @@ Class MainWindow
 
 	Private Sub btnRemoveQuoteLine_Click(sender As Object, e As RoutedEventArgs) Handles btnRemoveQuoteLine.Click
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-		Quote.Lines.Remove(dgQuoteDetails.SelectedItem)
+		Quote.QuoteLines.Remove(dgQuoteDetails.SelectedItem)
 		dgQuoteDetails.Items.Refresh()
 	End Sub
 
@@ -144,7 +144,7 @@ Class MainWindow
 
 		Dim Sorter = Function(x As QuoteLine, y As QuoteLine) If(x.Display = y.Display, x.ID.CompareTo(y.ID), x.Display).CompareTo(y.Display)
 
-		Dim Data = Quote.Lines.ToList
+		Dim Data = Quote.QuoteLines.ToList
 		Data.Sort(Sorter)
 
 		Dim List As New LinkedList(Of QuoteLine)
@@ -222,7 +222,7 @@ Class MainWindow
 
 		Items.Table.CellSpacing = 0 '<-- I don't think this is having any affect due to the CustomXAML
 
-		For Each Detail In Quote.Lines.OrderBy(Function(x) Val(x.Display))
+		For Each Detail In Quote.QuoteLines.OrderBy(Function(x) Val(x.Display))
 			If Val(Detail.COST) > 0.0 Then
 				Dim FormattedCurrency As String = FormatCurrency(Val(Detail.COST))
 				'FormattedCurrency = "$" & Space(Math.Abs(7 - FormattedCurrency.Length)) & FormattedCurrency.Replace("$", "")
@@ -367,7 +367,7 @@ Class MainWindow
 		End If
 
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-		If Quote.Lines.Any Then
+		If Quote.QuoteLines.Any Then
 			Create_Quote_Printout(lbxContacts.SelectedItem).Show()
 		Else
 			MsgBox("You cannot print an empty quote")
@@ -500,7 +500,7 @@ Class MainWindow
 				Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
 
 
-				Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+				Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.QuoteLines").ToArray
 
 				Dim MyNotes =
 				<Customers>
@@ -516,7 +516,7 @@ Class MainWindow
 								<Quotes>
 									<%= From Quote In Company.Quotes
 										Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
-												   <%= From Line In Quote.Lines
+												   <%= From Line In Quote.QuoteLines
 													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
 											   </Quote>
 									%>
@@ -552,10 +552,10 @@ Class MainWindow
 
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		For Each Item In Products
-			Dim Display = If(Quote.Lines.Any, Quote.Lines.Max(Function(x) x.Display), 0) + 1
+			Dim Display = If(Quote.QuoteLines.Any, Quote.QuoteLines.Max(Function(x) x.Display), 0) + 1
 			Dim QuoteLine As New QuoteLine With {.DESC = Item.DESCRIP, .Quote = Quote, .Display = Display, .COST = Item.SELL_CALC5, .UNIT = Item.RTDESC1}
 
-			Quote.Lines.Add(QuoteLine)
+			Quote.QuoteLines.Add(QuoteLine)
 			dgQuoteDetails.SelectedItem = QuoteLine
 		Next
 
@@ -583,7 +583,7 @@ Class MainWindow
 			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
 
 
-			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.Lines").ToArray
+			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.QuoteLines").ToArray
 
 			Dim MyNotes =
 			<Customers>
@@ -599,7 +599,7 @@ Class MainWindow
 							<Quotes>
 								<%= From Quote In Company.Quotes
 									Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
-											   <%= From Line In Quote.Lines
+											   <%= From Line In Quote.QuoteLines
 												   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
 										   </Quote>
 								%>
@@ -620,11 +620,25 @@ Class MainWindow
 		MsgBox("Update Finish")
 	End Sub
 
-	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
+	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles DispatcherTimer.Tick
 		Try
 			Me.db.SaveChanges()
 		Catch ex As Exception
 			MsgBox(ex.ToString, MsgBoxStyle.OkOnly, "Error Saving!! You cannot save anything!")
 		End Try
+	End Sub
+
+	Private Sub btnCompanyLocationAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnCompanyLocationAdd.Click
+		Dim Location As New Location With {.Company = cbxCompanies.SelectedItem, .Name = "New Location"}
+		lbxCompanyLocations.Items.Add(Location)
+
+	End Sub
+
+	Private Sub btnCompanyLocationDelete_Click(sender As Object, e As RoutedEventArgs) Handles btnCompanyLocationDelete.Click
+		Dim Location As Location = lbxCompanyLocations.SelectedItem
+		CType(cbxCompanies.SelectedItem, Company).Locations.Remove(Location)
+		lbxCompanyLocations.Items.Remove(Location)
+
+
 	End Sub
 End Class

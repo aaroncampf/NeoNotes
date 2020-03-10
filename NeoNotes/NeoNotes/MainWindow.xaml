@@ -56,7 +56,7 @@
 
 				</Grid>
 			</TabItem>
-			<TabItem Header="Quotes" HorizontalAlignment="Right" Width="54" Height="22" Margin="0,-2,-2,0" VerticalAlignment="Bottom">
+			<TabItem Header="Quotes">
 				<Grid Background="#FFE5E5E5" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
 					<Label x:Name="label8" Content="Quotes" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
 					<ListBox x:Name="lbxQuotes" HorizontalAlignment="Left" Margin="10,36,0,34" Width="248" ItemsSource="{Binding SelectedItem.Quotes, ElementName=cbxCompanies}">
@@ -120,6 +120,24 @@
 							<Label x:Name="label5" Content="Title" HorizontalAlignment="Left" Margin="0,49,0,0" VerticalAlignment="Top"/>
 						</Grid>
 					</GroupBox>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Locations">
+				<Grid Background="#FFE5E5E5" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
+					<ListBox x:Name="lbxCompanyLocations" HorizontalAlignment="Left" Height="241" Margin="10,36,0,0" VerticalAlignment="Top" Width="168"/>
+					<Label Content="Locations" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+					<Button x:Name="btnCompanyLocationAdd" Content="Add" HorizontalAlignment="Left" Margin="10,282,0,0" VerticalAlignment="Top" Width="168"/>
+					<Button x:Name="btnCompanyLocationDelete" Content="Delete" HorizontalAlignment="Left" Margin="10,307,0,0" VerticalAlignment="Top" Width="168"/>
+					<GroupBox Header="Details" HorizontalAlignment="Left" Height="255" Margin="201,22,0,0" VerticalAlignment="Top" Width="231">
+						<Grid>
+							<Label Content="Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+							<TextBox x:Name="txtCompanyLocations_Name" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="199"/>
+							<Label Content="Address" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top"/>
+							<TextBox x:Name="txtCompanyLocations_Address" HorizontalAlignment="Left" Height="23" Margin="10,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="199"/>
+
+						</Grid>
+					</GroupBox>
+
 				</Grid>
 			</TabItem>
 		</TabControl>

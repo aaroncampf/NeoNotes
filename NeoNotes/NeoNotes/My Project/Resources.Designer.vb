@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  A strongly-typed resource class, for looking up localized strings, etc.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -61,7 +61,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to a_hWEmajHdoAAAAAAAABQa7YbKfAH0mrPauZ-rFiwtp-0oWPVXSZKEB3d6WD4el9.
+        '''  Looks up a localized string similar to .
         '''</summary>
         Friend ReadOnly Property Dropbox_AccessToken() As String
             Get
@@ -74,10 +74,10 @@ Namespace My.Resources
         '''			  xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
         '''			  xmlns:xrd=&quot;clr-namespace:Aaron.Reports;assembly=Aaron.Reports&quot;
         '''              ColumnWidth=&quot;21cm&quot; PageHeight=&quot;27.0cm&quot; PageWidth=&quot;21cm&quot; FontFamily=&quot;Century Gothic&quot;&gt;
-        '''    &lt;!--
+        '''	&lt;!--
         '''    ColumnWidth=&quot;21cm&quot; PageHeight=&quot;29.7cm&quot; PageWidth=&quot;21cm&quot;
         '''    xmlns:crcv=&quot;clr-namespace:CodeReason.Reports.Charts.Visifire;assembly=CodeReason.Reports.Charts.Visifire&quot; 
-        '''    xmlns:xrd=&quot;c [rest of string was truncated]&quot;;.
+        '''    xmlns:xrd=&quot;clr- [rest of string was truncated]&quot;;.
         '''</summary>
         Friend ReadOnly Property Hand_Made_Quote() As String
             Get

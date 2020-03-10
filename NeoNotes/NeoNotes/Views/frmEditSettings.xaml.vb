@@ -1,5 +1,5 @@
 ﻿Public Class frmEditSettings
-	Dim db As New NeoNotesContainer
+	Dim db As New Database
 	Public SettingsRecord As Setting
 
 	Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
