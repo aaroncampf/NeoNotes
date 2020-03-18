@@ -1,4 +1,5 @@
 ﻿Imports Aaron.Reports
+Imports System.Linq
 Imports M = System.Net.Mail
 
 Class MainWindow
@@ -629,9 +630,12 @@ Class MainWindow
 	End Sub
 
 	Private Sub btnCompanyLocationAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnCompanyLocationAdd.Click
-		Dim Location As New Location With {.Company = cbxCompanies.SelectedItem, .Name = "New Location"}
-		lbxCompanyLocations.Items.Add(Location)
+		Dim Company As Company = cbxCompanies.SelectedItem
+		Dim Location As New Location With {.Company = Company, .Name = "New Location", .Address = "?"}
+		Company.Locations.Add(Location)
 
+		lbxCompanyLocations.SelectedItem = Location
+		lbxCompanyLocations.Items.Refresh()
 	End Sub
 
 	Private Sub btnCompanyLocationDelete_Click(sender As Object, e As RoutedEventArgs) Handles btnCompanyLocationDelete.Click

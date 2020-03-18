@@ -7,7 +7,8 @@ Partial Public Class Database
 	Inherits DbContext
 
 	Public Sub New()
-		MyBase.New("(LocalDB)\MSSQLLocalDB;attachdbfilename=|DataDirectory|NeoNotes.mdf")
+		'MyBase.New("(LocalDB)\MSSQLLocalDB;attachdbfilename=|DataDirectory|NeoNotes.mdf")
+		MyBase.New("Data Source=|DataDirectory|NeoNotesContainer.sdf")
 	End Sub
 
 	Public Overridable Property Companies As DbSet(Of Company)
@@ -21,10 +22,15 @@ Partial Public Class Database
 	Public Overridable Property Settings As DbSet(Of Setting)
 
 	Protected Overrides Sub OnModelCreating(ByVal modelBuilder As DbModelBuilder)
+		'modelBuilder.Entity(Of Company)() _
+		'	.HasMany(Function(e) e.Contacts) _
+		'	.WithRequired(Function(e) e.Company) _
+		'	.HasForeignKey(Function(e) e.Company_ID) _
+		'	.WillCascadeOnDelete(False)
+
 		modelBuilder.Entity(Of Company)() _
 			.HasMany(Function(e) e.Contacts) _
 			.WithRequired(Function(e) e.Company) _
-			.HasForeignKey(Function(e) e.Company_ID) _
 			.WillCascadeOnDelete(False)
 
 		modelBuilder.Entity(Of Company)() _

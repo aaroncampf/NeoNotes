@@ -124,20 +124,24 @@
 			</TabItem>
 			<TabItem Header="Locations">
 				<Grid Background="#FFE5E5E5" IsEnabled="{Binding SelectedItem, ElementName=cbxCompanies, Converter={StaticResource IsNothingConverter}}">
-					<ListBox x:Name="lbxCompanyLocations" HorizontalAlignment="Left" Height="241" Margin="10,36,0,0" VerticalAlignment="Top" Width="168"/>
+					<ListBox x:Name="lbxCompanyLocations" HorizontalAlignment="Left" Height="241" Margin="10,36,0,0" VerticalAlignment="Top" Width="168" ItemsSource="{Binding SelectedItem.Locations, ElementName=cbxCompanies}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Path=Name}" />
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
 					<Label Content="Locations" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
 					<Button x:Name="btnCompanyLocationAdd" Content="Add" HorizontalAlignment="Left" Margin="10,282,0,0" VerticalAlignment="Top" Width="168"/>
 					<Button x:Name="btnCompanyLocationDelete" Content="Delete" HorizontalAlignment="Left" Margin="10,307,0,0" VerticalAlignment="Top" Width="168"/>
-					<GroupBox Header="Details" HorizontalAlignment="Left" Height="255" Margin="201,22,0,0" VerticalAlignment="Top" Width="231">
+					<GroupBox Header="Details" HorizontalAlignment="Left" Height="255" Margin="201,22,0,0" VerticalAlignment="Top" Width="231" IsEnabled="{Binding SelectedItem, ElementName=lbxCompanyLocations, Converter={StaticResource IsNothingConverter}}">
 						<Grid>
 							<Label Content="Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-							<TextBox x:Name="txtCompanyLocations_Name" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="199"/>
+							<TextBox x:Name="txtCompanyLocations_Name" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="199" Text="{Binding SelectedItem.Name, ElementName=lbxCompanyLocations}"/>
 							<Label Content="Address" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top"/>
-							<TextBox x:Name="txtCompanyLocations_Address" HorizontalAlignment="Left" Height="23" Margin="10,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="199"/>
-
+							<TextBox x:Name="txtCompanyLocations_Address" HorizontalAlignment="Left" Height="23" Margin="10,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="199" Text="{Binding SelectedItem.Address, ElementName=lbxCompanyLocations}"/>
 						</Grid>
 					</GroupBox>
-
 				</Grid>
 			</TabItem>
 		</TabControl>

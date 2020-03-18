@@ -21,7 +21,7 @@ Partial Public Class Contact
 
 	Public Property Position As String
 
-	Public Property Company_ID As Integer
+	'Public Property Company_ID As Integer
 
 	Public Overridable Property Company As Company
 
