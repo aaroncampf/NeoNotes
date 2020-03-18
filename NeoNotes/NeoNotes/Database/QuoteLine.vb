@@ -10,7 +10,7 @@ Partial Public Class QuoteLine
 
 	Public Property Display As Integer
 
-	<Required>
+	<Required(AllowEmptyStrings:=True)>
 	Public Property UNIT As String
 
 	Public Property COST As Decimal

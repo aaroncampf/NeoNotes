@@ -84,14 +84,20 @@ Class MainWindow
 	Private Sub btnQuoteAdd_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteAdd.Click
 		Dim Quote As New Quote With {.Name = "New Quote", .Date = Now}
 		CType(cbxCompanies.SelectedItem, Company).Quotes.Add(Quote)
-		Quote.QuoteLines.Add(New QuoteLine With {.Display = 0, .DESC = "NO MINIMUM ORDER", .IsCentered = True})
-		Quote.QuoteLines.Add(New QuoteLine With {.Display = 0, .DESC = "NO DELIVERY CHARGE", .IsCentered = True})
+		Quote.QuoteLines.Add(New QuoteLine With {.Display = 0, .UNIT = "", .DESC = "NO MINIMUM ORDER", .IsCentered = True})
+		Quote.QuoteLines.Add(New QuoteLine With {.Display = 0, .UNIT = "", .DESC = "NO DELIVERY CHARGE", .IsCentered = True})
 
 		lbxQuotes.SelectedItem = Quote
 		lbxQuotes.Items.Refresh()
 
 		txtQuoteTitle.Focus()
 		txtQuoteTitle.SelectAll()
+
+
+
+
+
+
 	End Sub
 
 	Private Sub btnQuoteRemove_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteRemove.Click

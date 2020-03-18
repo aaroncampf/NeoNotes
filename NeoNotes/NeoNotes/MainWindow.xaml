@@ -76,7 +76,7 @@
 					<Button x:Name="btnQuoteAdd" Content="Add" HorizontalAlignment="Left" Margin="9,0,0,9" Width="248" Height="20" VerticalAlignment="Bottom"/>
 					<GroupBox x:Name="groupBox1" Header="Details" HorizontalAlignment="Left" Margin="262,36,0,10" Width="519" IsEnabled="{Binding SelectedItem, ElementName=lbxQuotes, Converter={StaticResource IsNothingConverter}}">
 						<Grid>
-							<DataGrid x:Name="dgQuoteDetails" d:DataContext="{d:DesignInstance Type=NeoNotes:QuoteLine}" ItemsSource="{Binding SelectedItem.Lines, ElementName=lbxQuotes}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,79,0,141">
+							<DataGrid x:Name="dgQuoteDetails" d:DataContext="{d:DesignInstance Type=NeoNotes:QuoteLine}" ItemsSource="{Binding SelectedItem.QuoteLines, ElementName=lbxQuotes}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="0,79,0,141">
 								<DataGrid.Columns>
 									<!--<DataGridComboBoxColumn x:Name="colQuoteDetailDescription" ClipboardContentBinding="{x:Null}" SelectedValueBinding="{x:Null}" SelectedItemBinding="{x:Null}" TextBinding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>-->
 									<DataGridTextColumn Binding="{Binding Path=DESC}" Header="Description" Width="*" IsReadOnly="True"/>
