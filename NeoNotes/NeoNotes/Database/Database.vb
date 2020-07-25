@@ -31,25 +31,25 @@ Partial Public Class Database
 		modelBuilder.Entity(Of Company)() _
 			.HasMany(Function(e) e.Contacts) _
 			.WithRequired(Function(e) e.Company) _
-			.WillCascadeOnDelete(False)
+			.WillCascadeOnDelete(True)
 
 		modelBuilder.Entity(Of Company)() _
 			.HasMany(Function(e) e.Quotes) _
 			.WithRequired(Function(e) e.Company) _
 			.HasForeignKey(Function(e) e.Company_ID) _
-			.WillCascadeOnDelete(False)
+			.WillCascadeOnDelete(True)
 
 		modelBuilder.Entity(Of Company)() _
 			.HasMany(Function(e) e.Locations) _
 			.WithRequired(Function(e) e.Company) _
 			.HasForeignKey(Function(e) e.Companies_ID) _
-			.WillCascadeOnDelete(False)
+			.WillCascadeOnDelete(True)
 
 		modelBuilder.Entity(Of Contact)() _
 			.HasMany(Function(e) e.Notes) _
 			.WithRequired(Function(e) e.Contact) _
 			.HasForeignKey(Function(e) e.Contact_ID) _
-			.WillCascadeOnDelete(False)
+			.WillCascadeOnDelete(True)
 
 		modelBuilder.Entity(Of QuoteLine)() _
 			.Property(Function(e) e.COST) _
@@ -59,7 +59,7 @@ Partial Public Class Database
 			.HasMany(Function(e) e.QuoteLines) _
 			.WithRequired(Function(e) e.Quote) _
 			.HasForeignKey(Function(e) e.Quote_ID) _
-			.WillCascadeOnDelete(False)
+			.WillCascadeOnDelete(True)
 
 		modelBuilder.Entity(Of QuoteSectionDetail)() _
 			.Property(Function(e) e.COST) _
@@ -69,6 +69,6 @@ Partial Public Class Database
 			.HasMany(Function(e) e.QuoteSectionDetails) _
 			.WithRequired(Function(e) e.QuoteSection) _
 			.HasForeignKey(Function(e) e.QuoteSection_ID) _
-			.WillCascadeOnDelete(False)
+			.WillCascadeOnDelete(True)
 	End Sub
 End Class
