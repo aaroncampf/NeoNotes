@@ -76,7 +76,10 @@ Class MainWindow
 
 	Private Sub btnContactRemove_Click(sender As Object, e As RoutedEventArgs) Handles btnContactRemove.Click
 		If MsgBox($"Are you sure you want to remove the contact {txtContactName.Text}?", MsgBoxStyle.YesNo) = MsgBoxResult.Yes Then
-			CType(cbxCompanies.SelectedItem, Company).Contacts.Remove(lbxContacts.SelectedItem)
+			Dim Company As Company = cbxCompanies.SelectedItem
+			Dim Contact As Contact = lbxContacts.SelectedItem
+			Company.Contacts.Remove(Contact)
+			db.Contacts.Remove(Contact)
 			lbxContacts.Items.Refresh()
 		End If
 	End Sub
@@ -96,8 +99,8 @@ Class MainWindow
 
 	Private Sub btnQuoteRemove_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteRemove.Click
 		Dim Quote As Quote = lbxQuotes.SelectedItem
-
 		CType(cbxCompanies.SelectedItem, Company).Quotes.Remove(Quote)
+		db.Quotes.Remove(Quote)
 		lbxQuotes.Items.Refresh()
 	End Sub
 
@@ -121,6 +124,7 @@ Class MainWindow
 	Private Sub btnRemoveQuoteLine_Click(sender As Object, e As RoutedEventArgs) Handles btnRemoveQuoteLine.Click
 		Dim Quote As Quote = lbxQuotes.SelectedItem
 		Quote.QuoteLines.Remove(dgQuoteDetails.SelectedItem)
+		db.QuoteLines.Remove(dgQuoteDetails.SelectedItem)
 		dgQuoteDetails.Items.Refresh()
 	End Sub
 
@@ -642,7 +646,6 @@ Class MainWindow
 		Dim Location As Location = lbxCompanyLocations.SelectedItem
 		CType(cbxCompanies.SelectedItem, Company).Locations.Remove(Location)
 		lbxCompanyLocations.Items.Remove(Location)
-
-
+		db.Locations.Remove(Location)
 	End Sub
 End Class
