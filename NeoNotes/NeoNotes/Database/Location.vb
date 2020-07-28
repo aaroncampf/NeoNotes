@@ -7,11 +7,14 @@ Imports System.Data.Entity.Spatial
 Public Class Location
 	Public Property Id As Integer
 
-	<Required>
+	<Required(AllowEmptyStrings:=True)>
 	Public Property Name As String
 
-	<Required>
+	<Required(AllowEmptyStrings:=True)>
 	Public Property Address As String
+
+	'<Required(AllowEmptyStrings:=True)>
+	Public Property Details As String
 
 	Public Property Companies_ID As Integer
 
