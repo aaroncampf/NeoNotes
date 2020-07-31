@@ -1,7 +1,8 @@
 ﻿Imports Aaron.Reports
-Imports System.Linq
 Imports M = System.Net.Mail
 
+<CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification:="<Pending>")>
+<CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Pending>")>
 Class MainWindow
 	ReadOnly db As New Database
 	ReadOnly UploadData_Lock As New Object
@@ -164,14 +165,14 @@ Class MainWindow
 
 		If Direction = -1 Then
 		ElseIf Direction = LogicalDirection.Backward Then
-			CurrentLine.Display = CurrentLine.Display + 1
+			CurrentLine.Display += 1
 
 			If List.Find(CurrentLine).Next IsNot Nothing Then
 				List.Find(CurrentLine).Next.Value.Display = List.Find(CurrentLine).Next.Value.Display - 1
 			End If
 
 		ElseIf Val(CurrentLine.Display) > 0 Then
-			CurrentLine.Display = CurrentLine.Display - 1
+			CurrentLine.Display -= 1
 
 			If List.Find(CurrentLine).Previous IsNot Nothing Then
 				List.Find(CurrentLine).Previous.Value.Display = List.Find(CurrentLine).Previous.Value.Display + 1
