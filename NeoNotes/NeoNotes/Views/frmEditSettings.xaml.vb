@@ -27,4 +27,5 @@
 
 		cbxSpecialTools.SelectedItem = Nothing
 	End Sub
+
 End Class
