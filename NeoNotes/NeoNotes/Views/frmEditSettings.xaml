@@ -24,6 +24,8 @@
 		<ComboBox x:Name="cbxSpecialTools" HorizontalAlignment="Left" Margin="104,209,0,0" VerticalAlignment="Top" Width="190">
 			<ComboBoxItem x:Name="cbiDataDirectory" Content="Open Data Directory"/>
 		</ComboBox>
+		<Label Content="Outlook Path" HorizontalAlignment="Left" Margin="10,177,0,0" VerticalAlignment="Top"/>
+		<TextBox x:Name="txtOutlookPath" HorizontalAlignment="Left" Height="23" Margin="104,181,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" />
 
 
 	</Grid>

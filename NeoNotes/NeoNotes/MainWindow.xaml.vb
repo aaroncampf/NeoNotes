@@ -218,10 +218,8 @@ Class MainWindow
 		'Process.Start($"https://mail.google.com/mail/?view=cm&fs=1&tf=1&to={CType(lbxContacts.SelectedItem, Contact).Email}")
 		'Process.Start($"{My.Settings.OutlookPath} /c ipm.note /m {CType(lbxContacts.SelectedItem, Contact).Email}")
 
-		Dim outlookApp As New Microsoft.Office.Interop.Outlook.Application()
-		Dim Item As Microsoft.Office.Interop.Outlook.MailItem = outlookApp.CreateItem(Microsoft.Office.Interop.Outlook.OlItemType.olMailItem)
-		Item.To = CType(lbxContacts.SelectedItem, Contact).Email
-		Item.Display(False)
+		IO.File.WriteAllText("NewEmail.bat", $"""{My.Settings.OutlookPath}"" /c ipm.note /m {CType(lbxContacts.SelectedItem, Contact).Email}")
+		Process.Start("NewEmail.bat")
 	End Sub
 
 	Private Function Create_Quote_Printout(Contact As Contact) As Basic

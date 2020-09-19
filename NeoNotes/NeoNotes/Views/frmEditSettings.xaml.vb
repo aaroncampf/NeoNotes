@@ -6,9 +6,14 @@
 		SettingsRecord = If(db.Settings.Any(), db.Settings.FirstOrDefault(), New Setting())
 		Me.DataContext = SettingsRecord
 		gridMain.DataContext = SettingsRecord
+
+		txtOutlookPath.Text = My.Settings.OutlookPath
 	End Sub
 
 	Private Sub btnSave_Click(sender As Object, e As RoutedEventArgs) Handles btnSave.Click
+		My.Settings.OutlookPath = txtOutlookPath.Text
+		My.Settings.Save()
+
 		'TODO: Check to see if this works 100% correctly, I think caching causes this not to update until restart
 		If Not db.Settings.Any Then
 			db.Settings.Add(SettingsRecord)
