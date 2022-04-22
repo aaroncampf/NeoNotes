@@ -173,6 +173,5 @@
 		</GroupBox>
 		<Button x:Name="btnCompany_Add" Content="Add" HorizontalAlignment="Left" Margin="274,17,0,0" VerticalAlignment="Top" Width="75"/>
 		<Button x:Name="btnSettings" Content="Settings" Margin="977,17,10,0" VerticalAlignment="Top"/>
-		<Button x:Name="btnUpload" Content="Upload" HorizontalAlignment="Left" Margin="863,17,0,0" VerticalAlignment="Top" Width="109"/>
 	</Grid>
 </Window>

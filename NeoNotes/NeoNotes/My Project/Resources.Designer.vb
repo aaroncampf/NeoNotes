@@ -61,15 +61,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to .
-        '''</summary>
-        Friend ReadOnly Property Dropbox_AccessToken() As String
-            Get
-                Return ResourceManager.GetString("Dropbox_AccessToken", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Looks up a localized string similar to &lt;FlowDocument xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot; 
         '''			  xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
         '''			  xmlns:xrd=&quot;clr-namespace:Aaron.Reports;assembly=Aaron.Reports&quot;

@@ -10,20 +10,6 @@
 
 	Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 		Dim LocalFilePath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoNotes2.txt"
-		If My.Computer.Network.IsAvailable AndAlso My.Settings.LastUpdated_Inventory < Now.AddDays(-1) OrElse Not IO.File.Exists(LocalFilePath) Then
-			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-			Dim File = Dbox.Files.DownloadAsync("/Storage/NeoNotes2.txt").Result.GetContentAsByteArrayAsync().Result
-
-			If IO.File.Exists(LocalFilePath) Then
-				IO.File.Delete(LocalFilePath)
-			End If
-
-			IO.File.WriteAllBytes(LocalFilePath, File)
-
-			My.Settings.LastUpdated = Now
-			My.Settings.Save() '<--- Do I need this?
-		End If
-
 		Dim Text = String.Join(vbCrLf, IO.File.ReadAllLines(LocalFilePath))
 		Dim StringReader As New IO.StringReader(Text)
 		Dim Reader As New CsvHelper.CsvReader(StringReader)

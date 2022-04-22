@@ -60,11 +60,6 @@ Class MainWindow
 
 	Private Sub lbxContacts_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lbxContacts.SelectionChanged
 		If lbxContacts.SelectedItem Is Nothing Then Exit Sub
-		'dgNotes.Items.Clear()
-
-		'For Each Item In CType(lbxContacts.SelectedItem, Contact).Notes
-		'	dgNotes.Items.Add(Item)
-		'Next
 	End Sub
 
 	Private Sub cbxSearchContacts_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbxSearchContacts.SelectionChanged
@@ -457,21 +452,6 @@ Class MainWindow
 
 	Public Shared Function Get_Item_Names() As String()
 		Dim LocalFilePath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoNotes.txt"
-		If My.Computer.Network.IsAvailable AndAlso My.Settings.LastUpdated < Now.AddDays(-7) OrElse Not IO.File.Exists(LocalFilePath) Then
-			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-			Dim File = Dbox.Files.DownloadAsync("/Storage/NeoNotes.txt").Result.GetContentAsByteArrayAsync().Result
-
-
-			If IO.File.Exists(LocalFilePath) Then
-				IO.File.Delete(LocalFilePath)
-			End If
-
-			IO.File.WriteAllBytes(LocalFilePath, File)
-
-			My.Settings.LastUpdated = Now
-			My.Settings.Save() '<--- Do I need this?
-		End If
-
 		Return IO.File.ReadAllLines(LocalFilePath)
 	End Function
 
@@ -479,83 +459,6 @@ Class MainWindow
 		Dim Form As New frmEditSettings
 		Form.ShowDialog()
 	End Sub
-
-	''' <summary>
-	''' 
-	''' </summary>
-	''' <param name="Disreguard_InUse">Try To Remove This Check</param>
-	Private Sub UploadData(Disreguard_InUse As Boolean)
-		If Not My.Computer.Network.IsAvailable Then
-			MsgBox("Unable to update phone app due to lack of internet")
-			Exit Sub
-		End If
-
-		SyncLock UploadData_Lock
-			Static IsInUse As Boolean
-			If Not db.ChangeTracker.HasChanges Or (IsInUse And Not Disreguard_InUse) Then Return
-			IsInUse = True
-
-
-			Try
-				Me.db.SaveChanges()
-			Catch ex As Exception
-				If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
-					IsInUse = False
-					Exit Sub
-				End If
-			End Try
-
-			Try
-				If Not IO.File.Exists(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml") Then
-					MsgBox($"Please Create the settings file: {AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml"}")
-					Exit Sub
-				End If
-
-				Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
-
-
-				Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.QuoteLines").ToArray
-
-				Dim MyNotes =
-				<Customers>
-					<%= From Company In Companies
-						Select
-							<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
-								<%= From Contact In Company.Contacts
-									Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
-											   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
-										   </Contact>
-								%>
-
-								<Quotes>
-									<%= From Quote In Company.Quotes
-										Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
-												   <%= From Line In Quote.QuoteLines
-													   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
-											   </Quote>
-									%>
-								</Quotes>
-							</Company>
-					%>
-				</Customers>
-
-				MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
-
-				Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-				Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
-				Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
-			Catch ex As Exception
-				MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
-			End Try
-
-			IsInUse = False
-		End SyncLock
-	End Sub
-
-	'Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles dispatcherTimer.Tick
-	'	Dim UploadTask As Task = New Task(Sub() UploadData(False))
-	'	UploadTask.Start()
-	'End Sub
 
 	Private Sub btnQuoteDetailAddFrinPriceList_Click(sender As Object, e As RoutedEventArgs) Handles btnQuoteDetailAddFrinPriceList.Click
 		Dim Products = frmInventory.GetProducts()
@@ -574,64 +477,6 @@ Class MainWindow
 		Next
 
 		dgQuoteDetails.Items.Refresh()
-	End Sub
-
-	Private Sub btnUpload_Click(sender As Object, e As RoutedEventArgs) Handles btnUpload.Click
-		'UploadData(True)
-
-		Try
-			Me.db.SaveChanges()
-		Catch ex As Exception
-			If MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.YesNo, "Error: Click Yes to quit without saving or No to Stay") = MsgBoxResult.No Then
-				'IsInUse = False
-				Exit Sub
-			End If
-		End Try
-
-		Try
-			If Not IO.File.Exists(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml") Then
-				MsgBox($"Please Create the settings file: {AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml"}")
-				Exit Sub
-			End If
-
-			Dim XML As XElement = XElement.Load(AppDomain.CurrentDomain.GetData("DataDirectory") + "\NeoInfo.xml")
-
-
-			Dim Companies = db.Companies.Include("Contacts").Include("Contacts.Notes").Include("Quotes").Include("Quotes.QuoteLines").ToArray
-
-			Dim MyNotes =
-			<Customers>
-				<%= From Company In Companies
-					Select
-						<Company ID=<%= Company.ID %> Name=<%= Company.Name %> Phone=<%= Company.Phone %> Address=<%= Company.Address %> City=<%= Company.City %> Zip=<%= Company.Zip %> Misc=<%= Company.Misc %>>
-							<%= From Contact In Company.Contacts
-								Select <Contact ID=<%= Contact.ID %> Name=<%= Contact.Name %> Email=<%= Contact.Email %> Phone=<%= Contact.Phone %> Position=<%= Contact.Position %>>
-										   <%= From Note In Contact.Notes Select <Note ID=<%= Note.ID %> Title=<%= Note.Title %> Text=<%= Note.Text %> Date=<%= Note.Date %>/> %>
-									   </Contact>
-							%>
-
-							<Quotes>
-								<%= From Quote In Company.Quotes
-									Select <Quote ID=<%= Quote.ID %> Date=<%= If(String.IsNullOrEmpty(Quote.Date), Date.MinValue.ToShortDateString, Quote.Date) %> Name=<%= Quote.Name %>>
-											   <%= From Line In Quote.QuoteLines
-												   Select <Detail ID=<%= Quote.ID %> Display=<%= Line.Display %> DESC=<%= Line.DESC %> UNIT=<%= Line.UNIT %> Cost=<%= Line.COST %>/> %>
-										   </Quote>
-								%>
-							</Quotes>
-						</Company>
-				%>
-			</Customers>
-
-			MyNotes.Save(IO.Path.GetTempPath & "\Notes.xml")
-
-			Dim Dbox As New Dropbox.Api.DropboxClient(My.Resources.Dropbox_AccessToken)
-			Dim File As IO.Stream = IO.File.OpenRead(IO.Path.GetTempPath & "\Notes.xml")
-			Dbox.Files.UploadAsync("/Users/" & XML.@Name & "/Notes.xml", body:=File, mode:=Dropbox.Api.Files.WriteMode.Overwrite.Instance).Result.ToString()
-		Catch ex As Exception
-			MsgBox(ex.GetType.Name & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.OkOnly And MsgBoxStyle.Critical, "Error Uploading Notes")
-		End Try
-
-		MsgBox("Update Finish")
 	End Sub
 
 	Private Sub dispatcherTimer_Tick(sender As Object, e As EventArgs) Handles DispatcherTimer.Tick
